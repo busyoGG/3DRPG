@@ -8,8 +8,10 @@ public class TestWorld : ECSWorld
     {
         Add(new JumpSystem());
         Add(new MoveSystem());
-        Add(new QTreeSystem());
+        Add(new CollideRefreshSystem());
         Add(new CollideSystem());
+        Add(new OffsetSystem());
+        Add(new QTreeSystem());
         Add(new RenderSystem());
     }
 }

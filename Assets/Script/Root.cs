@@ -75,6 +75,7 @@ public class Root : MonoBehaviour
         collidePlayer.aabb = aabbPlayer;
 
         collidePlayer.isStatic = false;
+        collidePlayer.position = player.transform.position;
 
         ConsoleUtils.Log(new Vector3(1, 0, 1).normalized);
 
@@ -93,6 +94,7 @@ public class Root : MonoBehaviour
         cube.transform.position = new Vector3(2, 1.5f, 2);
         cube.transform.localScale = new Vector3(1, 2, 1);
 
+        collideCube.position = cube.transform.position;
         collideCube.type = CollisionType.AABB;
 
         AABBData aabbCube = new AABBData();
@@ -114,6 +116,7 @@ public class Root : MonoBehaviour
         cube3.transform.position = new Vector3(3, 1.5f, 2);
         cube3.transform.localScale = new Vector3(1, 2, 1);
 
+        collideCube3.position = cube.transform.position;
         collideCube3.type = CollisionType.AABB;
 
         AABBData aabbCube3 = new AABBData();
@@ -138,8 +141,9 @@ public class Root : MonoBehaviour
         cube2.transform.position = new Vector3(6, 1f, 1);
         cube2.transform.localScale = new Vector3(4, 4, 4);
 
-        cube2.transform.eulerAngles = new Vector3(-60, 45, 0);
+        cube2.transform.eulerAngles = new Vector3(-60, 0, 0);
 
+        collideCube2.position = cube.transform.position;
         collideCube2.type = CollisionType.OBB;
 
         AABBData aabbCube2 = new AABBData();

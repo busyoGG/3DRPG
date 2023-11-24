@@ -1,5 +1,7 @@
 
 using Game;
+using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class CollideUtils
@@ -141,7 +143,7 @@ public class CollideUtils
     {
         //求出最近点
         Vector3 center = data1.position;
-        Vector3 nearP = GetClosestPointAABB(data1.position, data2);
+        Vector3 nearP = GetClosestPoint(data1.position, data2);
         //求出最近点与球心的距离
         float distance = (nearP - center).sqrMagnitude;
         float radius = Mathf.Pow(data1.radius, 2);
@@ -164,7 +166,7 @@ public class CollideUtils
     /// <param name="data1"></param>
     /// <param name="data2"></param>
     /// <returns></returns>
-    public static Vector3 GetClosestPointAABB(Vector3 point, AABBData data2)
+    public static Vector3 GetClosestPoint(Vector3 point, AABBData data2)
     {
         Vector3 nearP = Vector3.zero;
         nearP.x = Mathf.Clamp(point.x, data2.min.x, data2.max.x);
@@ -182,7 +184,7 @@ public class CollideUtils
     public static bool CollisionCircle2OBB(CircleData data1, OBBData data2, out Vector3 point)
     {
         //求最近点
-        Vector3 nearP = GetClosestPointOBB(data1.position, data2);
+        Vector3 nearP = GetClosestPoint(data1.position, data2);
         //与AABB检测原理相同
         float distance = (nearP - data1.position).sqrMagnitude;
         float radius = Mathf.Pow(data1.radius, 2);
@@ -202,7 +204,7 @@ public class CollideUtils
     /// 获取一点到OBB的最近点
     /// </summary>
     /// <returns></returns>
-    public static Vector3 GetClosestPointOBB(Vector3 point, OBBData data2, bool isWorldPosition = true)
+    public static Vector3 GetClosestPoint(Vector3 point, OBBData data2, bool isWorldPosition = true)
     {
         Vector3 nearP = data2.position;
         //求球心与OBB中心的距离向量 从OBB中心指向球心
@@ -435,129 +437,124 @@ public class CollideUtils
 
     //----- 获取碰撞法线 -----
 
-    public static Vector3 GetCollideNormal(Vector3 point, AABBData data2)
+    public static Vector3 GetCollideNormal(AABBData data1, AABBData data2, out float len)
     {
         Vector3 normal = Vector3.zero;
-        float[] ratio = new float[3];
+        Vector3 len1_2 = data1.max - data2.min;
+        Vector3 len2_1 = data2.max - data1.min;
 
-        if (point.x <= data2.position.x || point.x >= data2.position.x)
-        {
-            ratio[0] = (point.x - data2.position.x) / data2.halfSize.x;
-        }
+        float[] depth = new float[6] {
+            len1_2.x,
+            len1_2.y,
+            len1_2.z,
+            len2_1.x,
+            len2_1.y,
+            len2_1.z
+        };
 
-        if (point.y <= data2.position.y || point.y >= data2.position.y)
+        float min = depth[0];
+        List<int> index = new List<int>() { 0 };
+        for (int i = 1; i < depth.Length; i++)
         {
-            ratio[1] = (point.y - data2.position.y) / data2.halfSize.y;
-        }
-
-        if (point.z <= data2.position.z || point.z >= data2.position.z)
-        {
-            ratio[2] = (point.z - data2.position.z) / data2.halfSize.z;
-        }
-        //if (Mathf.Abs(ratio[0]) == Mathf.Abs(ratio[2]))
-        //{
-        //    normal.x = ratio[0];
-        //    normal.z = ratio[2];
-        //    return normal.normalized;
-        //}
-
-        if (Mathf.Abs(ratio[1]) >= 1)
-        {
-            normal.y = ratio[1];
-            return normal;
-        }
-
-        float max = ratio[0];
-        int index = 0;
-        for (int i = 1; i < 3; i++)
-        {
-            if (Mathf.Abs(ratio[i]) > Mathf.Abs(max))
+            if (depth[i] < min)
             {
-                index = i;
-                max = ratio[i];
+                min = depth[i];
+                if (index.Count > 1)
+                {
+                    index.Clear();
+                }
+
+                if (index.Count == 0)
+                {
+                    index.Add(i);
+                }
+                else
+                {
+                    index[0] = i;
+                }
+            }
+            else if (depth[i] == min)
+            {
+                index.Add(i);
             }
         }
 
-        switch (index)
-        {
-            case 0:
-                normal.x = max;
-                break;
-            case 1:
-                normal.y = max;
-                break;
-            case 2:
-                normal.z = max;
-                break;
-        }
+        len = min;
 
-        return normal;
+        for (int i = 0; i < index.Count; i++)
+        {
+            switch (index[i])
+            {
+                case 0:
+                    normal.x = -1;
+                    break;
+                case 1:
+                    normal.y = -1;
+                    break;
+                case 2:
+                    normal.z = -1;
+                    break;
+                case 3:
+                    normal.x = 1;
+                    break;
+                case 4:
+                    normal.y = 1;
+                    break;
+                case 5:
+                    normal.z = 1;
+                    break;
+            }
+        }
+        return normal.normalized;
     }
 
-    public static Vector3 GetCollideNormal(Vector3 point, OBBData data2)
+    public static Vector3 GetCollideNormal(OBBData data1, OBBData data2, out float len)
     {
-        Vector3 normal = Vector3.zero;
-        float[] ratio = new float[3];
-        Vector3[] axes = data2.axes;
+        Vector3 dir = data1.position - data2.position;
 
-        Vector3 dist = point - data2.position;
+        Vector3[] axes = new Vector3[6] {
+            data2.axes[0],
+            data2.axes[1],
+            data2.axes[2],
+            -data2.axes[0],
+            -data2.axes[1],
+            -data2.axes[2]
+        };
 
-        Vector3 distance = new Vector3(Vector3.Dot(dist, axes[0]), Vector3.Dot(dist, axes[1]), Vector3.Dot(dist, axes[2]));
+        float[] halfSize = new float[3]{
+            data2.halfSize.x,
+            data2.halfSize.y,
+            data2.halfSize.z
+        };
 
-        //float[] size = new float[3] { data2.halfSize.x, data2.halfSize.y, data2.halfSize.z };
 
+        float max = Vector3.Dot(dir, data2.axes[0]);
+        float halfSizeNum = halfSize[0];
+        Vector3 normal = axes[0];
 
-        if (distance.x <= data2.halfSize.x || distance.x >= data2.halfSize.x)
+        for (int i = 1; i < axes.Length; i++)
         {
-            ratio[0] = distance.x / data2.halfSize.x;
-        }
-
-        if (distance.y <= data2.halfSize.y || distance.y >= data2.halfSize.y)
-        {
-            ratio[1] = distance.y / data2.halfSize.y;
-        }
-
-        if (distance.z <= data2.halfSize.z || distance.z >= data2.halfSize.z)
-        {
-            ratio[2] = distance.z / data2.halfSize.z;
-        }
-
-        if (Mathf.Abs(ratio[1]) >= 1)
-        {
-            normal = ratio[1] * axes[1];
-            return normal;
-        }
-
-        float max = ratio[0];
-        int index = 0;
-        for (int i = 1; i < 3; i++)
-        {
-            if (Mathf.Abs(ratio[i]) > Mathf.Abs(max))
+            float dot = Vector3.Dot(dir, axes[i]) / halfSize[i % 3];
+            if (dot > max)
             {
-                index = i;
-                max = ratio[i];
+                max = dot;
+                normal = axes[i];
+                halfSizeNum = halfSize[i % 3];
             }
         }
 
-        switch (index)
+        len = Vector3.Dot(normal, data1.vertexts[0] - data2.position);
+        for (int i = 1; i < data1.vertexts.Length; i++)
         {
-            case 0:
-                //normal.x = max;
-                normal = max / Mathf.Abs(max) * axes[0];
-                break;
-            case 1:
-                //normal.y = max;
-                normal = max / Mathf.Abs(max) * axes[1];
-                break;
-            case 2:
-                //normal.z = max;
-                normal = max / Mathf.Abs(max) * axes[2];
-                break;
+            float dot = Vector3.Dot(normal, data1.vertexts[i] - data2.position);
+            if(dot < len)
+            {
+                len = dot;
+            }
         }
-        if (float.IsNaN(normal.x))
-        {
-            ConsoleUtils.Log("计算错误");
-        }
+
+        len = halfSizeNum - len;
+
         return normal;
     }
 

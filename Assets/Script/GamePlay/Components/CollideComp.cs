@@ -15,6 +15,8 @@ public class CollideComp : Comp
 {
     public CollisionType type;
 
+    public Vector3 position;
+
     public CircleData circle;
 
     public AABBData aabb;
@@ -34,9 +36,12 @@ public class CollideComp : Comp
 
     public bool isStatic;
 
+    public Vector3 totalOffset;
+
     public override void Reset()
     {
         type = CollisionType.Circle;
+        position = Vector3.zero;
         circle = null;
         aabb = null;
         obb = null;
@@ -44,5 +49,6 @@ public class CollideComp : Comp
         thrust = 0.0f;
         friction = 0.0f;
         isStatic = true;
+        totalOffset = Vector3.zero;
     }
 }

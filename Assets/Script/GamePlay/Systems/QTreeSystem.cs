@@ -22,7 +22,8 @@ public class QTreeSystem : ECSSystem
 
             if (move.lastPosition != move.nextPostition || isFreeFall)
             {
-                qTree.qObj.RefreshBounds(calculatedPosition);
+                //qTree.qObj.RefreshBounds(calculatedPosition);
+                qTree.qObj.RefreshBounds(move.nextPostition);
                 //ConsoleUtils.Log("¸üÐÂbound",nextPosition);
             }
 

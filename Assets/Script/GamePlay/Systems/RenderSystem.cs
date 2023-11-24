@@ -39,14 +39,15 @@ public class RenderSystem : ECSSystem
                     transform.rotation = _rotation;
                 }
             }
-            //if (move.isMove)
-            //{
-            //    Vector3 nextPosition = move.nextPostition;
-            //    nextPosition.y += moveY;
-            //    transform.position = nextPosition;
-            //    ConsoleUtils.Log("渲染坐标", nextPosition);
-            //}
-            transform.position = calculatedPosition;
+            if (move.isMove)
+            {
+                //    Vector3 nextPosition = move.nextPostition;
+                //    nextPosition.y += moveY;
+                //    transform.position = nextPosition;
+                //    ConsoleUtils.Log("渲染坐标", nextPosition);
+                transform.position = move.nextPostition;
+            }
+            //transform.position = calculatedPosition;
             //ConsoleUtils.Log("渲染坐标", nextPosition, move.nextPostition, moveY);
 
         }

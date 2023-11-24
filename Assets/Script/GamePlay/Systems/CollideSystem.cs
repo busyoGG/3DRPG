@@ -8,7 +8,7 @@ public class CollideSystem : ECSSystem
 {
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(CollideComp), typeof(QTreeComp));
+        return ECSManager.Ins().AllOf(typeof(CollideComp), typeof(QTreeComp), typeof(MoveComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -20,63 +20,17 @@ public class CollideSystem : ECSSystem
             if (collider.isStatic) continue;
 
             MoveComp move = entity.Get<MoveComp>();
-            Vector3 calculatedPosition = TransformSingleton.Ins().GetCalculatedPosition(entity.id);
-
-            //更新包围盒
-            switch (collider.type)
-            {
-                case CollisionType.AABB:
-                    if (collider.aabb.position != calculatedPosition)
-                    {
-                        collider.aabb.position = calculatedPosition;
-                    }
-                    break;
-                case CollisionType.OBB:
-                    if (collider.obb.position != calculatedPosition)
-                    {
-                        collider.obb.position = calculatedPosition;
-                    }
-                    //if(collider.obb.axes)
-                    break;
-            }
-
             //检测碰撞
             QTreeComp qTree = entity.Get<QTreeComp>();
             //初始化碰撞数组
             List<CollideComp> colliders = CollisionSingleton.Ins().GetColliders(entity.id);
-            colliders.Clear();
-            List<Vector3> normals = CollisionSingleton.Ins().GetNormalList(entity.id);
-            normals.Clear();
-            List<float> higherests = CollisionSingleton.Ins().GetHigherestList(entity.id);
-            higherests.Clear();
-            List<Vector3> closestPoints = CollisionSingleton.Ins().GetClosestPointList(entity.id);
-            closestPoints.Clear();
-            List<Vector3> closestPointSelfs = CollisionSingleton.Ins().GetClosestPointSelfList(entity.id);
-            closestPointSelfs.Clear();
-            List<Vector3> insidePoints = CollisionSingleton.Ins().GetInsidePointList(entity.id);
-            insidePoints.Clear();
+            List<CollideComp> collidedComps = new List<CollideComp>();
 
             AABBData bounds = qTree.qObj.bounds;
 
             List<QTreeObj> objs = QtreeManager.Ins().Find(MapManager.Ins().GetIndex(bounds.position), bounds);
 
             Vector3 point;
-            Vector3 totalNormal = Vector3.zero;
-            float totalHigherest = float.MinValue;
-
-            Vector3 position = Vector3.zero;
-            float maxY = 0;
-            CollideComp higherestCollide = null;
-
-            switch (collider.type)
-            {
-                case CollisionType.AABB:
-                    position = collider.aabb.position;
-                    break;
-                case CollisionType.OBB:
-                    position = collider.obb.position;
-                    break;
-            }
 
             foreach (var obj in objs)
             {
@@ -87,86 +41,30 @@ public class CollideSystem : ECSSystem
                     bool isCollided = CheckCollide(collider, collideComp, out point);
                     if (isCollided)
                     {
-                        colliders.Add(collideComp);
-                        Vector3 closest = Vector3.zero;
-                        Vector3 closestSelf = Vector3.zero;
-
-                        if (collideComp.type == CollisionType.AABB)
+                        if (!colliders.Contains(collideComp))
                         {
-                            closest = CollideUtils.GetClosestPointAABB(position, collideComp.aabb);
-                            switch (collider.type)
-                            {
-                                case CollisionType.AABB:
-                                    closestSelf = CollideUtils.GetClosestPointAABB(closest, collider.aabb);
-                                    break;
-                                case CollisionType.OBB:
-                                    closestSelf = CollideUtils.GetClosestPointOBB(collideComp.aabb.position, collider.obb);
-                                    foreach (Vector3 vertext in collideComp.aabb.vertexts)
-                                    {
-                                        if (CollideUtils.CheckInsideObb(vertext - collider.obb.position, collider.obb))
-                                        {
-                                            insidePoints.Add(vertext);
-                                            break;
-                                        }
-                                    }
-                                    break;
-                            }
-                            //AABB情况
-                            Vector3 normal = CollideUtils.GetCollideNormal(position, collideComp.aabb);
-                            normals.Add(normal);
-                            totalNormal += normal;
-                            maxY = normal.y > 0 ? closestSelf.y : float.MinValue;
+                            colliders.Insert(0, collideComp);
                         }
-                        else if (collideComp.type == CollisionType.OBB)
-                        {
-                            //maxY = collideComp.obb.max.y;
-                            closest = CollideUtils.GetClosestPointOBB(position, collideComp.obb);
-                            switch (collider.type)
-                            {
-                                case CollisionType.AABB:
-                                    closestSelf = CollideUtils.GetClosestPointAABB(closest, collider.aabb);
-                                    break;
-                                case CollisionType.OBB:
-                                    closestSelf = CollideUtils.GetClosestPointOBB(collideComp.obb.position, collider.obb);
-                                    foreach (Vector3 vertext in collideComp.obb.vertexts)
-                                    {
-                                        if (CollideUtils.CheckInsideObb(vertext, collider.obb))
-                                        {
-                                            insidePoints.Add(vertext);
-                                            break;
-                                        }
-                                    }
-                                    break;
-                            }
-                            //OBB情况
-                            Vector3 normal = CollideUtils.GetCollideNormal(closestSelf, collideComp.obb);
-                            
-                            normals.Add(normal);
-                            totalNormal += normal;
-                            maxY = normal.y > 0 ? closestSelf.y : float.MinValue;
-                        }
-
-                        closestPoints.Add(closest);
-                        closestPointSelfs.Add(closestSelf);
-                        higherests.Add(maxY);
-                        //totalHigherest = Mathf.Max(totalHigherest, maxY);
-                        if (totalHigherest < maxY)
-                        {
-                            totalHigherest = maxY;
-                            higherestCollide = collideComp;
-                        }
+                        collidedComps.Add(collideComp);
                     }
                 }
             }
-            //ConsoleUtils.Log("最高", totalHigherest);
-
-            totalNormal.x = Mathf.Clamp(totalNormal.x, -1, 1);
-            totalNormal.y = Mathf.Clamp(totalNormal.y, -1, 1);
-            totalNormal.z = Mathf.Clamp(totalNormal.z, -1, 1);
-            CollisionSingleton.Ins().SetTotalNormal(entity.id, totalNormal);
-
-            CollisionSingleton.Ins().SetHigherest(entity.id, totalHigherest);
-            CollisionSingleton.Ins().SetHigherestCollide(entity.id, higherestCollide);
+            //按顺序检测碰撞
+            for (int i = colliders.Count - 1; i >= 0; i--)
+            {
+                CollideComp collideComp = colliders[i];
+                if (!collidedComps.Contains(collideComp))
+                {
+                    colliders.RemoveAt(i);
+                }
+                else
+                {
+                    float len;
+                    Vector3 normal = GetNormal(collider, collideComp, out len);
+                    collider.totalOffset += normal * len;
+                    RefreshCollider(collider, normal * len);
+                }
+            }
         }
     }
 
@@ -183,6 +81,28 @@ public class CollideSystem : ECSSystem
             {
                 Gizmos.DrawLineList(collider.obb.vertexts);
             }
+        }
+    }
+
+    private void RefreshCollider(CollideComp collider, Vector3 offset)
+    {
+        //更新包围盒
+        collider.position += offset;
+        switch (collider.type)
+        {
+            case CollisionType.AABB:
+                if (collider.aabb.position != collider.position)
+                {
+                    collider.aabb.position = collider.position;
+                }
+                break;
+            case CollisionType.OBB:
+                if (collider.obb.position != collider.position)
+                {
+                    collider.obb.position = collider.position;
+                }
+                //if(collider.obb.axes)
+                break;
         }
     }
 
@@ -245,5 +165,50 @@ public class CollideSystem : ECSSystem
         }
         point = CollideUtils._minValue;
         return false;
+    }
+
+    public Vector3 GetNormal(CollideComp collide1, CollideComp collide2, out float len)
+    {
+        switch (collide1.type)
+        {
+            case CollisionType.Circle:
+                break;
+            case CollisionType.AABB:
+                switch (collide2.type)
+                {
+                    case CollisionType.Circle:
+                    case CollisionType.AABB:
+                        return CollideUtils.GetCollideNormal(collide1.aabb, collide2.aabb, out len);
+                    case CollisionType.OBB:
+                        return CollideUtils.GetCollideNormal(collide1.aabb.obb, collide2.obb, out len);
+                    case CollisionType.Ray:
+                        break;
+                }
+                break;
+            case CollisionType.OBB:
+                switch (collide2.type)
+                {
+                    case CollisionType.Circle:
+                    case CollisionType.AABB:
+                        return CollideUtils.GetCollideNormal(collide1.obb, collide2.aabb.obb, out len);
+                    case CollisionType.OBB:
+                        return CollideUtils.GetCollideNormal(collide1.obb, collide2.obb, out len);
+                    case CollisionType.Ray:
+                        break;
+                }
+                break;
+            case CollisionType.Ray:
+                switch (collide2.type)
+                {
+                    case CollisionType.Circle:
+                    case CollisionType.AABB:
+                    case CollisionType.OBB:
+                    case CollisionType.Ray:
+                        break;
+                }
+                break;
+        }
+        len = 0;
+        return Vector3.zero;
     }
 }

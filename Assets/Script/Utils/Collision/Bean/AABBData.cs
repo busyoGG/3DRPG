@@ -64,6 +64,22 @@ public class AABBData
 
     private Vector3 _min;
 
+    //public float maxY
+    //{
+    //    get
+    //    {
+    //        return max.y;
+    //    }
+    //}
+
+    //public float minY
+    //{
+    //    get
+    //    {
+    //        return min.y;
+    //    }
+    //}
+
     public OBBData obb
     {
         get

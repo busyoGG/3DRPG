@@ -6,8 +6,8 @@ public class TestWorld : ECSWorld
 {
     public override void Init()
     {
-        Add(new JumpSystem());
         Add(new MoveSystem());
+        Add(new JumpSystem());
         Add(new CollideRefreshSystem());
         Add(new CollideSystem());
         Add(new OffsetSystem());

@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum CollisionType { 
+public enum CollisionType
+{
     Circle,
     AABB,
     OBB,
@@ -37,6 +38,44 @@ public class CollideComp : Comp
     public bool isStatic;
 
     public Vector3 totalOffset;
+
+    public float maxY
+    {
+        get
+        {
+            switch (type)
+            {
+                case CollisionType.Circle:
+                    return circle.position.y + circle.radius;
+                case CollisionType.AABB:
+                    return aabb.max.y;
+                case CollisionType.OBB:
+                    return obb.maxY;
+                case CollisionType.Ray:
+                    break;
+            }
+            return 0;
+        }
+    }
+
+    public float minY
+    {
+        get
+        {
+            switch (type)
+            {
+                case CollisionType.Circle:
+                    return circle.position.y - circle.radius;
+                case CollisionType.AABB:
+                    return aabb.min.y;
+                case CollisionType.OBB:
+                    return obb.minY;
+                case CollisionType.Ray:
+                    break;
+            }
+            return 0;
+        }
+    }
 
     public override void Reset()
     {

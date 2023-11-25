@@ -16,6 +16,8 @@ public class OBBData
             _position = value;
             _vertexts = null;
             _aabb = null;
+            _maxY = float.MinValue;
+            _minY = float.MaxValue;
         }
     }
     private Vector3 _position;
@@ -99,7 +101,6 @@ public class OBBData
         {
             if (_maxY == float.MinValue)
             {
-                //GetMaxMin();
                 for (int i = 0; i < _vertexts.Length; i++)
                 {
                     _maxY = Mathf.Max(_maxY, _vertexts[i].y);
@@ -111,19 +112,22 @@ public class OBBData
 
     private float _maxY = float.MinValue;
 
-    //public Vector3 min
-    //{
-    //    get
-    //    {
-    //        if (_min.Equals(Vector3.zero))
-    //        {
-    //            GetMaxMin();
-    //        }
-    //        return _min;
-    //    }
-    //}
+    public float minY
+    {
+        get
+        {
+            if (_minY == float.MaxValue)
+            {
+                for (int i = 0; i < _vertexts.Length; i++)
+                {
+                    _minY = Mathf.Min(_minY, _vertexts[i].y);
+                }
+            }
+            return _minY;
+        }
+    }
 
-    //private Vector3 _min;
+    private float _minY = float.MaxValue;
 
     public AABBData aabb
     {

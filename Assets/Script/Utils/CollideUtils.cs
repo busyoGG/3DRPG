@@ -1,12 +1,16 @@
 
 using Game;
 using System.Collections.Generic;
-using System.Drawing;
 using UnityEngine;
 
 public class CollideUtils
 {
     public static Vector3 _minValue = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+    public static Dictionary<string, Vector3[]> _seperatingAxes = new Dictionary<string, Vector3[]>();
+
+    public static Dictionary<string, List<Vector2[]>> _limitObb = new Dictionary<string, List<Vector2[]>>();
+
     //----- AABB ----- start
 
     /// <summary>
@@ -42,34 +46,62 @@ public class CollideUtils
     public static bool CollisionOBB(OBBData data1, OBBData data2)
     {
         //求两个OBB包围盒之间两两坐标轴的法平面轴 共9个
-        int len1 = data1.axes.Length;
-        int len2 = data2.axes.Length;
-        Vector3[] axes = new Vector3[len1 + len2 + len1 * len2];
-        int k = 0;
-        int initJ = len2;
-        for (int i = 0; i < len1; i++)
+        Vector3[] axes;
+
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        _seperatingAxes.TryGetValue(id, out axes);
+        if (axes == null)
         {
-            axes[k++] = data1.axes[i];
-            for (int j = 0; j < len2; j++)
+            int len1 = data1.axes.Length;
+            int len2 = data2.axes.Length;
+            axes = new Vector3[len1 + len2 + len1 * len2];
+            int k = 0;
+            int initJ = len2;
+            for (int i = 0; i < len1; i++)
             {
-                if (initJ > 0)
+                axes[k++] = data1.axes[i];
+                for (int j = 0; j < len2; j++)
                 {
-                    initJ--;
-                    axes[k++] = data2.axes[j];
+                    if (initJ > 0)
+                    {
+                        initJ--;
+                        axes[k++] = data2.axes[j];
+                    }
+                    axes[k++] = Vector3.Cross(data1.axes[i], data2.axes[j]);
                 }
-                axes[k++] = Vector3.Cross(data1.axes[i], data2.axes[j]);
             }
+            _seperatingAxes.Add(id, axes);
+        }
+
+        List<Vector2[]> limitList;
+        _limitObb.TryGetValue(id, out limitList);
+        if (limitList == null)
+        {
+            limitList = new List<Vector2[]>();
+            _limitObb.Add(id, limitList);
+        }
+        else
+        {
+            limitList.Clear();
         }
 
 
         for (int i = 0, len = axes.Length; i < len; i++)
         {
-            if (NotInteractiveOBB(data1.vertexts, data2.vertexts, axes[i]))
+            Vector2[] limit;
+            bool isNotInteractive = NotInteractiveOBB(data1.vertexts, data2.vertexts, axes[i], out limit);
+
+            if (isNotInteractive)
             {
                 //有一个不相交就退出
                 return false;
             }
+            else
+            {
+                limitList.Add(limit);
+            }
         }
+
         return true;
     }
 
@@ -80,13 +112,15 @@ public class CollideUtils
     /// <param name="vertexs2"></param>
     /// <param name="axis"></param>
     /// <returns></returns>
-    public static bool NotInteractiveOBB(Vector3[] vertexs1, Vector3[] vertexs2, Vector3 axis)
+    public static bool NotInteractiveOBB(Vector3[] vertexs1, Vector3[] vertexs2, Vector3 axis, out Vector2[] limit)
     {
+        limit = new Vector2[2];
         //计算OBB包围盒在分离轴上的投影极限值
-        float[] limit1 = GetProjectionLimit(vertexs1, axis);
-        float[] limit2 = GetProjectionLimit(vertexs2, axis);
+        limit[0] = GetProjectionLimit(vertexs1, axis);
+        limit[1] = GetProjectionLimit(vertexs2, axis);
         //两个包围盒极限值不相交，则不碰撞
-        return limit1[0] > limit2[1] || limit2[0] > limit1[1];
+        bool res = limit[0].x > limit[1].y || limit[1].x > limit[0].y;
+        return res;
     }
 
     /// <summary>
@@ -95,15 +129,15 @@ public class CollideUtils
     /// <param name="vertexts"></param>
     /// <param name="axis"></param>
     /// <returns></returns>
-    public static float[] GetProjectionLimit(Vector3[] vertexts, Vector3 axis)
+    public static Vector2 GetProjectionLimit(Vector3[] vertexts, Vector3 axis)
     {
-        float[] result = new float[2] { float.MaxValue, float.MinValue };
+        Vector2 result = new Vector2(float.MaxValue, float.MinValue);
         for (int i = 0, len = vertexts.Length; i < len; i++)
         {
             Vector3 vertext = vertexts[i];
             float dot = Vector3.Dot(vertext, axis);
-            result[0] = Mathf.Min(dot, result[0]);
-            result[1] = Mathf.Max(dot, result[1]);
+            result.x = Mathf.Min(dot, result[0]);
+            result.y = Mathf.Max(dot, result[1]);
         }
         return result;
     }
@@ -510,52 +544,97 @@ public class CollideUtils
 
     public static Vector3 GetCollideNormal(OBBData data1, OBBData data2, out float len)
     {
-        Vector3 dir = data1.position - data2.position;
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        Vector3 normal = Vector3.zero;
 
-        Vector3[] axes = new Vector3[6] {
-            data2.axes[0],
-            data2.axes[1],
-            data2.axes[2],
-            -data2.axes[0],
-            -data2.axes[1],
-            -data2.axes[2]
-        };
+        Vector3[] axes;
+        _seperatingAxes.TryGetValue(id, out axes);
+        List<Vector2[]> limitList;
+        _limitObb.TryGetValue(id, out limitList);
 
-        float[] halfSize = new float[3]{
-            data2.halfSize.x,
-            data2.halfSize.y,
-            data2.halfSize.z
-        };
-
-
-        float max = Vector3.Dot(dir, data2.axes[0]);
-        float halfSizeNum = halfSize[0];
-        Vector3 normal = axes[0];
-
-        for (int i = 1; i < axes.Length; i++)
+        if (axes == null)
         {
-            float dot = Vector3.Dot(dir, axes[i]) / halfSize[i % 3];
-            if (dot > max)
+            int len1 = data1.axes.Length;
+            int len2 = data2.axes.Length;
+            axes = new Vector3[len1 + len2 + len1 * len2];
+            int k = 0;
+            int initJ = len2;
+            for (int i = 0; i < len1; i++)
             {
-                max = dot;
-                normal = axes[i];
-                halfSizeNum = halfSize[i % 3];
+                axes[k++] = data1.axes[i];
+                for (int j = 0; j < len2; j++)
+                {
+                    if (initJ > 0)
+                    {
+                        initJ--;
+                        axes[k++] = data2.axes[j];
+                    }
+                    axes[k++] = Vector3.Cross(data1.axes[i], data2.axes[j]);
+                }
+            }
+            _seperatingAxes.Add(id, axes);
+        }
+
+        if (limitList == null)
+        {
+            limitList = new List<Vector2[]>();
+            _limitObb.Add(id, limitList);
+
+            for (int i = 0; i < axes.Length; i++)
+            {
+                Vector2[] limit;
+                bool isNotInteractive = NotInteractiveOBB(data1.vertexts, data2.vertexts, axes[i], out limit);
+
+                if (isNotInteractive)
+                {
+                    //有一个不相交就退出
+                    len = 0;
+                    return normal;
+                }
+                else
+                {
+                    limitList.Add(limit);
+                }
             }
         }
 
-        len = Vector3.Dot(normal, data1.vertexts[0] - data2.position);
-        for (int i = 1; i < data1.vertexts.Length; i++)
+        float minOverlap = float.MaxValue;
+
+        for (int i = 0; i < limitList.Count; i++)
         {
-            float dot = Vector3.Dot(normal, data1.vertexts[i] - data2.position);
-            if(dot < len)
+            Vector2[] limit = limitList[i];
+            float overlap;
+            if (limit[0].y > limit[1].y && limit[0].x < limit[1].x)
             {
-                len = dot;
+                overlap = Mathf.Min(limit[0].y - limit[1].x, limit[1].y - limit[0].x);
+            }
+            else if (limit[1].y > limit[0].y && limit[1].x < limit[0].x)
+            {
+                overlap = Mathf.Min(limit[1].y - limit[0].x, limit[0].y - limit[1].x);
+            }
+            else
+            {
+                overlap = Mathf.Min(limit[0].y, limit[1].y) - Mathf.Max(limit[0].x, limit[1].x);
+            }
+            if (overlap > 0)
+            {
+
+                if (overlap < minOverlap)
+                {
+                    minOverlap = overlap;
+                    normal = axes[i];
+                }
             }
         }
 
-        len = halfSizeNum - len;
-
-        return normal;
+        len = minOverlap * 2;
+        Vector3 dis = data1.position - data2.position;
+        float amount = normal.x * dis.x + normal.y * dis.y + normal.z * dis.z;
+        if(amount < 0)
+        {
+            normal = -normal;
+        }
+        return normal.normalized;
     }
 
     //TODO GJK检测

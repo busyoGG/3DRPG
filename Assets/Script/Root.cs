@@ -141,7 +141,7 @@ public class Root : MonoBehaviour
         cube2.transform.position = new Vector3(6, 1f, 1);
         cube2.transform.localScale = new Vector3(4, 4, 4);
 
-        cube2.transform.eulerAngles = new Vector3(-60, 0, 0);
+        cube2.transform.eulerAngles = new Vector3(-60, 45, 0);
 
         collideCube2.position = cube.transform.position;
         collideCube2.type = CollisionType.OBB;

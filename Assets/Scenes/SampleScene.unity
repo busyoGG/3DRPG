@@ -627,7 +627,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 0.03
   _rotateLerpSpeed: 0.3
-  _jumpSpeed: 7
+  _jumpSpeed: 1
   _gravity: 9.8
   _jumpScale: 2
 --- !u!33 &1365198097

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Collision
 {
-    public static bool CheckCollide(AABBData data1, AABBData data2,out Vector3 point)
+    public static bool CheckCollide(AABBData data1, AABBData data2, out Vector3 point)
     {
         point = CollideUtils._minValue;
         return CollideUtils.CollisionAABB(data1, data2);

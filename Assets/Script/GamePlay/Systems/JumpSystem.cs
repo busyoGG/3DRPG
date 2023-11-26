@@ -21,22 +21,8 @@ public class JumpSystem : ECSSystem
 
             if (jump.startJump)
             {
-                jump.isJump = true;
+                move.isJump = true;
                 jump.startJump = false;
-            }
-
-            if (jump.isJump)
-            {
-                if (move.nextPostition.y <= 1 && jump.duration > 0 || move.isSlope)
-                {
-                    jump.isJump = false;
-                    jump.duration = 0;
-                }
-                else
-                {
-                    jump.duration += _dt * 0.5f;
-                    move.nextPostition.y += jump.speed * jump.duration;
-                }
             }
         }
     }

@@ -575,10 +575,13 @@ public class CollideUtils
             _seperatingAxes.Add(id, axes);
         }
 
-        if (limitList == null)
+        if (limitList == null || limitList.Count == 0)
         {
-            limitList = new List<Vector2[]>();
-            _limitObb.Add(id, limitList);
+            if (limitList == null)
+            {
+                limitList = new List<Vector2[]>();
+                _limitObb.Add(id, limitList);
+            }
 
             for (int i = 0; i < axes.Length; i++)
             {
@@ -628,13 +631,14 @@ public class CollideUtils
         }
 
         len = minOverlap * 2;
+        //len = minOverlap;
         Vector3 dis = data1.position - data2.position;
         float amount = normal.x * dis.x + normal.y * dis.y + normal.z * dis.z;
-        if(amount < 0)
+        if (amount < 0)
         {
             normal = -normal;
         }
-        return normal.normalized;
+        return normal;
     }
 
     //TODO GJK¼ì²â

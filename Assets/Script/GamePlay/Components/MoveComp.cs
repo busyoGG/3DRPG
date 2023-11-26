@@ -19,17 +19,25 @@ public class MoveComp : Comp
 
     public Vector3 nextPostition;
 
-    public float gravity;
-
     public float fallTime;
 
     public float speed;
+
+    public bool isJump;
+
+    public float jumpSpeed;
+
+    public float jumpScale;
+
+    public float gravity;
 
     public bool isMove;
 
     public bool isTop;
 
     public bool isSlope;
+
+    public bool isFall;
 
     public Vector3 forwardOffset;
 
@@ -45,5 +53,9 @@ public class MoveComp : Comp
         gravity = 9.8f;
         isTop = false;
         isSlope = false;
+        isFall = false;
+        isJump = false;
+        jumpScale = 0f;
+        jumpSpeed = 0f;
     }
 }

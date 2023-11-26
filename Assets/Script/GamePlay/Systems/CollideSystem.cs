@@ -1,4 +1,5 @@
 using Game;
+using Microsoft.SqlServer.Server;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Transactions;
@@ -65,11 +66,7 @@ public class CollideSystem : ECSSystem
                 {
                     float len;
                     Vector3 normal = GetNormal(collider, collideComp, out len);
-                    if (normal.y == 0)
-                    {
-                        collider.totalOffset += normal * len;
-                    }
-                    else if (collider.position.y >= 1)
+                    if (collider.position.y >= 1 && normal.y > 0)
                     {
                         move.isSlope = true;
                         Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
@@ -77,6 +74,14 @@ public class CollideSystem : ECSSystem
                         {
                             move.forwardOffset = normal;
                         }
+                    }
+                    else
+                    {
+                        if ((collider.totalOffset.y > 0 || move.nextPostition.y <= 1) && normal.y < 0)
+                        {
+                            normal.y = 0;
+                        }
+                        collider.totalOffset += normal * len;
                     }
 
                     RefreshCollider(collider, normal * len);
@@ -87,22 +92,6 @@ public class CollideSystem : ECSSystem
                     }
                 }
             }
-
-            //if (collider.totalOffset.y > 0.01 && collider.position.y >= 1)
-            //{
-            //    move.isSlope = true;
-            //    Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
-            //    if (!inputForward.Equals(Vector3.zero))
-            //    {
-            //        Vector3 left = Vector3.Cross(inputForward.normalized, collider.totalOffset.normalized).normalized;
-            //        Vector3 slopeForward = Vector3.Cross(collider.totalOffset.normalized, left);
-            //        move.forwardOffset = slopeForward.normalized;
-            //    }
-            //}
-            //else
-            //{
-            //    move.isSlope = false;
-            //}
         }
     }
 

@@ -20,8 +20,6 @@ public class RenderSystem : ECSSystem
             MoveComp move = entity.Get<MoveComp>();
             Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
 
-            Vector3 calculatedPosition = TransformSingleton.Ins().GetCalculatedPosition(entity.id);
-
             Transform transform = render.node.transform;
 
             //转向
@@ -39,12 +37,8 @@ public class RenderSystem : ECSSystem
                     transform.rotation = _rotation;
                 }
             }
-            if (move.isMove)
+            if (move.isMove || move.isFall)
             {
-                //    Vector3 nextPosition = move.nextPostition;
-                //    nextPosition.y += moveY;
-                //    transform.position = nextPosition;
-                //    ConsoleUtils.Log("渲染坐标", nextPosition);
                 transform.position = move.nextPostition;
             }
             //transform.position = calculatedPosition;

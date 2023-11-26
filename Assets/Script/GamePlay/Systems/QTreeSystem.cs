@@ -16,15 +16,10 @@ public class QTreeSystem : ECSSystem
         {
             QTreeComp qTree = entity.Get<QTreeComp>();
             MoveComp move = entity.Get<MoveComp>();
-            Vector3 calculatedPosition = TransformSingleton.Ins().GetCalculatedPosition(entity.id);
 
-            bool isFreeFall = TransformSingleton.Ins().GetFreeFall(entity.id);
-
-            if (move.lastPosition != move.nextPostition || isFreeFall)
+            if (move.lastPosition != move.nextPostition || move.isFall)
             {
-                //qTree.qObj.RefreshBounds(calculatedPosition);
                 qTree.qObj.RefreshBounds(move.nextPostition);
-                //ConsoleUtils.Log("¸üÐÂbound",nextPosition);
             }
 
         }

@@ -35,10 +35,6 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     public float _jumpScale = 1f;
     /// <summary>
-    /// 移动坐标
-    /// </summary>
-    private Vector3 _movePos = Vector3.zero;
-    /// <summary>
     /// 是否可以移动
     /// </summary>
     private bool _canMove = true;
@@ -61,7 +57,6 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        _movePos = transform.position;
 
         player.Get<MoveComp>().speed = _moveSpeed;
         player.Get<MoveComp>().lastPosition = transform.position;
@@ -69,12 +64,11 @@ public class PlayerController : MonoBehaviour
 
         player.Get<RenderComp>().node = transform;
 
-        player.Get<JumpComp>().speed = _jumpSpeed;
-        player.Get<JumpComp>().baseY = transform.position.y;
+        player.Get<MoveComp>().jumpSpeed = _jumpSpeed;
         //player.Get<JumpComp>().curY = transform.position.y;
         //TransformSingleton.Ins().SetMoveY(player.id,transform.position.y);
-        player.Get<JumpComp>().gravity = _gravity;
-        player.Get<JumpComp>().scale = _jumpScale;
+        player.Get<MoveComp>().gravity = _gravity;
+        player.Get<MoveComp>().jumpScale = _jumpScale;
         ConsoleUtils.Log("玩家初始化");
         InitInput();
     }
@@ -169,7 +163,6 @@ public class PlayerController : MonoBehaviour
         {
             if (_canJump)
             {
-                player.Get<JumpComp>().isJump = true;
                 player.Get<JumpComp>().startJump = true;
             }
         });

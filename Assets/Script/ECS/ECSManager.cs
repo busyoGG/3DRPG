@@ -28,6 +28,11 @@ public class ECSManager : Singleton<ECSManager>
     /// </summary>
     private Stack<Entity> _entityPool = new Stack<Entity>();
 
+    /// <summary>
+    /// 实体对象
+    /// </summary>
+    private Dictionary<int, Entity> _entities = new Dictionary<int, Entity>();
+
     private Dictionary<int, Stack<Comp>> _compPool = new Dictionary<int, Stack<Comp>>();
 
     public void Init()
@@ -153,18 +158,29 @@ public class ECSManager : Singleton<ECSManager>
         {
             Entity entity = new Entity();
             entity.id = _entityId++;
+            _entities.Add(entity.id,entity);
             return entity;
         }
         else
         {
+            Entity entity = _entityPool.Pop();
+            _entities.Add(entity.id, entity);
             return _entityPool.Pop();
         }
+    }
+
+    public Entity GetEntity(int id)
+    {
+        Entity entity;
+        _entities.TryGetValue(id, out entity);
+        return entity;
     }
 
     public void RemoveEntity(Entity entity)
     {
         entity.Clear();
         _entityPool.Push(entity);
+        _entities.Remove(entity.id);
     }
 
     public void CompChangeBroadcast(Entity entity, int compId)

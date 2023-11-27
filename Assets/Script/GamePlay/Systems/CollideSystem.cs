@@ -22,15 +22,11 @@ public class CollideSystem : ECSSystem
             if (collider.isStatic) continue;
 
             MoveComp move = entity.Get<MoveComp>();
-            //检测碰撞
-            QTreeComp qTree = entity.Get<QTreeComp>();
             //初始化碰撞数组
             List<CollideComp> colliders = CollisionSingleton.Ins().GetColliders(entity.id);
             List<CollideComp> collidedComps = new List<CollideComp>();
 
-            AABBData bounds = qTree.qObj.bounds;
-
-            List<QTreeObj> objs = QtreeManager.Ins().Find(MapManager.Ins().GetIndex(bounds.position), bounds);
+            List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
 
             Vector3 point;
 

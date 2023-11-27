@@ -9,8 +9,10 @@ public class TestWorld : ECSWorld
         Add(new MoveSystem());
         Add(new JumpSystem());
         Add(new FallSystem());
+        Add(new QObjFindingSystem());
         Add(new CollideRefreshSystem());
         Add(new CollideSystem());
+        Add(new TriggerSystem());
         Add(new OffsetSystem());
         Add(new QTreeSystem());
         Add(new RenderSystem());

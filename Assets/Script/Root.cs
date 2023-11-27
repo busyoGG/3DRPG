@@ -86,27 +86,46 @@ public class Root : MonoBehaviour
         qtreePlayer.qObj = QtreeManager.Ins().CreateQtreeObj(aabbPlayer, entity);
         qtreePlayer.qNode = QtreeManager.Ins().Insert(MapManager.Ins().GetIndex(player.transform.position), qtreePlayer.qObj);
 
+        TriggerComp triggerPlayer = entity.Add<TriggerComp>();
+        triggerPlayer.isPositive = true;
+
         //创建障碍物
         Entity entityCube = ECSManager.Ins().CreateEntity();
-        CollideComp collideCube = entityCube.Add<CollideComp>();
+        //CollideComp collideCube = entityCube.Add<CollideComp>();
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = new Vector3(2, 1.5f, 2);
         cube.transform.localScale = new Vector3(1, 2, 1);
 
-        collideCube.position = cube.transform.position;
-        collideCube.type = CollisionType.AABB;
+        //collideCube.position = cube.transform.position;
+        //collideCube.type = CollisionType.AABB;
 
         AABBData aabbCube = new AABBData();
         aabbCube.position = cube.transform.position;
         aabbCube.size = cube.transform.localScale;
 
-        collideCube.aabb = aabbCube;
+        //collideCube.aabb = aabbCube;
 
         QTreeComp qtreeCube = entityCube.Add<QTreeComp>();
 
         qtreeCube.qObj = QtreeManager.Ins().CreateQtreeObj(aabbCube, entityCube);
         qtreeCube.qNode = QtreeManager.Ins().Insert(MapManager.Ins().GetIndex(cube.transform.position), qtreeCube.qObj);
+
+        TriggerComp triggerCube = entityCube.Add<TriggerComp>();
+        triggerCube.OnTriggerEnter = (Entity self, Entity other) =>
+        {
+            ConsoleUtils.Log("进入trigger");
+        };
+
+        triggerCube.OnTriggerExit = (Entity self, Entity other) =>
+        {
+            ConsoleUtils.Log("退出trigger");
+        };
+
+        triggerCube.OnTriggerKeeping = (Entity self, Entity other) =>
+        {
+            ConsoleUtils.Log("持续trigger");
+        };
 
         //-----
         Entity entityCube3 = ECSManager.Ins().CreateEntity();
@@ -131,8 +150,6 @@ public class Root : MonoBehaviour
         qtreeCube3.qNode = QtreeManager.Ins().Insert(MapManager.Ins().GetIndex(cube3.transform.position), qtreeCube3.qObj);
 
         //-----
-
-
 
         Entity entityCube2 = ECSManager.Ins().CreateEntity();
         CollideComp collideCube2 = entityCube2.Add<CollideComp>();

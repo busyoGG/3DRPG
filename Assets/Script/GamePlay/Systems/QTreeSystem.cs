@@ -25,13 +25,13 @@ public class QTreeSystem : ECSSystem
         }
     }
 
-    public override void OnDrawGizmos(List<Entity> entities)
-    {
-        foreach(Entity entity in entities)
-        {
-            QTreeComp qTree = entity.Get<QTreeComp>();
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(qTree.qObj.bounds.position, qTree.qObj.bounds.size);
-        }
-    }
+    //public override void OnDrawGizmos(List<Entity> entities)
+    //{
+    //    foreach(Entity entity in entities)
+    //    {
+    //        QTreeComp qTree = entity.Get<QTreeComp>();
+    //        Gizmos.color = Color.green;
+    //        Gizmos.DrawWireCube(qTree.qObj.bounds.position, qTree.qObj.bounds.size);
+    //    }
+    //}
 }

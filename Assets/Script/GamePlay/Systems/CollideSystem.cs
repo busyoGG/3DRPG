@@ -49,12 +49,13 @@ public class CollideSystem : ECSSystem
                 }
             }
 
+            //证true的属性需要满足条件才初始化为true
             if (colliders.Count > 0 && move.isClimbTop != 2)
             {
-                move.isTop = true;
-                move.isSlope = false;
                 move.isClimbTop = 1;
+                move.isTop = true;
             }
+            move.isSlope = false;
 
             float minClose = float.MaxValue;
             //按顺序检测碰撞
@@ -85,6 +86,8 @@ public class CollideSystem : ECSSystem
                         {
                             collider.totalOffset += normal * len;
                         }
+                        //刷新包围盒
+                        RefreshCollider(collider, normal * len);
                     }
                     else
                     {
@@ -117,7 +120,7 @@ public class CollideSystem : ECSSystem
                                     Quaternion rotation = Quaternion.identity;
                                     rotation.SetFromToRotation(Vector3.up, dir);
 
-                                    move.climbOffset = dir;
+                                    move.climbOffset = dir * 2;
                                     move.climbOffsetQua = rotation;
 
                                     switch (collider.type)
@@ -131,6 +134,10 @@ public class CollideSystem : ECSSystem
                                     }
                                 }
                             }
+                            else
+                            {
+                                ConsoleUtils.Log("到顶");
+                            }
                         }
                         else
                         {
@@ -141,11 +148,11 @@ public class CollideSystem : ECSSystem
                                 normal.y = 0;
                             }
                             collider.totalOffset += normal * len;
+                            //刷新包围盒
+                            RefreshCollider(collider, normal * len);
                         }
 
                     }
-                    //刷新包围盒
-                    RefreshCollider(collider, normal * len);
                     //判断是否站在顶部
                     if (collider.minY < collideComp.maxY)
                     {
@@ -159,12 +166,6 @@ public class CollideSystem : ECSSystem
             if (!move.isClimb)
             {
                 //没有攀爬 重置攀爬到顶状态
-                move.isClimbTop = 0;
-            }
-
-            //重置攀爬到顶状态
-            if (move.isClimbTop == 2)
-            {
                 move.isClimbTop = 0;
             }
         }

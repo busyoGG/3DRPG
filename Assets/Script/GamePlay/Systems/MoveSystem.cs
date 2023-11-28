@@ -9,14 +9,6 @@ using UnityEngine.UIElements;
 
 public class MoveSystem : ECSSystem
 {
-    private Quaternion _up = Quaternion.identity;
-
-    private Vector3 temp = Vector3.zero;
-
-    public override void Init()
-    {
-        _up.SetLookRotation(-Vector3.up);
-    }
 
     public override ECSMatcher Filter()
     {

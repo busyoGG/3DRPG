@@ -63,8 +63,6 @@ public class ClimbSystem : ECSSystem
                         move.isClimb = false;
                     }
                 }
-                //move.nextPostition += move.climbOffset * move.speed;
-                //move.climbOffset = Vector3.zero;
                
             }
 

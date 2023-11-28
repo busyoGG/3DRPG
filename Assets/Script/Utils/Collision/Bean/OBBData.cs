@@ -103,9 +103,9 @@ public class OBBData
         {
             if (_maxY == float.MinValue)
             {
-                for (int i = 0; i < _vertexts.Length; i++)
+                for (int i = 0; i < vertexts.Length; i++)
                 {
-                    _maxY = Mathf.Max(_maxY, _vertexts[i].y);
+                    _maxY = Mathf.Max(_maxY, vertexts[i].y);
                 }
             }
             return _maxY;
@@ -120,9 +120,9 @@ public class OBBData
         {
             if (_minY == float.MaxValue)
             {
-                for (int i = 0; i < _vertexts.Length; i++)
+                for (int i = 0; i < vertexts.Length; i++)
                 {
-                    _minY = Mathf.Min(_minY, _vertexts[i].y);
+                    _minY = Mathf.Min(_minY, vertexts[i].y);
                 }
             }
             return _minY;

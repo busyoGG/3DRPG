@@ -23,9 +23,9 @@ public abstract class ECSSystem
 
         List<Entity> entities = _group.GetEntities();
 
-        OnRemove(_removes);
         OnEnter(_enters);
         OnUpdate(entities);
+        OnRemove(_removes);
 
         _removes.Clear();
         _enters.Clear();
@@ -44,7 +44,11 @@ public abstract class ECSSystem
 
     private void EntityRemove(Entity entity)
     {
-        _removes.Add(entity);
+        List<Entity> entities = _group.GetEntities();
+        if (entities.Contains(entity))
+        {
+            _removes.Add(entity);
+        }
     }
 
     public virtual void Init() { }

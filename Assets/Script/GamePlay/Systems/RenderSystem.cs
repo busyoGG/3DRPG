@@ -37,7 +37,7 @@ public class RenderSystem : ECSSystem
                     transform.rotation = _rotation;
                 }
             }
-            if (move.isMove || move.isFall)
+            if (move.nextPostition != move.lastPosition)
             {
                 transform.position = move.nextPostition;
             }

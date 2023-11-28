@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class TestWorld : ECSWorld
 {
-    public override void Init()
+    public override void SystemAdd()
     {
+        Add(new ClimbSystem());
         Add(new MoveSystem());
         Add(new JumpSystem());
+        Add(new ClimbUpSystem());
         Add(new FallSystem());
         Add(new QObjFindingSystem());
         Add(new CollideRefreshSystem());

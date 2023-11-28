@@ -38,7 +38,6 @@ public class CollideComp : Comp
     public bool isStatic;
 
     public Vector3 totalOffset;
-
     public float maxY
     {
         get

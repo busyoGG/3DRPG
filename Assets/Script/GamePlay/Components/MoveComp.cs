@@ -7,14 +7,6 @@ using UnityEngine;
 [CompRegister(typeof(MoveComp))]
 public class MoveComp : Comp
 {
-
-    //[RuntimeInitializeOnLoadMethod]
-    //static void Init()
-    //{
-    //    id = ECSManager.Ins().GetCompId();
-    //    ECSManager.Ins().CompRegister(typeof(TransformComp), id);
-    //}
-
     public Vector3 lastPosition;
 
     public Vector3 nextPostition;
@@ -30,14 +22,24 @@ public class MoveComp : Comp
     public float jumpScale;
 
     public float gravity;
-
+    /// <summary>
+    /// 是否移动
+    /// </summary>
     public bool isMove;
-
+    /// <summary>
+    /// 是否在顶部
+    /// </summary>
     public bool isTop;
 
     public bool isSlope;
-
-    public bool isFall;
+    /// <summary>
+    /// 是否攀爬
+    /// </summary>
+    public bool isClimb;
+    /// <summary>
+    /// 是否爬到顶
+    /// </summary>
+    public int isClimbTop;
 
     public Vector3 forwardOffset;
 
@@ -53,9 +55,10 @@ public class MoveComp : Comp
         gravity = 9.8f;
         isTop = false;
         isSlope = false;
-        isFall = false;
         isJump = false;
+        isClimb = false;
         jumpScale = 0f;
         jumpSpeed = 0f;
+        isClimbTop = 0;
     }
 }

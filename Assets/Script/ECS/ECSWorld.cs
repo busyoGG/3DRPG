@@ -6,11 +6,20 @@ public abstract class ECSWorld
 {
     private List<ECSSystem> _systems = new List<ECSSystem>();
 
-    public ECSWorld() { 
+    public ECSWorld() {
+        SystemAdd();
         Init();
     }
 
-    public abstract void Init();
+    public void Init()
+    {
+        foreach (var system in _systems)
+        {
+            system.Init();
+        }
+    }
+
+    public abstract void SystemAdd();
 
     public void Update()
     {

@@ -51,6 +51,7 @@ public class Root : MonoBehaviour
         entity.Add<MoveComp>();
         entity.Add<RenderComp>();
         entity.Add<JumpComp>();
+        entity.Add<ClimbComp>();
 
         CollideComp collidePlayer = entity.Add<CollideComp>();
         collidePlayer.type = CollisionType.AABB;
@@ -91,41 +92,41 @@ public class Root : MonoBehaviour
 
         //创建障碍物
         Entity entityCube = ECSManager.Ins().CreateEntity();
-        //CollideComp collideCube = entityCube.Add<CollideComp>();
+        CollideComp collideCube = entityCube.Add<CollideComp>();
 
         GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
         cube.transform.position = new Vector3(2, 1.5f, 2);
         cube.transform.localScale = new Vector3(1, 2, 1);
 
-        //collideCube.position = cube.transform.position;
-        //collideCube.type = CollisionType.AABB;
+        collideCube.position = cube.transform.position;
+        collideCube.type = CollisionType.AABB;
 
         AABBData aabbCube = new AABBData();
         aabbCube.position = cube.transform.position;
         aabbCube.size = cube.transform.localScale;
 
-        //collideCube.aabb = aabbCube;
+        collideCube.aabb = aabbCube;
 
         QTreeComp qtreeCube = entityCube.Add<QTreeComp>();
 
         qtreeCube.qObj = QtreeManager.Ins().CreateQtreeObj(aabbCube, entityCube);
         qtreeCube.qNode = QtreeManager.Ins().Insert(MapManager.Ins().GetIndex(cube.transform.position), qtreeCube.qObj);
 
-        TriggerComp triggerCube = entityCube.Add<TriggerComp>();
-        triggerCube.OnTriggerEnter = (Entity self, Entity other) =>
-        {
-            ConsoleUtils.Log("进入trigger");
-        };
+        //TriggerComp triggerCube = entityCube.Add<TriggerComp>();
+        //triggerCube.OnTriggerEnter = (Entity self, Entity other) =>
+        //{
+        //    ConsoleUtils.Log("进入trigger");
+        //};
 
-        triggerCube.OnTriggerExit = (Entity self, Entity other) =>
-        {
-            ConsoleUtils.Log("退出trigger");
-        };
+        //triggerCube.OnTriggerExit = (Entity self, Entity other) =>
+        //{
+        //    ConsoleUtils.Log("退出trigger");
+        //};
 
-        triggerCube.OnTriggerKeeping = (Entity self, Entity other) =>
-        {
-            ConsoleUtils.Log("持续trigger");
-        };
+        //triggerCube.OnTriggerKeeping = (Entity self, Entity other) =>
+        //{
+        //    ConsoleUtils.Log("持续trigger");
+        //};
 
         //-----
         Entity entityCube3 = ECSManager.Ins().CreateEntity();

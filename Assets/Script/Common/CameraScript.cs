@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 public class CameraScript : MonoBehaviour
@@ -38,6 +39,10 @@ public class CameraScript : MonoBehaviour
     /// 是否可以按下鼠标旋转
     /// </summary>
     private bool _holdToRotate = false;
+    /// <summary>
+    /// 视野缩放
+    /// </summary>
+    private float _scale = 1f;
 
     void Start()
     {
@@ -56,6 +61,7 @@ public class CameraScript : MonoBehaviour
     {
         if (!_showCursor || _holdToRotate)
         {
+            UpdateScale();
             UpdatePosition();
             UpdateRotation();
             transform.LookAt(_target.transform.position);
@@ -78,7 +84,7 @@ public class CameraScript : MonoBehaviour
     /// </summary>
     private void UpdatePosition()
     {
-        Vector3 endPos = _target.transform.position + _rotation * _direction;
+        Vector3 endPos = _target.transform.position + _rotation * _direction * _scale;
         if (_followSpeed == 1)
         {
             transform.position = endPos;
@@ -100,6 +106,13 @@ public class CameraScript : MonoBehaviour
 
         _rotation = Quaternion.Euler(_mouseMove.y, _mouseMove.x, 0);
     }
+
+    private void UpdateScale()
+    {
+        _scale -= Input.GetAxis("Mouse ScrollWheel");
+        _scale = Mathf.Clamp(_scale, 0.3f, 1);
+    }
+
     /// <summary>
     /// 初始化输入事件
     /// </summary>

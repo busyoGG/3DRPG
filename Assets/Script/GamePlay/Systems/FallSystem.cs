@@ -17,26 +17,15 @@ public class FallSystem : ECSSystem
 
             float timeOfHigherest = move.jumpSpeed / move.gravity;
 
-            if (move.isSlope && (!move.isJump || move.isJump && move.fallTime > timeOfHigherest))
+            if (move.isClimb || move.isSlope && (!move.isJump || move.isJump && move.fallTime > timeOfHigherest))
             {
                 move.isJump = false;
-                move.isFall = false;
                 move.fallTime = 0f;
             }
             else
             {
                 //ÏÂÂä
-                move.isFall = true;
                 move.fallTime += _dt * move.jumpScale;
-
-                //if (move.isJump)
-                //{
-                //    move.nextPostition.y += move.jumpSpeed * move.fallTime - 0.5f * move.gravity * move.fallTime * move.fallTime;
-                //}
-                //else
-                //{
-                //    move.nextPostition.y += -0.5f * move.gravity * move.fallTime * move.fallTime;
-                //}
 
                 if(move.isJump )
                 {
@@ -50,7 +39,6 @@ public class FallSystem : ECSSystem
                 if (move.nextPostition.y < 1)
                 {
                     move.isJump = false;
-                    move.isFall = false;
                     move.fallTime = 0f;
                     move.nextPostition.y = 1;
                 }

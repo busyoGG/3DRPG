@@ -17,7 +17,7 @@ public class QTreeSystem : ECSSystem
             QTreeComp qTree = entity.Get<QTreeComp>();
             MoveComp move = entity.Get<MoveComp>();
 
-            if (move.lastPosition != move.nextPostition || move.isFall)
+            if (move.lastPosition != move.nextPostition)
             {
                 qTree.qObj.RefreshBounds(move.nextPostition);
             }

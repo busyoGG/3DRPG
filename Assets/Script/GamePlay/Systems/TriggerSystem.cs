@@ -18,8 +18,10 @@ public class TriggerSystem : ECSSystem
 
             List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
 
+            //初始化本实体触发的所有触发器状态
             foreach (var obj in objs)
             {
+                if (obj.entity.id == entity.id) continue;
                 TriggerComp triggerComp = obj.entity.Get<TriggerComp>();
 
                 if (triggerComp != null)
@@ -44,7 +46,7 @@ public class TriggerSystem : ECSSystem
 
 
             var keys = trigger.status.Keys.ToArray();
-
+            //执行本实体所有触发事件
             foreach (var key in keys)
             {
                 TriggerStatus state = trigger.status[key];

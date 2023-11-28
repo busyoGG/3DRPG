@@ -166,6 +166,11 @@ public class PlayerController : MonoBehaviour
                 player.Get<JumpComp>().startJump = true;
             }
         });
+
+        InputManager.Ins().AddKeyboardInputCallback(KeyCode.X, InputStatus.Down, () =>
+        {
+            player.Get<MoveComp>().isClimb = false;
+        });
     }
 
     private void SetForward(KeyCode key)
@@ -185,12 +190,8 @@ public class PlayerController : MonoBehaviour
                 _forward.z = -1f;
                 break;
         }
-        //_forward = _forward.normalized;
-        Vector3 res = (camera.GetRotation(false) * _forward).normalized;
-        //res.y = 0f;
-        //player.Get<MoveComp>().forward.x = res.x;
-        //player.Get<MoveComp>().forward.z = res.z;
-        InputSingleton.Ins().SetForward(player.id, res.x, res.z);
+        Vector3 res = _forward.normalized;
+        InputSingleton.Ins().SetForward(player.id, res.x, res.z, camera.GetRotation(false));
     }
 
     private void ResetForward(KeyCode key)
@@ -206,11 +207,8 @@ public class PlayerController : MonoBehaviour
                 _forward.z = 0f;
                 break;
         }
-        Vector3 res = (camera.GetRotation(false) * _forward).normalized;
-        //res.y = 0f;
-        //player.Get<MoveComp>().forward.x = res.x;
-        //player.Get<MoveComp>().forward.z = res.z;
-        InputSingleton.Ins().SetForward(player.id, res.x, res.z);
+        Vector3 res =  _forward.normalized;
+        InputSingleton.Ins().SetForward(player.id, res.x, res.z, camera.GetRotation(false));
     }
 
     public void SetControlType(ControlType type)

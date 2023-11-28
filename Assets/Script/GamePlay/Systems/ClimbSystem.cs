@@ -6,40 +6,46 @@ public class ClimbSystem : ECSSystem
 {
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(ClimbComp));
+        return ECSManager.Ins().AllOf(typeof(ClimbComp), typeof(CollideComp), typeof(MoveComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
     {
         foreach (var entity in entities)
         {
-            ClimbComp climb = entity.Get<ClimbComp>();
-
-            Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
-
-            if (inputForward.x != 0 || inputForward.z != 0)
+            MoveComp move = entity.Get<MoveComp>();
+            if (!move.isClimb)
             {
-                List<CollideComp> colliders = CollisionSingleton.Ins().GetColliders(entity.id);
+                ClimbComp climb = entity.Get<ClimbComp>();
+                CollideComp collider = entity.Get<CollideComp>();
 
-                bool isCollide = colliders != null && colliders.Count > 0;
+                Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
 
-                if (isCollide)
+                float sameSide = Vector3.Dot(collider.totalOffset, inputForward);
+
+                if (sameSide < 0)
                 {
-                    if (!climb.isClimb)
+                    climb.enterTime += _dt;
+                    if (climb.enterTime >= climb.targetTime)
                     {
-                        climb.enterTime += _dt;
-                        if (climb.enterTime > 0.5f)
-                        {
-                            climb.isClimb = true;
-                            ClimbSingleton.Ins().SetClimbState(entity.id, climb.isClimb);
-                        }
-                    }
-                    else
-                    {
-                        //攀爬逻辑
-                        
+                        move.isClimb = true;
                     }
                 }
+                else
+                {
+                    climb.enterTime = 0;
+                }
+            }
+
+            if (move.nextPostition.y < 1)
+            {
+                move.isClimb = false;
+            }
+
+            //攀爬到顶并且没有ClimbUpComp的情况下添加组件
+            if (move.isClimbTop == 1 && !entity.Has<ClimbUpComp>())
+            {
+                entity.Add<ClimbUpComp>();
             }
         }
     }

@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class CollideSystem : ECSSystem
 {
+    private Vector3 _tempVec = Vector3.zero;
     public override ECSMatcher Filter()
     {
         return ECSManager.Ins().AllOf(typeof(CollideComp), typeof(QTreeComp), typeof(MoveComp));
@@ -48,8 +49,14 @@ public class CollideSystem : ECSSystem
                 }
             }
 
-            move.isTop = true;
-            move.isSlope = false;
+            if (colliders.Count > 0 && move.isClimbTop != 2)
+            {
+                move.isTop = true;
+                move.isSlope = false;
+                move.isClimbTop = 1;
+            }
+
+            float minClose = float.MaxValue;
             //按顺序检测碰撞
             for (int i = colliders.Count - 1; i >= 0; i--)
             {
@@ -64,29 +71,89 @@ public class CollideSystem : ECSSystem
                     Vector3 normal = GetNormal(collider, collideComp, out len);
                     if (collider.position.y >= 1 && normal.y > 0)
                     {
+                        //计算坡道法线
                         move.isSlope = true;
                         Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
+                        //防止滑坡
                         if (!inputForward.Equals(Vector3.zero))
                         {
                             move.forwardOffset = normal;
                         }
+
+                        if (normal.y >= 1 || move.isClimbTop == 2)
+                        {
+                            collider.totalOffset += normal * len;
+                        }
                     }
                     else
                     {
+                        //计算偏移法线
                         if ((collider.totalOffset.y > 0 || move.nextPostition.y <= 1) && normal.y < 0)
                         {
                             normal.y = 0;
                         }
                         collider.totalOffset += normal * len;
+
+                        //攀爬用偏移
+                        Vector3 closest = GetClosestPoint(collider.position, collideComp);
+                        //攀爬最高点
+                        _tempVec = collider.position;
+                        switch (collider.type)
+                        {
+                            case CollisionType.AABB:
+                                _tempVec.y = collider.aabb.max.y;
+                                break;
+                            case CollisionType.OBB:
+                                _tempVec.y = collider.obb.maxY;
+                                break;
+                        }
+                        Vector3 higherest = GetClosestPoint(_tempVec, collideComp);
+                        //判断是否爬到顶部 没有的话就计算攀爬法线
+                        if (_tempVec.y - higherest.y < 0.1f)
+                        {
+                            move.isClimbTop = 0;
+                            //计算攀爬法线
+                            Vector3 dir = collider.position - closest;
+                            if (dir.magnitude < minClose)
+                            {
+                                minClose = dir.magnitude;
+                                move.forwardOffset = dir;
+                            }
+                        }
                     }
-
+                    //刷新包围盒
                     RefreshCollider(collider, normal * len);
-
+                    //判断是否站在顶部
                     if (collider.minY < collideComp.maxY)
                     {
                         move.isTop = false;
                     }
                 }
+            }
+
+            if (move.isClimb)
+            {
+                //计算攀爬状态偏移
+                if (collider.totalOffset.x != 0)
+                {
+                    collider.totalOffset.x -= move.forwardOffset.normalized.x * 0.05f;
+                }
+                if (collider.totalOffset.z != 0)
+                {
+                    collider.totalOffset.z -= move.forwardOffset.normalized.z * 0.05f;
+                }
+                //collider.totalOffset -= move.forwardOffset.normalized * 0.05f ;
+            }
+            else
+            {
+                //没有攀爬 重置攀爬到顶状态
+                move.isClimbTop = 0;
+            }
+
+            //重置攀爬到顶状态
+            if (move.isClimbTop == 2)
+            {
+                move.isClimbTop = 0;
             }
         }
     }
@@ -232,6 +299,24 @@ public class CollideSystem : ECSSystem
                 break;
         }
         len = 0;
+        return Vector3.zero;
+    }
+
+    /// <summary>
+    /// 获取最近点
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="data2"></param>
+    /// <returns></returns>
+    private Vector3 GetClosestPoint(Vector3 position, CollideComp data2)
+    {
+        switch (data2.type)
+        {
+            case CollisionType.AABB:
+                return CollideUtils.GetClosestPoint(position, data2.aabb);
+            case CollisionType.OBB:
+                return CollideUtils.GetClosestPoint(position, data2.obb);
+        }
         return Vector3.zero;
     }
 }

@@ -113,7 +113,13 @@ public class CollideSystem : ECSSystem
                                 if (dir.magnitude - move.speed <= minClose)
                                 {
                                     minClose = dir.magnitude;
-                                    move.forwardOffset = dir;
+
+                                    Quaternion rotation = Quaternion.identity;
+                                    rotation.SetFromToRotation(Vector3.up, dir);
+
+                                    move.climbOffset = dir;
+                                    move.climbOffsetQua = rotation;
+
                                     switch (collider.type)
                                     {
                                         case CollisionType.AABB:
@@ -150,24 +156,7 @@ public class CollideSystem : ECSSystem
 
             move.forwardOffset = move.forwardOffset.normalized;
 
-            if (move.isClimb)
-            {
-                //¼ÆËãÅÊÅÀ×´Ì¬Æ«ÒÆ
-                //if (collider.totalOffset.x != 0)
-                //{
-                //    collider.totalOffset.x -= move.forwardOffset.x * move.speed;
-                //}
-                //if (collider.totalOffset.z != 0)
-                //{
-                //    collider.totalOffset.z -= move.forwardOffset.z * move.speed;
-                //}
-
-                //collider.totalOffset.x -= move.forwardOffset.x * move.speed;
-                //collider.totalOffset.z -= move.forwardOffset.z * move.speed;
-                //collider.totalOffset -= move.forwardOffset.normalized * 0.05f ;
-
-            }
-            else
+            if (!move.isClimb)
             {
                 //Ã»ÓÐÅÊÅÀ ÖØÖÃÅÊÅÀµ½¶¥×´Ì¬
                 move.isClimbTop = 0;

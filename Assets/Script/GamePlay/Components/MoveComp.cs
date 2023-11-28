@@ -47,6 +47,10 @@ public class MoveComp : Comp
 
     public Quaternion forwardOffsetQua;
 
+    public Vector3 climbOffset;
+
+    public Quaternion climbOffsetQua;
+
     public override void Reset()
     {
         isMove = false;
@@ -54,6 +58,8 @@ public class MoveComp : Comp
         nextPostition = Vector3.zero;
         forwardOffset = Vector3.zero;
         forwardOffsetQua = Quaternion.identity;
+        climbOffset = Vector3.zero;
+        climbOffsetQua = Quaternion.identity;
         //forward = Vector3.zero;
         speed = 0f;
         fallTime = 0f;

@@ -39,16 +39,16 @@ public class MoveSystem : ECSSystem
                 }
                 else if (move.isClimb)
                 {
-                    if (move.forwardOffset != Vector3.zero)
+                    if (move.climbOffset != Vector3.zero)
                     {
                         Vector3 originForward = InputSingleton.Ins().GetOriginForward(entity.id);
 
                         Quaternion climbRot = Quaternion.identity;
-                        climbRot.SetLookRotation(-move.forwardOffset);
+                        climbRot.SetLookRotation(-move.climbOffset);
 
                         originForward = climbRot * originForward;
 
-                        inputForward = move.forwardOffsetQua * originForward;
+                        inputForward = move.climbOffsetQua * originForward;
                     }
                 }
 

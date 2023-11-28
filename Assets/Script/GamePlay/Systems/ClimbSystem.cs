@@ -17,13 +17,17 @@ public class ClimbSystem : ECSSystem
             ClimbComp climb = entity.Get<ClimbComp>();
             if (!move.isClimb)
             {
+                //≥ı ºªØ
+                move.climbOffset = Vector3.zero;
+                move.climbOffsetQua = Quaternion.identity;
+
                 CollideComp collider = entity.Get<CollideComp>();
 
                 Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
 
-                float sameSide = Vector3.Dot(collider.totalOffset, inputForward);
+                float sameSide = Vector3.Dot(collider.totalOffset.normalized, inputForward);
 
-                if (sameSide < 0)
+                if (sameSide < -0.9f)
                 {
                     climb.enterTime += _dt;
                     if (climb.enterTime >= climb.targetTime)
@@ -39,13 +43,29 @@ public class ClimbSystem : ECSSystem
             }
             else
             {
-                //if (climb.firstClimb)
-                //{
-                //    climb.firstClimb = false;
-                //    move.nextPostition -= move.forwardOffset * move.speed;
-                //}
+                if (climb.firstClimb)
+                {
+                    climb.firstClimb = false;
+
+                    Vector3 originForward = InputSingleton.Ins().GetOriginForward(entity.id);
+
+                    Quaternion climbRot = Quaternion.identity;
+                    climbRot.SetLookRotation(-move.climbOffset);
+
+                    originForward = climbRot * originForward;
+
+                    move.nextPostition += move.climbOffsetQua * originForward * move.speed;
+                }
+                else
+                {
+                    if (move.isSlope || move.isTop)
+                    {
+                        move.isClimb = false;
+                    }
+                }
                 //move.nextPostition += move.climbOffset * move.speed;
                 //move.climbOffset = Vector3.zero;
+               
             }
 
             if (move.nextPostition.y < 1)

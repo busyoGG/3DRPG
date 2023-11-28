@@ -12,7 +12,7 @@ public class ClimbComp : Comp
     public override void Reset()
     {
         enterTime = 0f;
-        targetTime = 0.5f;
+        targetTime = 0.1f;
         firstClimb = false;
     }
 }

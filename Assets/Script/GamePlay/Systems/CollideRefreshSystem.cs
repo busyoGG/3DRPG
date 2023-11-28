@@ -19,6 +19,8 @@ public class CollideRefreshSystem : ECSSystem
             //¸üÐÂ°üÎ§ºÐ
             collider.position = move.nextPostition;
             collider.totalOffset = Vector3.zero;
+            move.forwardOffset = Vector3.zero;
+
             switch (collider.type)
             {
                 case CollisionType.AABB:

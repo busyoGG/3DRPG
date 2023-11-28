@@ -18,5 +18,6 @@ public class TestWorld : ECSWorld
         Add(new OffsetSystem());
         Add(new QTreeSystem());
         Add(new RenderSystem());
+        Add(new CollideGizmosSystem());
     }
 }

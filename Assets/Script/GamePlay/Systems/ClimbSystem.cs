@@ -14,9 +14,9 @@ public class ClimbSystem : ECSSystem
         foreach (var entity in entities)
         {
             MoveComp move = entity.Get<MoveComp>();
+            ClimbComp climb = entity.Get<ClimbComp>();
             if (!move.isClimb)
             {
-                ClimbComp climb = entity.Get<ClimbComp>();
                 CollideComp collider = entity.Get<CollideComp>();
 
                 Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
@@ -29,12 +29,23 @@ public class ClimbSystem : ECSSystem
                     if (climb.enterTime >= climb.targetTime)
                     {
                         move.isClimb = true;
+                        climb.firstClimb = true;
                     }
                 }
                 else
                 {
                     climb.enterTime = 0;
                 }
+            }
+            else
+            {
+                //if (climb.firstClimb)
+                //{
+                //    climb.firstClimb = false;
+                //    move.nextPostition -= move.forwardOffset * move.speed;
+                //}
+                //move.nextPostition += move.climbOffset * move.speed;
+                //move.climbOffset = Vector3.zero;
             }
 
             if (move.nextPostition.y < 1)

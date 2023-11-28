@@ -35,23 +35,21 @@ public class MoveSystem : ECSSystem
             {
                 if (move.isSlope && !move.isTop)
                 {
-                    Quaternion rotation = Quaternion.identity;
-                    rotation.SetFromToRotation(Vector3.up, move.forwardOffset);
-                    inputForward = rotation * inputForward;
+                    inputForward = move.forwardOffsetQua * inputForward;
                 }
                 else if (move.isClimb)
                 {
-                    Vector3 originForward = InputSingleton.Ins().GetOriginForward(entity.id);
+                    if (move.forwardOffset != Vector3.zero)
+                    {
+                        Vector3 originForward = InputSingleton.Ins().GetOriginForward(entity.id);
 
-                    Quaternion rotation = Quaternion.identity;
-                    rotation.SetFromToRotation(Vector3.up, move.forwardOffset);
+                        Quaternion climbRot = Quaternion.identity;
+                        climbRot.SetLookRotation(-move.forwardOffset);
 
-                    Quaternion climbRot = Quaternion.identity;
-                    climbRot.SetLookRotation(-move.forwardOffset);
+                        originForward = climbRot * originForward;
 
-                    originForward = climbRot * originForward;
-
-                    inputForward = rotation * originForward;
+                        inputForward = move.forwardOffsetQua * originForward;
+                    }
                 }
 
                 move.lastPosition = move.nextPostition;
@@ -66,31 +64,26 @@ public class MoveSystem : ECSSystem
         }
     }
 
-    //public override void OnDrawGizmos(List<Entity> entities)
-    //{
-    //    foreach (Entity entity in entities)
-    //    {
-    //        MoveComp move = entity.Get<MoveComp>();
-    //        Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
-    //        if (move.isSlope && !move.isTop)
-    //        {
-    //            Quaternion rotation = Quaternion.identity;
-    //            rotation.SetFromToRotation(Vector3.up, move.forwardOffset);
-    //            inputForward = rotation * inputForward;
-    //        }
-    //        else if (move.isClimb)
-    //        {
-    //            float sameSide = Vector3.Dot(inputForward, move.forwardOffset);
-    //            if (sameSide > 0)
-    //            {
-    //                inputForward = _up * move.forwardOffset;
-    //            }
-    //            else
-    //            {
-    //                inputForward = _up * -move.forwardOffset;
-    //            }
-    //        }
-    //        Gizmos.DrawLine(move.lastPosition, move.lastPosition + inputForward * 10);
-    //    }
-    //}
+    public override void OnDrawGizmos(List<Entity> entities)
+    {
+        foreach (Entity entity in entities)
+        {
+            MoveComp move = entity.Get<MoveComp>();
+
+            Gizmos.color = Color.black;
+
+            Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
+            if (move.isSlope && !move.isTop)
+            {
+                Quaternion rotation = Quaternion.identity;
+                rotation.SetFromToRotation(Vector3.up, move.forwardOffset);
+                inputForward = rotation * inputForward;
+            }
+            Gizmos.DrawLine(move.lastPosition, move.lastPosition + inputForward * 100);
+
+            if (!move.isClimb) continue;
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(move.lastPosition, move.lastPosition + move.forwardOffset * 10);
+        }
+    }
 }

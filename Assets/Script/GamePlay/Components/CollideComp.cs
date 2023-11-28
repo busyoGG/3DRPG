@@ -26,15 +26,6 @@ public class CollideComp : Comp
 
     public RayData ray;
 
-    /// <summary>
-    /// ÍÆÁ¦
-    /// </summary>
-    public float thrust;
-    /// <summary>
-    /// Ä¦²ÁÁ¦
-    /// </summary>
-    public float friction;
-
     public bool isStatic;
 
     public Vector3 totalOffset;
@@ -84,8 +75,6 @@ public class CollideComp : Comp
         aabb = null;
         obb = null;
         ray = null;
-        thrust = 0.0f;
-        friction = 0.0f;
         isStatic = true;
         totalOffset = Vector3.zero;
     }

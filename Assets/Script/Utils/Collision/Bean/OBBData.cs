@@ -50,6 +50,8 @@ public class OBBData
         }
     }
 
+    public Quaternion rot { get; set; }
+
     private Vector3[] _axes;
 
     public Vector3[] vertexts

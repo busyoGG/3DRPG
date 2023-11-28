@@ -575,12 +575,16 @@ public class CollideUtils
             _seperatingAxes.Add(id, axes);
         }
 
-        if (limitList == null || limitList.Count == 0)
+        if (limitList == null || limitList.Count != axes.Length)
         {
             if (limitList == null)
             {
                 limitList = new List<Vector2[]>();
                 _limitObb.Add(id, limitList);
+            }
+            else
+            {
+                limitList.Clear();
             }
 
             for (int i = 0; i < axes.Length; i++)
@@ -605,6 +609,7 @@ public class CollideUtils
 
         for (int i = 0; i < limitList.Count; i++)
         {
+            if (axes[i].x == 0 && axes[i].y == 0 && axes[i].z == 0) continue;
             Vector2[] limit = limitList[i];
             float overlap;
             if (limit[0].y > limit[1].y && limit[0].x < limit[1].x)
@@ -628,6 +633,12 @@ public class CollideUtils
                     normal = axes[i];
                 }
             }
+            else
+            {
+                len = 0;
+                limitList.Clear();
+                return normal;
+            }
         }
 
         len = minOverlap * 2;
@@ -637,6 +648,10 @@ public class CollideUtils
         if (amount < 0)
         {
             normal = -normal;
+        }
+        if (len > 0.5f)
+        {
+            ConsoleUtils.Log("³¬³¤");
         }
         return normal;
     }

@@ -19,9 +19,26 @@ public class OffsetSystem : ECSSystem
             //Åö×²Æ«ÒÆ
             if (!collider.totalOffset.Equals(Vector3.zero))
             {
-                move.nextPostition += collider.totalOffset;
+                if (move.isSlope)
+                {
+                    move.nextPostition += move.forwardOffsetQua * collider.totalOffset;
+                }
+                else
+                {
+                    move.nextPostition += collider.totalOffset;
+                }
                 //ConsoleUtils.Log("Æ«ÒÆÁ¿", move.nextPostition,collider.totalOffset);
             }
+        }
+    }
+
+    public override void OnDrawGizmos(List<Entity> entities)
+    {
+        foreach (Entity entity in entities)
+        {
+            CollideComp colider = entity.Get<CollideComp>();
+            Gizmos.color = Color.red;
+            Gizmos.DrawLine(colider.position, colider.position + colider.totalOffset * 100);
         }
     }
 }

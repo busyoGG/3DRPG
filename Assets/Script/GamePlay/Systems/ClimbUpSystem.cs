@@ -18,6 +18,8 @@ public class ClimbUpSystem : ECSSystem
             MoveComp move = entity.Get<MoveComp>();
             //此处暂时硬编码为上升1高度
             climbUp.targetY = move.nextPostition.y + 1;
+            //设置为自动攀爬状态
+            move.isClimbTop = 2;
         }
     }
 
@@ -47,7 +49,6 @@ public class ClimbUpSystem : ECSSystem
         foreach(Entity entity in entities)
         {
             MoveComp move = entity.Get<MoveComp>();
-            move.isClimbTop = 2;
             move.isClimb = false;
         }
     }

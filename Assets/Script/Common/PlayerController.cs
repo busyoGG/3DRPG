@@ -15,26 +15,6 @@ public enum ControlType
 public class PlayerController : MonoBehaviour
 {
     /// <summary>
-    /// 移动速度
-    /// </summary>
-    public float _moveSpeed = 0.1f;
-    /// <summary>
-    /// 旋转速度
-    /// </summary>
-    public float _rotateLerpSpeed = 0.3f;
-    /// <summary>
-    /// 跳跃初速度
-    /// </summary>
-    public float _jumpSpeed = 1f;
-    /// <summary>
-    /// 重力
-    /// </summary>
-    public float _gravity = 9.8f;
-    /// <summary>
-    /// 跳跃过程倍率
-    /// </summary>
-    public float _jumpScale = 1f;
-    /// <summary>
     /// 是否可以移动
     /// </summary>
     private bool _canMove = true;
@@ -53,36 +33,17 @@ public class PlayerController : MonoBehaviour
 
     public Entity player { get; set; }
 
-    public CameraScript camera { get; set; }
+    MoveComp _move;
+
+    JumpComp _jump;
+
+    public CameraScript cam { get; set; }
 
     void Start()
     {
-
-        player.Get<MoveComp>().speed = _moveSpeed;
-        player.Get<MoveComp>().lastPosition = transform.position;
-        player.Get<MoveComp>().nextPostition = transform.position;
-
-        player.Get<RenderComp>().node = transform;
-
-        player.Get<MoveComp>().jumpSpeed = _jumpSpeed;
-        //player.Get<JumpComp>().curY = transform.position.y;
-        //TransformSingleton.Ins().SetMoveY(player.id,transform.position.y);
-        player.Get<MoveComp>().gravity = _gravity;
-        player.Get<MoveComp>().jumpScale = _jumpScale;
-        ConsoleUtils.Log("玩家初始化");
+        _move = player.Get<MoveComp>();
+        _jump = player.Get<JumpComp>();
         InitInput();
-    }
-
-    void Update()
-    {
-        //Rotate();
-        //Jump();
-        if (_controlType == ControlType.MouseAndKeyboard)
-        {
-            //MoveTo();
-        }
-        //DoMove();
-
     }
 
     private void InitInput()
@@ -163,13 +124,13 @@ public class PlayerController : MonoBehaviour
         {
             if (_canJump)
             {
-                player.Get<JumpComp>().startJump = true;
+                _jump.startJump = true;
             }
         });
 
         InputManager.Ins().AddKeyboardInputCallback(KeyCode.X, InputStatus.Down, () =>
         {
-            player.Get<MoveComp>().isClimb = false;
+            _move.isClimb = false;
         });
     }
 
@@ -191,7 +152,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         Vector3 res = _forward.normalized;
-        InputSingleton.Ins().SetForward(player.id, res.x, res.z, camera.GetRotation(false));
+        InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
     }
 
     private void ResetForward(KeyCode key)
@@ -208,7 +169,7 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         Vector3 res =  _forward.normalized;
-        InputSingleton.Ins().SetForward(player.id, res.x, res.z, camera.GetRotation(false));
+        InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
     }
 
     public void SetControlType(ControlType type)

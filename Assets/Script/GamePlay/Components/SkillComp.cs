@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SkillComp : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public enum SkillType { 
+    
+}
 
-    // Update is called once per frame
-    void Update()
+[CompRegister(typeof(SkillComp))]
+public class SkillComp : Comp
+{
+    public int id;
+
+    public float duration;
+
+    public float passTime;
+
+    public override void Reset()
     {
-        
+
     }
 }

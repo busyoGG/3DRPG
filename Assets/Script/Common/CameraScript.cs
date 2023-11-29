@@ -1,4 +1,5 @@
 using Game;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraScript : MonoBehaviour
@@ -118,26 +119,63 @@ public class CameraScript : MonoBehaviour
     /// </summary>
     private void InitInput()
     {
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.LeftAlt, InputStatus.Down, () =>
+        InputManager.Ins().AddEventListener(() =>
         {
-            _showCursor = true;
-            Cursor.lockState = CursorLockMode.None;
+            Dictionary<KeyCode, InputStatus> curKey = InputManager.Ins().GetKey();
+            foreach (var data in curKey)
+            {
+                KeyCode key = data.Key;
+                InputStatus status = data.Value;
+                if (status == InputStatus.Hold || status == InputStatus.Down)
+                {
+                    switch (key)
+                    {
+                        case KeyCode.LeftAlt:
+                            _showCursor = true;
+                            Cursor.lockState = CursorLockMode.None;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (key)
+                    {
+                        case KeyCode.LeftAlt:
+                            _showCursor = false;
+                            Cursor.lockState = CursorLockMode.Locked;
+                            break;
+                    }
+                }
+            }
         });
 
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.LeftAlt, InputStatus.Up, () =>
+        InputManager.Ins().AddEventListener(() =>
         {
-            _showCursor = false;
-            Cursor.lockState = CursorLockMode.Locked;
-        });
+            Dictionary<int, InputStatus> curMouse = InputManager.Ins().GetMouse();
 
-        InputManager.Ins().AddMouseInputCallback(0, InputStatus.Down, () =>
-        {
-            _holdToRotate = true;
-        });
-
-        InputManager.Ins().AddMouseInputCallback(0, InputStatus.Up, () =>
-        {
-            _holdToRotate = false;
+            foreach (var data in curMouse)
+            {
+                int key = data.Key;
+                InputStatus status = data.Value;
+                if (status == InputStatus.Hold || status == InputStatus.Down)
+                {
+                    switch (key)
+                    {
+                        case 0:
+                            _holdToRotate = true;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (key)
+                    {
+                        case 0:
+                            _holdToRotate = false;
+                            break;
+                    }
+                }
+            }
         });
     }
 }

@@ -12,6 +12,7 @@ public enum InputType
 
 public enum InputStatus
 {
+    None,
     Down,
     Up,
     Hold
@@ -19,11 +20,15 @@ public enum InputStatus
 
 public class InputManager : Singleton<InputManager>
 {
-    delegate void InputCallback();
+    public delegate void InputCallback();
 
     InputCallback _callbackHandler;
 
-    Dictionary<string, InputCallback> _callbacks = new Dictionary<string, InputCallback>();
+    //Dictionary<string, InputCallback> _callbacks = new Dictionary<string, InputCallback>();
+
+    private Dictionary<KeyCode, InputStatus> _curKey = new Dictionary<KeyCode, InputStatus>();
+
+    private Dictionary<int, InputStatus> _curMouse = new Dictionary<int, InputStatus>();
 
     public void Init()
     {
@@ -31,6 +36,96 @@ public class InputManager : Singleton<InputManager>
         inputSystem.name = "InputSystem";
 
         inputSystem.AddComponent<InputScript>();
+
+        foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+        {
+            KeyListener(key);
+        }
+
+        for (int i = 0; i < 3; i++)
+        {
+            MouseListener(i);
+        }
+    }
+
+    private void KeyListener(KeyCode key)
+    {
+        //_curKey.Add(key, InputStatus.None);
+        InputCallback inputCallback = () =>
+        {
+            if (Input.GetKeyDown(key))
+            {
+                //_curKey[key] = InputStatus.Down;
+                _curKey.Add(key, InputStatus.Down);
+            }
+            else if (Input.GetKeyUp(key))
+            {
+                _curKey[key] = InputStatus.Up;
+            }
+            else if (Input.GetKey(key))
+            {
+                _curKey[key] = InputStatus.Hold;
+            }
+            else
+            {
+                //_curKey[key] = InputStatus.None;
+                _curKey.Remove(key);
+            }
+        };
+
+        if (_callbackHandler != null)
+        {
+            _callbackHandler += inputCallback;
+        }
+        else
+        {
+            _callbackHandler = inputCallback;
+        }
+    }
+
+    private void MouseListener(int key)
+    {
+        //_curMouse.Add(key, InputStatus.None);
+        InputCallback inputCallback = () =>
+        {
+            if (Input.GetMouseButtonDown(key))
+            {
+                //_curMouse[key] = InputStatus.Down;
+                _curMouse.Add(key, InputStatus.Down);
+            }
+            else if (Input.GetMouseButtonUp(key))
+            {
+                _curMouse[key] = InputStatus.Up;
+            }
+            else if (Input.GetMouseButton(key))
+            {
+                _curMouse[key] = InputStatus.Hold;
+            }
+            else
+            {
+                //_curMouse[key] = InputStatus.None;
+                _curMouse.Remove(key);
+            }
+        };
+
+        if (_callbackHandler != null)
+        {
+            _callbackHandler += inputCallback;
+        }
+        else
+        {
+            _callbackHandler = inputCallback;
+        }
+    }
+
+    public Dictionary<KeyCode, InputStatus> GetKey()
+    {
+        return _curKey;
+    }
+
+    public Dictionary<int, InputStatus> GetMouse()
+    {
+        return _curMouse;
     }
 
     public void CheckInput()
@@ -41,103 +136,13 @@ public class InputManager : Singleton<InputManager>
         }
     }
 
-    public void AddKeyboardInputCallback(KeyCode key, InputStatus state, Action callback)
+    public void AddEventListener(InputCallback callback)
     {
-        string id = key.GetHashCode() + "-" + callback.GetHashCode();
-
-        InputCallback inputCallback = () =>
-        {
-            switch (state)
-            {
-                case InputStatus.Down:
-                    if (Input.GetKeyDown(key))
-                    {
-                        callback();
-                    }
-                    break;
-                case InputStatus.Up:
-                    if (Input.GetKeyUp(key))
-                    {
-                        callback();
-                    }
-                    break;
-                case InputStatus.Hold:
-                    if (Input.GetKey(key))
-                    {
-                        callback();
-                    }
-                    break;
-            }
-
-        };
-
-        _callbacks.Add(id, inputCallback);
-        if (_callbackHandler != null)
-        {
-            _callbackHandler += inputCallback;
-        }
-        else
-        {
-            _callbackHandler = inputCallback;
-        }
+        _callbackHandler += callback;
     }
 
-    public void AddMouseInputCallback(int key, InputStatus state, Action callback)
+    public void RemoveEventListener(InputCallback callback)
     {
-        string id = key.GetHashCode() + "-" + callback.GetHashCode();
-
-        InputCallback inputCallback = () =>
-        {
-
-            switch (state)
-            {
-                case InputStatus.Down:
-                    if (Input.GetMouseButtonDown(key))
-                    {
-                        callback();
-                    }
-                    break;
-                case InputStatus.Up:
-                    if (Input.GetMouseButtonUp(key))
-                    {
-                        callback();
-                    }
-                    break;
-                case InputStatus.Hold:
-                    if (Input.GetMouseButton(key))
-                    {
-                        callback();
-                    }
-                    break;
-            }
-        };
-
-        _callbacks.Add(id, inputCallback);
-        if (_callbackHandler != null)
-        {
-            _callbackHandler += inputCallback;
-        }
-        else
-        {
-            _callbackHandler = inputCallback;
-        }
-    }
-
-    public void RemoveInputCallback(KeyCode key, Action callback)
-    {
-        string id = key.GetHashCode() + "-" + callback.GetHashCode();
-        InputCallback action;
-        _callbacks.TryGetValue(id, out action);
-        _callbackHandler -= action;
-        _callbacks.Remove(id);
-    }
-
-    public void RemoveInputCallback(int key, Action callback)
-    {
-        string id = key.GetHashCode() + "-" + callback.GetHashCode();
-        InputCallback action;
-        _callbacks.TryGetValue(id, out action);
-        _callbackHandler -= action;
-        _callbacks.Remove(id);
+        _callbackHandler -= callback;
     }
 }

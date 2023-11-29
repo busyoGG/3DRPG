@@ -2,6 +2,7 @@ using Game;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
 
@@ -48,89 +49,25 @@ public class PlayerController : MonoBehaviour
 
     private void InitInput()
     {
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.W, InputStatus.Hold, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.z += _moveSpeed;
-                SetForward(KeyCode.W);
-            }
-        });
+        //Dictionary<KeyCode, InputStatus> curKey = InputManager.Ins().GetKey();
 
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.S, InputStatus.Hold, () =>
+        InputManager.Ins().AddEventListener(() =>
         {
-            if (_canMove)
+            Dictionary<KeyCode, InputStatus> curKey = InputManager.Ins().GetKey();
+            foreach (var data in curKey)
             {
-                //_movePos.z += -_moveSpeed;
-                SetForward(KeyCode.S);
-            }
-        });
+                KeyCode key = data.Key;
+                InputStatus status = data.Value;
 
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.A, InputStatus.Hold, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.x += -_moveSpeed;
-                SetForward(KeyCode.A);
+                if (status == InputStatus.Hold || status == InputStatus.Down)
+                {
+                    SetForward(key);
+                }
+                else
+                {
+                    ResetForward(key);
+                }
             }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.D, InputStatus.Hold, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.x += _moveSpeed;
-                SetForward(KeyCode.D);
-            }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.W, InputStatus.Up, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.z += _moveSpeed;
-                ResetForward(KeyCode.W);
-            }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.S, InputStatus.Up, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.z += -_moveSpeed;
-                ResetForward(KeyCode.S);
-            }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.A, InputStatus.Up, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.x += -_moveSpeed;
-                ResetForward(KeyCode.A);
-            }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.D, InputStatus.Up, () =>
-        {
-            if (_canMove)
-            {
-                //_movePos.x += _moveSpeed;
-                ResetForward(KeyCode.D);
-            }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.Space, InputStatus.Down, () =>
-        {
-            if (_canJump)
-            {
-                _jump.startJump = true;
-            }
-        });
-
-        InputManager.Ins().AddKeyboardInputCallback(KeyCode.X, InputStatus.Down, () =>
-        {
-            _move.isClimb = false;
         });
     }
 
@@ -150,9 +87,28 @@ public class PlayerController : MonoBehaviour
             case KeyCode.S:
                 _forward.z = -1f;
                 break;
+            case KeyCode.Space:
+                if (_canJump)
+                {
+                    _jump.startJump = true;
+                }
+                return;
+            case KeyCode.X:
+                _move.isClimb = false;
+                return;
+            default:
+                return;
         }
-        Vector3 res = _forward.normalized;
-        InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
+
+        if (_canMove)
+        {
+            Vector3 res = _forward.normalized;
+            InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
+        }
+        else
+        {
+            ResetForward(key);
+        }
     }
 
     private void ResetForward(KeyCode key)
@@ -167,8 +123,10 @@ public class PlayerController : MonoBehaviour
             case KeyCode.S:
                 _forward.z = 0f;
                 break;
+            default:
+                return;
         }
-        Vector3 res =  _forward.normalized;
+        Vector3 res = _forward.normalized;
         InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
     }
 

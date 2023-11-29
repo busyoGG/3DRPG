@@ -26,9 +26,7 @@ public class InputManager : Singleton<InputManager>
 
     //Dictionary<string, InputCallback> _callbacks = new Dictionary<string, InputCallback>();
 
-    private Dictionary<KeyCode, InputStatus> _curKey = new Dictionary<KeyCode, InputStatus>();
-
-    private Dictionary<int, InputStatus> _curMouse = new Dictionary<int, InputStatus>();
+    private Dictionary<InputKey, InputStatus> _curKey = new Dictionary<InputKey, InputStatus>();
 
     public void Init()
     {
@@ -37,38 +35,38 @@ public class InputManager : Singleton<InputManager>
 
         inputSystem.AddComponent<InputScript>();
 
-        foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+        foreach (InputKey key in Enum.GetValues(typeof(InputKey)))
         {
-            KeyListener(key);
-        }
-
-        for (int i = 0; i < 3; i++)
-        {
-            MouseListener(i);
+            if (key == InputKey.MouseLeft || key == InputKey.MouseRight || key == InputKey.MouseMid)
+            {
+                MouseListener(key);
+            }
+            else
+            {
+                KeyListener(key);
+            }
         }
     }
 
-    private void KeyListener(KeyCode key)
+    private void KeyListener(InputKey key)
     {
-        //_curKey.Add(key, InputStatus.None);
+        KeyCode transKey = (KeyCode)key;
         InputCallback inputCallback = () =>
         {
-            if (Input.GetKeyDown(key))
+            if (Input.GetKeyDown(transKey))
             {
-                //_curKey[key] = InputStatus.Down;
                 _curKey.Add(key, InputStatus.Down);
             }
-            else if (Input.GetKeyUp(key))
+            else if (Input.GetKeyUp(transKey))
             {
                 _curKey[key] = InputStatus.Up;
             }
-            else if (Input.GetKey(key))
+            else if (Input.GetKey(transKey))
             {
                 _curKey[key] = InputStatus.Hold;
             }
             else
             {
-                //_curKey[key] = InputStatus.None;
                 _curKey.Remove(key);
             }
         };
@@ -83,28 +81,27 @@ public class InputManager : Singleton<InputManager>
         }
     }
 
-    private void MouseListener(int key)
+    private void MouseListener(InputKey key)
     {
-        //_curMouse.Add(key, InputStatus.None);
+        int transKey = Mathf.Abs((int)key) - 1;
         InputCallback inputCallback = () =>
         {
-            if (Input.GetMouseButtonDown(key))
+            if (Input.GetMouseButtonDown(transKey))
             {
                 //_curMouse[key] = InputStatus.Down;
-                _curMouse.Add(key, InputStatus.Down);
+                _curKey.Add(key, InputStatus.Down);
             }
-            else if (Input.GetMouseButtonUp(key))
+            else if (Input.GetMouseButtonUp(transKey))
             {
-                _curMouse[key] = InputStatus.Up;
+                _curKey[key] = InputStatus.Up;
             }
-            else if (Input.GetMouseButton(key))
+            else if (Input.GetMouseButton(transKey))
             {
-                _curMouse[key] = InputStatus.Hold;
+                _curKey[key] = InputStatus.Hold;
             }
             else
             {
-                //_curMouse[key] = InputStatus.None;
-                _curMouse.Remove(key);
+                _curKey.Remove(key);
             }
         };
 
@@ -118,14 +115,9 @@ public class InputManager : Singleton<InputManager>
         }
     }
 
-    public Dictionary<KeyCode, InputStatus> GetKey()
+    public Dictionary<InputKey, InputStatus> GetKey()
     {
         return _curKey;
-    }
-
-    public Dictionary<int, InputStatus> GetMouse()
-    {
-        return _curMouse;
     }
 
     public void CheckInput()

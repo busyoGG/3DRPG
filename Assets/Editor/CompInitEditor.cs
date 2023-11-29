@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,10 +15,13 @@ public class CompInitEditor : Editor
 
     private SerializedProperty _cam;
 
+    private SerializedProperty _skill;
+
     private void OnEnable()
     {
         _collideType = serializedObject.FindProperty("_collideType");
         _cam = serializedObject.FindProperty("_cameraScript");
+        _skill = serializedObject.FindProperty("_skillMap");
     }
 
     public override void OnInspectorGUI()
@@ -27,10 +31,17 @@ public class CompInitEditor : Editor
 
         compInit._isMainCharacter = EditorGUILayout.Toggle("是否主角", compInit._isMainCharacter);
 
-        if(compInit._isMainCharacter)
+        if (compInit._isMainCharacter)
         {
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(_cam, new GUIContent("主相机"));
+            compInit._isSkill = EditorGUILayout.Toggle("是否有技能", compInit._isSkill);
+            if (compInit._isSkill)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(_skill, new GUIContent("技能"));
+                EditorGUI.indentLevel--;
+            }
             EditorGUI.indentLevel--;
         }
 
@@ -63,7 +74,7 @@ public class CompInitEditor : Editor
             _collideGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_collideGroup, "碰撞组件属性");
             if (_collideGroup)
             {
-                EditorGUILayout.PropertyField(_collideType,new GUIContent("碰撞类型"));
+                EditorGUILayout.PropertyField(_collideType, new GUIContent("碰撞类型"));
                 compInit._isStatic = EditorGUILayout.Toggle("是否静态物体", compInit._isStatic);
             }
             EditorGUILayout.EndFoldoutHeaderGroup();

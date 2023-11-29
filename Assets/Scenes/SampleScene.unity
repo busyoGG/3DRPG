@@ -210,6 +210,7 @@ MonoBehaviour:
   _isTrigger: 0
   _isQTree: 1
   _isClimb: 0
+  _isSkill: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -219,6 +220,8 @@ MonoBehaviour:
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
+  _skillMap:
+    list: []
 --- !u!65 &616471584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -528,6 +531,111 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &918035869
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 918035870}
+  - component: {fileID: 918035873}
+  - component: {fileID: 918035872}
+  - component: {fileID: 918035871}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &918035870
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918035869}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.794, y: 0, z: 0.748}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1365198095}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &918035871
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918035869}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &918035872
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918035869}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &918035873
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918035869}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,6 +828,7 @@ MonoBehaviour:
   _isTrigger: 0
   _isQTree: 1
   _isClimb: 0
+  _isSkill: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -729,6 +838,8 @@ MonoBehaviour:
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
+  _skillMap:
+    list: []
 --- !u!65 &1005002486
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -860,6 +971,7 @@ GameObject:
   - component: {fileID: 1365198097}
   - component: {fileID: 1365198099}
   - component: {fileID: 1365198100}
+  - component: {fileID: 1365198101}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -876,10 +988,11 @@ Transform:
   m_GameObject: {fileID: 1365198093}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.38268343, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: -1.271, y: 1, z: -2.147}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 918035870}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
 --- !u!33 &1365198097
@@ -951,6 +1064,7 @@ MonoBehaviour:
   _isTrigger: 0
   _isQTree: 1
   _isClimb: 1
+  _isSkill: 1
   _moveSpeed: 0.03
   _jumpSpeed: 8
   _gravity: 9.8
@@ -960,6 +1074,10 @@ MonoBehaviour:
   _isCustomAABB: 1
   _aabbSize: {x: 2, y: 2, z: 2}
   _cameraScript: {fileID: 963194229}
+  _skillMap:
+    list:
+    - Key: -1
+      Value: 1
 --- !u!65 &1365198100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -981,6 +1099,27 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!95 &1365198101
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365198093}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: db74f22243501b34c801a5e77ec52106, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1725057874
 GameObject:
   m_ObjectHideFlags: 0
@@ -1020,6 +1159,7 @@ MonoBehaviour:
   _isTrigger: 0
   _isQTree: 1
   _isClimb: 0
+  _isSkill: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1029,6 +1169,8 @@ MonoBehaviour:
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
+  _skillMap:
+    list: []
 --- !u!65 &1725057876
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1154,6 +1296,7 @@ MonoBehaviour:
   _isTrigger: 0
   _isQTree: 1
   _isClimb: 0
+  _isSkill: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1163,6 +1306,8 @@ MonoBehaviour:
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
+  _skillMap:
+    list: []
 --- !u!65 &1752253664
 BoxCollider:
   m_ObjectHideFlags: 0

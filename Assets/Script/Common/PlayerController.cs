@@ -38,27 +38,31 @@ public class PlayerController : MonoBehaviour
 
     JumpComp _jump;
 
+    SkillComp _skill;
+
     public CameraScript cam { get; set; }
 
     void Start()
     {
         _move = player.Get<MoveComp>();
         _jump = player.Get<JumpComp>();
+        _skill = player.Get<SkillComp>();
         InitInput();
     }
 
     private void InitInput()
     {
-        //Dictionary<KeyCode, InputStatus> curKey = InputManager.Ins().GetKey();
+        //Dictionary<InputKey, InputStatus> curKey = InputManager.Ins().GetKey();
 
         InputManager.Ins().AddEventListener(() =>
         {
-            Dictionary<KeyCode, InputStatus> curKey = InputManager.Ins().GetKey();
+            Dictionary<InputKey, InputStatus> curKey = InputManager.Ins().GetKey();
             foreach (var data in curKey)
             {
-                KeyCode key = data.Key;
+                InputKey key = data.Key;
                 InputStatus status = data.Value;
 
+                //基本操作监听
                 if (status == InputStatus.Hold || status == InputStatus.Down)
                 {
                     SetForward(key);
@@ -67,33 +71,37 @@ public class PlayerController : MonoBehaviour
                 {
                     ResetForward(key);
                 }
+
+                //技能监听
+                _skill.key = key;
+                _skill.status = status;
             }
         });
     }
 
-    private void SetForward(KeyCode key)
+    private void SetForward(InputKey key)
     {
         switch (key)
         {
-            case KeyCode.A:
+            case InputKey.A:
                 _forward.x = -1f;
                 break;
-            case KeyCode.D:
+            case InputKey.D:
                 _forward.x = 1f;
                 break;
-            case KeyCode.W:
+            case InputKey.W:
                 _forward.z = 1f;
                 break;
-            case KeyCode.S:
+            case InputKey.S:
                 _forward.z = -1f;
                 break;
-            case KeyCode.Space:
+            case InputKey.Space:
                 if (_canJump)
                 {
                     _jump.startJump = true;
                 }
                 return;
-            case KeyCode.X:
+            case InputKey.X:
                 _move.isClimb = false;
                 return;
             default:
@@ -111,16 +119,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void ResetForward(KeyCode key)
+    private void ResetForward(InputKey key)
     {
         switch (key)
         {
-            case KeyCode.A:
-            case KeyCode.D:
+            case InputKey.A:
+            case InputKey.D:
                 _forward.x = 0f;
                 break;
-            case KeyCode.W:
-            case KeyCode.S:
+            case InputKey.W:
+            case InputKey.S:
                 _forward.z = 0f;
                 break;
             default:

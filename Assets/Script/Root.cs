@@ -43,6 +43,8 @@ public class Root : MonoBehaviour
         _physicWorld = new PhysicWorld();
 
         _start = true;
+
+        ConsoleUtils.Log("≤‚ ‘key", InputKey.None == InputKey.MouseLeft);
     }
 
     // Update is called once per frame

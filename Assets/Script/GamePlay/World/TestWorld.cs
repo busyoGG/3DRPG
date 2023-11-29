@@ -15,6 +15,6 @@ public class TestWorld : ECSWorld
         Add(new QTreeSystem());
         Add(new RenderSystem());
         Add(new CollideGizmosSystem());
-
+        Add(new SkillSystem());
     }
 }

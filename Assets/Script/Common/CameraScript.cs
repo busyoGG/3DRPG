@@ -121,47 +121,20 @@ public class CameraScript : MonoBehaviour
     {
         InputManager.Ins().AddEventListener(() =>
         {
-            Dictionary<KeyCode, InputStatus> curKey = InputManager.Ins().GetKey();
+            Dictionary<InputKey, InputStatus> curKey = InputManager.Ins().GetKey();
             foreach (var data in curKey)
             {
-                KeyCode key = data.Key;
+                InputKey key = data.Key;
                 InputStatus status = data.Value;
                 if (status == InputStatus.Hold || status == InputStatus.Down)
                 {
                     switch (key)
                     {
-                        case KeyCode.LeftAlt:
+                        case InputKey.LeftAlt:
                             _showCursor = true;
                             Cursor.lockState = CursorLockMode.None;
                             break;
-                    }
-                }
-                else
-                {
-                    switch (key)
-                    {
-                        case KeyCode.LeftAlt:
-                            _showCursor = false;
-                            Cursor.lockState = CursorLockMode.Locked;
-                            break;
-                    }
-                }
-            }
-        });
-
-        InputManager.Ins().AddEventListener(() =>
-        {
-            Dictionary<int, InputStatus> curMouse = InputManager.Ins().GetMouse();
-
-            foreach (var data in curMouse)
-            {
-                int key = data.Key;
-                InputStatus status = data.Value;
-                if (status == InputStatus.Hold || status == InputStatus.Down)
-                {
-                    switch (key)
-                    {
-                        case 0:
+                        case InputKey.MouseLeft:
                             _holdToRotate = true;
                             break;
                     }
@@ -170,7 +143,11 @@ public class CameraScript : MonoBehaviour
                 {
                     switch (key)
                     {
-                        case 0:
+                        case InputKey.LeftAlt:
+                            _showCursor = false;
+                            Cursor.lockState = CursorLockMode.Locked;
+                            break;
+                        case InputKey.MouseLeft:
                             _holdToRotate = false;
                             break;
                     }

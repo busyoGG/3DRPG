@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,7 @@ public class CompInit : MonoBehaviour
     public bool _isTrigger = false;
     public bool _isQTree = false;
     public bool _isClimb = false;
+    public bool _isSkill = false;
 
     //-----move-start-----
     /// <summary>
@@ -50,6 +52,10 @@ public class CompInit : MonoBehaviour
     public CameraScript _cameraScript;
 
     //-----main_character-end-----
+
+    //-----skill-start-----
+    public SerializableDictionary<InputKey, int> _skillMap;
+    //-----skill-end-----
 
     void Start()
     {
@@ -141,6 +147,12 @@ public class CompInit : MonoBehaviour
         if (_isClimb)
         {
             entity.Add<ClimbComp>();
+        }
+
+        if (_isSkill)
+        {
+            SkillComp skill = entity.Add<SkillComp>();
+            skill.id = _skillMap.ToDictionary();
         }
     }
 

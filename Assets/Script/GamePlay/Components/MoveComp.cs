@@ -7,7 +7,7 @@ using UnityEngine;
 [CompRegister(typeof(MoveComp))]
 public class MoveComp : Comp
 {
-    public Vector3 lastPosition;
+    //public Vector3 lastPosition;
 
     public Vector3 nextPostition;
 
@@ -54,7 +54,7 @@ public class MoveComp : Comp
     public override void Reset()
     {
         isMove = false;
-        lastPosition = Vector3.zero;
+        //lastPosition = Vector3.zero;
         nextPostition = Vector3.zero;
         forwardOffset = Vector3.zero;
         forwardOffsetQua = Quaternion.identity;

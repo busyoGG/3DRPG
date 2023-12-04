@@ -1,4 +1,4 @@
-using Game;
+
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Xml.Schema;
@@ -9,10 +9,12 @@ using UnityEngine.UIElements;
 
 public class MoveSystem : ECSSystem
 {
+    private Quaternion _rotation = Quaternion.identity;
+    private Vector3 _forward = Vector3.zero;
 
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AnyOf(typeof(MoveComp));
+        return ECSManager.Ins().AllOf(typeof(TransformComp), typeof(MoveComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -20,8 +22,9 @@ public class MoveSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             MoveComp move = entity.Get<MoveComp>();
-            Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
+            TransformComp transform = entity.Get<TransformComp>();
 
+            Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
 
             if (move.isClimbTop == 0 && !inputForward.Equals(Vector3.zero))
             {
@@ -44,10 +47,26 @@ public class MoveSystem : ECSSystem
                     }
                 }
 
-                move.lastPosition = move.nextPostition;
-                move.nextPostition = move.lastPosition + inputForward * move.speed;
+                transform.position = move.nextPostition;
+                move.nextPostition = transform.position + inputForward * move.speed;
 
                 move.isMove = true;
+
+                //转向
+                if (!inputForward.Equals(Vector3.zero))
+                {
+                    Vector3 target = transform.position;
+                    target.y = transform.position.y;
+                    //设置转向方向
+                    _forward.x = inputForward.x;
+                    _forward.z = inputForward.z;
+                    //转向
+                    if (!_forward.Equals(Vector3.zero))
+                    {
+                        _rotation.SetLookRotation(_forward);
+                        transform.rotation = _rotation;
+                    }
+                }
             }
             else
             {
@@ -61,6 +80,7 @@ public class MoveSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             MoveComp move = entity.Get<MoveComp>();
+            TransformComp transform = entity.Get<TransformComp>();
 
             Gizmos.color = Color.black;
 
@@ -71,11 +91,11 @@ public class MoveSystem : ECSSystem
                 rotation.SetFromToRotation(Vector3.up, move.forwardOffset);
                 inputForward = rotation * inputForward;
             }
-            Gizmos.DrawLine(move.lastPosition, move.lastPosition + inputForward * 100);
+            Gizmos.DrawLine(transform.position, transform.position + inputForward * 100);
 
             if (!move.isClimb) continue;
             Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(move.lastPosition, move.lastPosition + move.forwardOffset * 10);
+            Gizmos.DrawLine(transform.position, transform.position + move.forwardOffset * 10);
         }
     }
 }

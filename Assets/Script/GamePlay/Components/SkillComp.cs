@@ -1,13 +1,5 @@
-using System.Collections;
+using Bean;
 using System.Collections.Generic;
-using UnityEngine;
-
-public enum SkillPlayStatus { 
-    Idle,
-    Charge,
-    Play,
-    End
-}
 
 [CompRegister(typeof(SkillComp))]
 public class SkillComp : Comp
@@ -22,7 +14,7 @@ public class SkillComp : Comp
 
     public SkillTrigger trigger;
 
-    public SkillData skill;
+    public SkillConfigData skill;
 
     public float duration;
 

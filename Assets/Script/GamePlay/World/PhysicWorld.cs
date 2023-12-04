@@ -10,5 +10,6 @@ public class PhysicWorld : ECSWorld
         Add(new QObjFindingSystem());
         Add(new CollideRefreshSystem());
         Add(new CollideSystem());
+        Add(new LogicAniSystem());
     }
 }

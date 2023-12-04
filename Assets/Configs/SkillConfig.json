@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "普通攻击",
+    "key|InputKey": -1,
+    "skillTime": 0.2,
+    "outOfTime": 0.5,
+    "holdingTime": 0,
+    "trigger|SkillTrigger": "Click",
+    "isCanForceStop": false,
+    "forceTimes": 0,
+    "defaultForceTimes": 0,
+    "forceResetTime": 0,
+    "ani": "Attack1",
+    "next": []
+  }
+]

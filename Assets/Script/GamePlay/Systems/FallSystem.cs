@@ -6,7 +6,7 @@ public class FallSystem : ECSSystem
 {
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(MoveComp), typeof(CollideComp));
+        return ECSManager.Ins().AllOf(typeof(MoveComp), typeof(CollideComp),typeof(TransformComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -14,6 +14,7 @@ public class FallSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             MoveComp move = entity.Get<MoveComp>();
+            TransformComp transform = entity.Get<TransformComp>();
 
             float timeOfHigherest = move.jumpSpeed / move.gravity;
 
@@ -42,6 +43,7 @@ public class FallSystem : ECSSystem
                     move.fallTime = 0f;
                     move.nextPostition.y = 1;
                 }
+                transform.position = move.nextPostition;
             }
         }
     }

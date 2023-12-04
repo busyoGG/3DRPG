@@ -3,20 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum InputType
-{
-    Mouse,
-    Keyboard,
-    Controller
-}
 
-public enum InputStatus
-{
-    None,
-    Down,
-    Up,
-    Hold
-}
 
 public class InputManager : Singleton<InputManager>
 {

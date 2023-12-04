@@ -1,14 +1,12 @@
-using Game;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+using System.Reflection;
+using System;
 
 public class Root : MonoBehaviour
 {
     public GameObject root;
     public GameObject pos;
+    public GameObject UI;
 
     public PlayerController player;
 
@@ -24,6 +22,7 @@ public class Root : MonoBehaviour
     {
         ECSManager.Ins().Init();
         InputManager.Ins().Init();
+        SkillManager.Ins().Init();
         //InputManager.Ins().AddKeyboardInputCallback(KeyCode.Space,InputStatus.Up, () =>
         //{
         //    ConsoleUtils.Log("按下了空格");
@@ -44,18 +43,26 @@ public class Root : MonoBehaviour
 
         _start = true;
 
-        ConsoleUtils.Log("测试key", InputKey.None == InputKey.MouseLeft);
+        UIManager.Ins().Init();
+        //UIManager.Ins().Show<>("Root");
+
+        //UIManager.Ins().AddUI<TriggerButtonUI>("TriggerButton", UI.transform);
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Application.targetFrameRate = 60;
         MapManager.Ins().RefreshPlayerPos(pos.transform.position);
         MapManager.Ins().Update();
         MapManager.Ins().RefreshChunk();
 
         _world.Update();
         _physicWorld.Update();
+    }
+
+    private void FixedUpdate()
+    {
     }
 
     void OnDrawGizmos()

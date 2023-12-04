@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "dialogId": 1,
+    "stepId": 0,
+    "target": "NPC",
+    "content": "这是一段测试对话",
+    "autoSpeed": 0.5,
+    "selection": [
+      "null"
+    ],
+    "next": []
+  }
+]

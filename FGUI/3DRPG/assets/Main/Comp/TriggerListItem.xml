@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,100">
+  <displayList>
+    <graph id="n0_rhxu" name="n0" xy="0,0" size="400,100" type="rect" corner="25"/>
+    <text id="n1_rhxu" name="content" xy="20,17" size="361,67" fontSize="40" vAlign="middle" autoSize="none" text="交互"/>
+  </displayList>
+</component>

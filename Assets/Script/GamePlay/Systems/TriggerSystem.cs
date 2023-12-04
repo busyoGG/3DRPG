@@ -56,21 +56,23 @@ public class TriggerSystem : ECSSystem
                     case TriggerStatus.Enter:
                         if (trigger.OnTriggerEnter != null)
                         {
-                            trigger.OnTriggerEnter(entity, triggerEntity);
+                            trigger.OnTriggerEnter.Invoke(entity, triggerEntity);
                         }
                         trigger.status[key] = TriggerStatus.Keeping;
                         break;
                     case TriggerStatus.Keeping:
                         if (trigger.OnTriggerKeeping != null)
                         {
-                            trigger.OnTriggerKeeping(entity, triggerEntity);
+                            //trigger.OnTriggerKeeping(entity, triggerEntity);
+                            trigger.OnTriggerKeeping.Invoke(entity, triggerEntity);
                         }
                         trigger.status[key] = TriggerStatus.Exit;
                         break;
                     case TriggerStatus.Exit:
                         if (trigger.OnTriggerExit != null)
                         {
-                            trigger.OnTriggerExit(entity, triggerEntity);
+                            //trigger.OnTriggerExit(entity, triggerEntity);
+                            trigger.OnTriggerExit.Invoke(entity, triggerEntity);
                         }
                         trigger.status[key] = TriggerStatus.Idle;
                         break;

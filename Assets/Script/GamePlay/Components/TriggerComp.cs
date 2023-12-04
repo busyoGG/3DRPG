@@ -1,15 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-
-public enum TriggerStatus
-{
-    Idle,
-    Enter,
-    Keeping,
-    Exit
-}
 
 [CompRegister(typeof(TriggerComp))]
 public class TriggerComp : Comp
@@ -19,11 +9,11 @@ public class TriggerComp : Comp
     /// </summary>
     public bool isPositive;
 
-    public Action<Entity,Entity> OnTriggerEnter { get; set; }
+    public Action<Entity, Entity> OnTriggerEnter;
 
-    public Action<Entity, Entity> OnTriggerExit { get; set; }
+    public Action<Entity, Entity> OnTriggerExit;
 
-    public Action<Entity, Entity> OnTriggerKeeping { get; set; }
+    public Action<Entity, Entity> OnTriggerKeeping;
 
     public Dictionary<int, TriggerStatus> status = new Dictionary<int, TriggerStatus>();
     public override void Reset()

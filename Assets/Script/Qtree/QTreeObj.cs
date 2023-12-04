@@ -26,7 +26,10 @@ public class QTreeObj
     /// <param name="pos"></param>
     public void RefreshBounds(Vector3 pos)
     {
-        bounds.position = pos;
-        qNode = qNode.Refresh(this);
+        if (bounds.position != pos)
+        {
+            bounds.position = pos;
+            qNode = qNode.Refresh(this);
+        }
     }
 }

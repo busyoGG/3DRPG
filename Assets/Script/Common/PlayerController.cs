@@ -1,17 +1,5 @@
-using Game;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
-
-public enum ControlType
-{
-    MouseAndKeyboard,
-    KeyboardOnly,
-    ControllerOnly
-}
 
 public class PlayerController : MonoBehaviour
 {
@@ -73,8 +61,13 @@ public class PlayerController : MonoBehaviour
                 }
 
                 //¼¼ÄÜ¼àÌý
-                _skill.key = key;
-                _skill.status = status;
+                if (key == InputKey.A || key == InputKey.D || key == InputKey.W || key == InputKey.S || key == InputKey.Space ||
+                key == InputKey.LeftAlt || key == InputKey.X) { }
+                else
+                {
+                    _skill.key = key;
+                    _skill.status = status;
+                }
             }
         });
     }

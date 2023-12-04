@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="lu13wm6n">
+  <resources>
+    <component id="h8s61" name="Root.xml" path="/" exported="true"/>
+    <component id="rhxu2" name="TriggerList.xml" path="/" exported="true"/>
+    <component id="rhxu3" name="TriggerListItem.xml" path="/Comp/" exported="true"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

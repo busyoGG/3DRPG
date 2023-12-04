@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 886abc8b70936c041b34bb8f89ac603a, type: 3}
+  m_Name: Idle
+  m_EditorClassIdentifier: 
+  frameDelta: 0.016666668
+  frameCount: 61
+  transforms:
+    list:
+    - Key: Cube
+      Value:
+      - position: {x: 0.794, y: 0, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.0018333334, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.0036666668, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.0055000004, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.0073333336, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.009166666, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.011, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.012833333, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.014666667, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.0165, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.018333333, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.020166665, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.022, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.023833333, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.025666665, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.027499998, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.029333334, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.031166669, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.03299999, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.02713042, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.021260848, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.015391279, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.009521709, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: 0.0036521386, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.0022174316, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.008087002, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.013956572, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.019826142, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.025695711, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.031565282, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.037434842, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.043304402, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.049173962, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.055043522, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.060913082, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.06678264, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.0726522, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.07852176, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.08439132, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.09026088, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.09613044, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.102, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.09736843, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.09273685, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.088105276, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.0834737, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.078842126, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.074210554, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.069578975, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.064947404, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.06031583, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.055684254, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.05105268, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.046421103, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.04178953, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.037157957, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.03252638, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.027894806, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.023263233, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.018631658, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}
+      - position: {x: 0.794, y: -0.014000083, z: 0.748}
+        euler: {x: 0, y: 0, z: 0}
+        scale: {x: 1, y: 1, z: 1}

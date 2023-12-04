@@ -2,13 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum MapStatus
-{
-    Inactive,
-    Active,
-    Cache
-}
-
 public class MapData
 {
     public int id { get; set; }

@@ -1,13 +1,14 @@
-using Game;
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillSystem : ECSSystem
 {
+    private string _idle = "Idle";
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(SkillComp));
+        return ECSManager.Ins().AllOf(typeof(SkillComp), typeof(AniComp), typeof(LogicAniComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -15,11 +16,15 @@ public class SkillSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             SkillComp skill = entity.Get<SkillComp>();
+            AniComp ani = entity.Get<AniComp>();
+            LogicAniComp logicAni = entity.Get<LogicAniComp>();
 
             switch (skill.play)
             {
                 case SkillPlayStatus.Idle:
                     int skillId = 0;
+                    ani.curAni = _idle;
+                    logicAni.curAni = _idle;
 
                     if (skill.status == InputStatus.Down)
                     {
@@ -42,6 +47,7 @@ public class SkillSystem : ECSSystem
                         {
                             skill.play = SkillPlayStatus.Charge;
                         }
+                        ConsoleUtils.Log("释放技能", skill.skill.name);
                     }
                     break;
                 case SkillPlayStatus.Charge:
@@ -60,6 +66,8 @@ public class SkillSystem : ECSSystem
                     skill.duration += _dt;
                     break;
                 case SkillPlayStatus.Play:
+                    ani.curAni = skill.skill.ani;
+                    logicAni.curAni = skill.skill.ani;
                     //释放技能
                     if (skill.duration >= skill.skill.skillTime)
                     {
@@ -72,18 +80,32 @@ public class SkillSystem : ECSSystem
                 case SkillPlayStatus.End:
 
                     skill.duration += _dt;
+                    //ConsoleUtils.Log("连招结束", skill.duration);
 
                     if (skill.duration >= skill.skill.outOfTime)
                     {
                         //连招超时
                         skill.duration = 0;
                         skill.play = SkillPlayStatus.Idle;
+                        skill.skill = null;
                     }
                     else if (skill.status == InputStatus.Down)
                     {
                         skill.skill = SkillManager.Ins().NextSkill(skill.skill, skill.key);
+
+                        if (skill.skill == null)
+                        {
+                            //判断是否成功变招
+                            skill.id.TryGetValue(skill.key, out skillId);
+                            skill.skill = SkillManager.Ins().GetSkill(skillId);
+                        }
+
                         if (skill.skill != null)
                         {
+                            ani.lastAni = _idle;
+                            logicAni.lastAni = _idle;
+                            skill.duration = 0;
+                            ConsoleUtils.Log("下一招", skill.skill.name);
                             //有后续技能
                             if (skill.skill.trigger != SkillTrigger.Charge)
                             {

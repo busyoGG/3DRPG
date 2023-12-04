@@ -13,8 +13,9 @@ public class TestWorld : ECSWorld
         Add(new TriggerSystem());
         Add(new OffsetSystem());
         Add(new QTreeSystem());
-        Add(new RenderSystem());
         Add(new CollideGizmosSystem());
         Add(new SkillSystem());
+        Add(new AniSystem());
+        Add(new RenderSystem());
     }
 }

@@ -1,4 +1,4 @@
-using Game;
+
 using System.Drawing;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -47,10 +47,22 @@ public class OBBData
             _axes = value;
             _vertexts = null;
             _aabb = null;
+            _rot = Quaternion.LookRotation(_axes[2]);
         }
     }
 
-    public Quaternion rot { get; set; }
+    public Quaternion rot { 
+        get
+        {
+            return _rot;
+        }
+        set
+        {
+            _rot = value;
+        }
+    }
+
+    private Quaternion _rot;
 
     private Vector3[] _axes;
 

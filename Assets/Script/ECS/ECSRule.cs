@@ -1,13 +1,6 @@
-using Game;
+
 using System;
 using System.Collections.Generic;
-
-public enum ECSRuleType
-{
-    AllOf,
-    AnyOf,
-    ExcludeOf
-}
 
 public class ECSRule
 {

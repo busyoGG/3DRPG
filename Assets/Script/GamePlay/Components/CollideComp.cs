@@ -1,15 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public enum CollisionType
-{
-    Circle,
-    AABB,
-    OBB,
-    Ray
-}
 
 [CompRegister(typeof(CollideComp))]
 public class CollideComp : Comp

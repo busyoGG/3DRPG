@@ -16,6 +16,12 @@ public class UIManager : Singleton<UIManager>
 
     private Transform _poolTransform;
 
+    private bool _inited = false;
+
+    private int _id = 0;
+
+    private bool _focus = false;
+
     private class UIPack
     {
         public static string Main = "Main";
@@ -30,6 +36,7 @@ public class UIManager : Singleton<UIManager>
 
     public void Init()
     {
+        if (_inited) return;
         //初始化ui相机
         var stageCamera = StageCamera.main;
         var cameraData = stageCamera.GetUniversalAdditionalCameraData();
@@ -38,6 +45,25 @@ public class UIManager : Singleton<UIManager>
 
         _poolTransform = new GameObject().transform;
         _poolTransform.gameObject.SetActive(false);
+        _inited = true;
+    }
+
+    public void SetFocus(bool focus)
+    {
+        _focus = focus;
+        if (_focus)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+    }
+
+    public bool IsFocus()
+    {
+        return _focus;
     }
 
     public T Get<T>(string name) where T : BaseView
@@ -75,9 +101,14 @@ public class UIManager : Singleton<UIManager>
 
             ui.main = UIPackage.CreateObject(UIPack.Main, name).asCom;
             ui.name = name;
+            ui.id = GetId();
             //添加到面板
             GRoot.inst.AddChild(ui.main);
             ui.OnAwake();
+        }
+        else
+        {
+            return ui;
         }
 
         ui.Show();
@@ -85,6 +116,8 @@ public class UIManager : Singleton<UIManager>
         _uiViewStack.Push(ui);
         //设置显示层级
         ui.main.parent.SetChildIndex(ui.main, ui.main.parent.numChildren - 1);
+
+        //Init();
 
         return ui;
     }
@@ -103,24 +136,6 @@ public class UIManager : Singleton<UIManager>
         }
     }
 
-    /// <summary>
-    /// 计算隐藏ui的数量
-    /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    private int CalculateHideNum(string key)
-    {
-        int i = 0;
-        foreach (BaseView ui in _uiViewStack)
-        {
-            i++;
-            if (ui.name == key)
-            {
-                break;
-            }
-        }
-        return _uiViewStack.Count - i;
-    }
 
     //-----组件-----
 
@@ -178,6 +193,7 @@ public class UIManager : Singleton<UIManager>
             ui.panel = panel;
             ui.main = panel.ui;
             ui.target = obj.transform;
+            ui.id = GetId();
 
             //panel.container.size = new Vector2(100,100);
             //panel.ui.scale = GRoot.inst.scale;
@@ -206,5 +222,31 @@ public class UIManager : Singleton<UIManager>
         }
 
         stack.Push(ui);
+    }
+
+    //-----工具-----
+
+    /// <summary>
+    /// 计算隐藏ui的数量
+    /// </summary>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    private int CalculateHideNum(string key)
+    {
+        int i = 0;
+        foreach (BaseView ui in _uiViewStack)
+        {
+            if (ui.name == key)
+            {
+                break;
+            }
+            i++;
+        }
+        return _uiViewStack.Count - i;
+    }
+
+    private string GetId()
+    {
+        return "ui_" + _id++;
     }
 }

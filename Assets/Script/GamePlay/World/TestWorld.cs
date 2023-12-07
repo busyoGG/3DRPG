@@ -6,6 +6,7 @@ public class TestWorld : ECSWorld
 {
     public override void SystemAdd()
     {
+        Add(new TransformSystem());
         Add(new ClimbSystem());
         Add(new MoveSystem());
         Add(new JumpSystem());

@@ -169,3 +169,11 @@ public enum SkillEntity
 {
     Cube
 }
+
+public enum InteractionType
+{
+    None,
+    Dialog,
+    PickUp,
+    Interaction
+}

@@ -18,6 +18,7 @@ public class CompInit : MonoBehaviour
     public bool _isSkill = false;
     public bool _isAni = false;
     public bool _isTransform = false;
+    public bool _isDialog = false;
 
     //-----move-start-----
     /// <summary>
@@ -67,6 +68,16 @@ public class CompInit : MonoBehaviour
 
     public bool _isTriggerPositive;
     //-----trigger-end-----
+
+    //-----dialog-start-----
+    public List<int> _randomId;
+
+    public float _maxDelta;
+
+    public float _minDelta;
+
+    public string _targetName;
+    //-----dialog-end-----
 
     void Start()
     {

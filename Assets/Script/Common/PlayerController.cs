@@ -44,7 +44,11 @@ public class PlayerController : MonoBehaviour
 
         InputManager.Ins().AddEventListener(() =>
         {
+            bool isFocus = UIManager.Ins().IsFocus();
+            if (isFocus) return;
+
             Dictionary<InputKey, InputStatus> curKey = InputManager.Ins().GetKey();
+            bool isAlt = curKey.ContainsKey(InputKey.LeftAlt) || curKey.ContainsKey(InputKey.RightAlt);
             foreach (var data in curKey)
             {
                 InputKey key = data.Key;
@@ -65,8 +69,11 @@ public class PlayerController : MonoBehaviour
                 key == InputKey.LeftAlt || key == InputKey.X) { }
                 else
                 {
-                    _skill.key = key;
-                    _skill.status = status;
+                    if (!isAlt || (key != InputKey.MouseLeft && key != InputKey.MouseRight))
+                    {
+                        _skill.key = key;
+                        _skill.status = status;
+                    }
                 }
             }
         });

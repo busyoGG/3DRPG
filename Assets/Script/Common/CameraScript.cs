@@ -60,7 +60,7 @@ public class CameraScript : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!_showCursor || _holdToRotate)
+        if (!UIManager.Ins().IsFocus() && !_showCursor || _holdToRotate)
         {
             UpdateScale();
             UpdatePosition();
@@ -121,6 +121,8 @@ public class CameraScript : MonoBehaviour
     {
         InputManager.Ins().AddEventListener(() =>
         {
+            bool isFocus = UIManager.Ins().IsFocus();
+
             Dictionary<InputKey, InputStatus> curKey = InputManager.Ins().GetKey();
             foreach (var data in curKey)
             {
@@ -144,6 +146,8 @@ public class CameraScript : MonoBehaviour
                     switch (key)
                     {
                         case InputKey.LeftAlt:
+                            if (isFocus) return;
+
                             _showCursor = false;
                             Cursor.lockState = CursorLockMode.Locked;
                             break;

@@ -43,7 +43,7 @@ public class FallSystem : ECSSystem
                     move.fallTime = 0f;
                     move.nextPostition.y = 1;
                 }
-                transform.position = move.nextPostition;
+                //transform.position = move.nextPostition;
             }
         }
     }

@@ -5,6 +5,8 @@ using FairyGUI;
 
 public class BaseUIComp
 {
+    public string id;
+
     public GComponent main;
 
     public UIPanel panel;

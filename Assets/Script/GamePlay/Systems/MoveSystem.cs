@@ -47,7 +47,7 @@ public class MoveSystem : ECSSystem
                     }
                 }
 
-                transform.position = move.nextPostition;
+                //transform.position = move.nextPostition;
                 move.nextPostition = transform.position + inputForward * move.speed;
 
                 move.isMove = true;
@@ -61,7 +61,7 @@ public class MoveSystem : ECSSystem
                     _forward.x = inputForward.x;
                     _forward.z = inputForward.z;
                     //×ªÏò
-                    if (!_forward.Equals(Vector3.zero))
+                    if (_forward.x != 0 && _forward.z != 0)
                     {
                         _rotation.SetLookRotation(_forward);
                         transform.rotation = _rotation;

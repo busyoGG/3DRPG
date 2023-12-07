@@ -3,7 +3,11 @@
   <resources>
     <component id="h8s61" name="Root.xml" path="/" exported="true"/>
     <component id="rhxu2" name="TriggerList.xml" path="/" exported="true"/>
-    <component id="rhxu3" name="TriggerListItem.xml" path="/Comp/" exported="true"/>
+    <component id="ge665" name="TriggerListItem.xml" path="/Comp/TriggerList/" exported="true"/>
+    <component id="ge667" name="ConversationView.xml" path="/" exported="true"/>
+    <component id="ge668" name="DialogButton.xml" path="/Comp/Conversation/"/>
+    <component id="kyv39" name="SelectionButton.xml" path="/Comp/Conversation/"/>
+    <component id="kyv3a" name="AutoButton.xml" path="/Comp/Conversation/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

@@ -22,6 +22,8 @@ public class CompInitEditor : Editor
 
     private SerializedProperty _logicAni;
 
+    private SerializedProperty _randomId;
+
 
     private void OnEnable()
     {
@@ -30,6 +32,7 @@ public class CompInitEditor : Editor
         _skill = serializedObject.FindProperty("_skillMap");
         _triggerFunc = serializedObject.FindProperty("_triggerFunc");
         _logicAni = serializedObject.FindProperty("_logicAni");
+        _randomId = serializedObject.FindProperty("_randomId");
     }
 
     public override void OnInspectorGUI()
@@ -122,6 +125,17 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel++;
             compInit._defAni = EditorGUILayout.TextField("默认动画", compInit._defAni);
             EditorGUILayout.PropertyField(_logicAni, new GUIContent("动画数据"));
+            EditorGUI.indentLevel--;
+        }
+
+        compInit._isDialog = EditorGUILayout.Toggle("是否有对话", compInit._isDialog);
+        if (compInit._isDialog)
+        {
+            EditorGUI.indentLevel++;
+            compInit._targetName = EditorGUILayout.TextField("对话角色", compInit._targetName);
+            EditorGUILayout.PropertyField(_randomId, new GUIContent("随机对话数据"));
+            compInit._maxDelta = EditorGUILayout.FloatField("最长间隔", compInit._maxDelta);
+            compInit._minDelta = EditorGUILayout.FloatField("最短间隔", compInit._minDelta);
             EditorGUI.indentLevel--;
         }
 

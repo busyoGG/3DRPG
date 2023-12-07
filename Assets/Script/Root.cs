@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Reflection;
 using System;
+using UnityEditor;
 
 public class Root : MonoBehaviour
 {
@@ -20,9 +21,11 @@ public class Root : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        TimerUtils.Init();
         ECSManager.Ins().Init();
         InputManager.Ins().Init();
         SkillManager.Ins().Init();
+        DialogManager.Ins().Init();
         //InputManager.Ins().AddKeyboardInputCallback(KeyCode.Space,InputStatus.Up, () =>
         //{
         //    ConsoleUtils.Log("按下了空格");
@@ -43,10 +46,40 @@ public class Root : MonoBehaviour
 
         _start = true;
 
-        UIManager.Ins().Init();
         //UIManager.Ins().Show<>("Root");
 
         //UIManager.Ins().AddUI<TriggerButtonUI>("TriggerButton", UI.transform);
+        EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
+        {
+            //ConsoleUtils.Log("运行状态改变",state);
+            if (state == PlayModeStateChange.ExitingPlayMode)
+            {
+                TimerUtils.Stop();
+            }
+        };
+
+        //test
+        ConsoleUtils.Log("开始等待", DateTime.Now);
+        TimerChain chain = null;
+        chain = TimerUtils.Loop(1000, () =>
+        {
+            ConsoleUtils.Log("测试等待循环", DateTime.Now);
+        }, 0, 3).Once(5000, () =>
+        {
+            ConsoleUtils.Log("测试等待", DateTime.Now);
+        });
+
+        TimerUtils.Once(2100, () =>
+        {
+            ConsoleUtils.Log("测试停止", DateTime.Now,chain.GetId());
+            TimerUtils.Clear(chain);
+        });
+    }
+
+    private void Start()
+    {
+
+        UIManager.Ins().Init();
     }
 
     // Update is called once per frame

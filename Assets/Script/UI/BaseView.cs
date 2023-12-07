@@ -5,12 +5,16 @@ using FairyGUI;
 
 public class BaseView
 {
+    public string id;
     public GComponent main;
     public string name;
+
     /// <summary>
     /// 只在创建的时候执行
     /// </summary>
-    public virtual void OnAwake() { 
+    public void OnAwake() { 
+        BindItem();
+        InitListener();
         InitAction();
     }
 
@@ -34,12 +38,16 @@ public class BaseView
     /// <summary>
     /// 每次展示的时候执行
     /// </summary>
-    public virtual void OnShow() { }
+    protected virtual void OnShow() { }
 
     /// <summary>
     /// 每次隐藏的时候执行
     /// </summary>
-    public virtual void OnHide() { }
+    protected virtual void OnHide() { }
 
-    public virtual void InitAction() { }
+    protected virtual void InitAction() { }
+
+    protected virtual void BindItem() { }
+
+    protected virtual void InitListener() { }
 }

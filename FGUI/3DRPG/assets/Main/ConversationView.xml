@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080" opaque="false">
+  <displayList>
+    <component id="n1_ge66" name="comp_conversation" src="ge668" fileName="Comp/Conversation/DialogButton.xml" xy="15,788"/>
+    <graph id="n2_kyv3" name="n2" xy="17,686" size="377,84" touchable="false" type="rect" lineSize="5" fillColor="#33333333" corner="20">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <text id="n3_kyv3" name="text_talker" xy="34,698" size="345,62" fontSize="40" align="center" vAlign="middle" autoSize="none" text="NPC"/>
+    <list id="n4_kyv3" name="list_selection" xy="1347,424" size="544,339" overflow="scroll" lineGap="10" defaultItem="ui://lu13wm6nkyv39">
+      <relation target="n1_ge66" sidePair="bottom-top"/>
+      <item/>
+    </list>
+    <component id="n5_kyv3" name="btn_auto" src="kyv3a" fileName="Comp/Conversation/AutoButton.xml" xy="28,23"/>
+  </displayList>
+</component>

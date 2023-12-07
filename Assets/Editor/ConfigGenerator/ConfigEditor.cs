@@ -177,7 +177,7 @@ public class ConfigEditor : EditorWindow
             if (type.Equals(JsonType.Array))
             {
                 //属性为数组
-                if(child.Count == 0)
+                if (child.Count == 0)
                 {
                     //最终类型非对象，该属性为纯数组
                     string strList = "";
@@ -277,7 +277,7 @@ public class ConfigEditor : EditorWindow
                 //Debug.Log("属性名" + propName + "," + type + "," + json[0][propName]);
                 //cls += "\t\tpublic " + GetType(type) + " " + propName + ";\r\n";
 
-                if(type == null)
+                if (type == null)
                 {
                     listClass.Add("\t\tpublic " + clsName + " " + propName + ";\r\n");
                 }
@@ -343,7 +343,16 @@ public class ConfigEditor : EditorWindow
 
         //保存数据类
         Debug.Log("生成类" + cls);
-        string output = Application.dataPath + "/Script/Loader/Config/Bean/" + folder + "/" + clsName + ".cs";
+        string strFolder;
+        if(folder == "Configs")
+        {
+            strFolder = "";
+        }
+        else
+        {
+            strFolder = folder + "/";
+        }
+        string output = Application.dataPath + "/Script/Loader/Config/Bean/" + strFolder + clsName + ".cs";
         GeneratorUtils.WriteFile(output, cls);
     }
 
@@ -361,7 +370,10 @@ public class ConfigEditor : EditorWindow
         //创建所有数据类
         foreach (var fileInfo in _allConfigs)
         {
-            folders += "\t\tpublic const string " + fileInfo.Key + " = \"" + fileInfo.Key + "\";\r\n";
+            if (fileInfo.Key != "Configs")
+            {
+                folders += "\t\tpublic const string " + fileInfo.Key + " = \"" + fileInfo.Key + "\";\r\n";
+            }
             //生成数据类
             for (int i = 0, len = fileInfo.Value.Count; i < len; i++)
             {
@@ -427,7 +439,7 @@ public class ConfigEditor : EditorWindow
                 _allConfigs.Add(parent, new List<FileInfo>());
             }
             _allConfigs[parent].Add(file);
-            //Debug.Log("添加路径" + file.FullName);
+            //ConsoleUtils.Log("添加路径" , (file.DirectoryName + "/"), _jsonUrl);
             _configsNum++;
         }
     }

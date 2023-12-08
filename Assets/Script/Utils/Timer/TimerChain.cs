@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public class TimerChain
 {
@@ -30,17 +27,25 @@ public class TimerChain
         return this;
     }
 
+    public TimerChain OnceAsync(int delay, Action action)
+    {
+        _id = _timeWheel.SetTimeoutAsync(_id, delay + _delay, action);
+        _delay = delay;
+        return this;
+    }
+
+    public TimerChain LoopAsync(int interval, Action action, int delay = 0, int loopTimes = -1)
+    {
+        _id = _timeWheel.SetIntervalAsync(_id, interval, action, delay + _delay, loopTimes);
+        _delay = interval * loopTimes + delay;
+        return this;
+    }
+
     public TimerChain Clear()
     {
         _timeWheel.ClearInterval(_id, true);
         return this;
     }
-
-    //public TimerChain Clear(int id)
-    //{
-    //    _timeWheel.ClearInterval(id);
-    //    return this;
-    //}
 
     public int GetId()
     {

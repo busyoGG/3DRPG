@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class TimeWheel
 {
@@ -118,8 +116,9 @@ public class TimeWheel
                     {
                         millisecond.Remove(task);
 
-                        ConsoleUtils.Log("执行任务", task.id);
-                        task.RunAsync();
+                        //ConsoleUtils.Log("执行任务", task.id);
+                        //task.RunAsync();
+                        task.Run();
 
                         if (task.CheckLoop())
                         {
@@ -137,7 +136,7 @@ public class TimeWheel
         {
             id = GetId();
         }
-        TimerTask task = new TimerTask(id, interval, action, loopTimes, delay);
+        TimerTask task = new TimerTask(id, interval, action, loopTimes, delay, TimerType.Sync);
         AddTask(task);
         return task.id;
     }
@@ -148,7 +147,29 @@ public class TimeWheel
         {
             id = GetId();
         }
-        TimerTask task = new TimerTask(id, 0, action, 1, delay);
+        TimerTask task = new TimerTask(id, 0, action, 1, delay, TimerType.Sync);
+        AddTask(task);
+        return task.id;
+    }
+
+    public int SetIntervalAsync(int id, int interval, Action action, int delay, int loopTimes)
+    {
+        if (id == -1)
+        {
+            id = GetId();
+        }
+        TimerTask task = new TimerTask(id, interval, action, loopTimes, delay, TimerType.Async);
+        AddTask(task);
+        return task.id;
+    }
+
+    public int SetTimeoutAsync(int id, int delay, Action action)
+    {
+        if (id == -1)
+        {
+            id = GetId();
+        }
+        TimerTask task = new TimerTask(id, 0, action, 1, delay, TimerType.Async);
         AddTask(task);
         return task.id;
     }

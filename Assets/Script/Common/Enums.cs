@@ -177,3 +177,9 @@ public enum InteractionType
     PickUp,
     Interaction
 }
+
+public enum TimerType
+{
+    Sync,
+    Async
+}

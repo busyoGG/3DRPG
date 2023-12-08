@@ -12,6 +12,8 @@ public class UIManager : Singleton<UIManager>
 
     private Dictionary<Type, Stack<BaseUIComp>> _uiCompPool = new Dictionary<Type, Stack<BaseUIComp>>();
 
+    private Dictionary<string, BaseView> _uiViewPool = new Dictionary<string, BaseView>();
+
     private Dictionary<string, bool> _packageState = new Dictionary<string, bool>();
 
     private Transform _poolTransform;
@@ -94,8 +96,12 @@ public class UIManager : Singleton<UIManager>
         }
 
         //ªÒ»°ui
-        T ui = Get<T>(name);
-        if (ui == null)
+        //T ui = Get<T>(name);
+        T ui;
+        BaseView baseView;
+        _uiViewPool.TryGetValue(name, out baseView);
+
+        if (baseView == null)
         {
             ui = new T();
 
@@ -108,7 +114,8 @@ public class UIManager : Singleton<UIManager>
         }
         else
         {
-            return ui;
+            ui = baseView as T;
+            //return ui;
         }
 
         ui.Show();
@@ -133,6 +140,14 @@ public class UIManager : Singleton<UIManager>
         {
             BaseView uiInStack = _uiViewStack.Pop();
             uiInStack.Hide();
+            if (_uiViewPool.ContainsKey(uiInStack.name))
+            {
+                _uiViewPool[uiInStack.name] = uiInStack;
+            }
+            else
+            {
+                _uiViewPool.Add(uiInStack.name, uiInStack);
+            }
         }
     }
 

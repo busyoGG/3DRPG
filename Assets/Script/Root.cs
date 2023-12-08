@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Reflection;
 using System;
 using UnityEditor;
+using System.Collections.Generic;
 
 public class Root : MonoBehaviour
 {
@@ -58,6 +59,12 @@ public class Root : MonoBehaviour
             }
         };
 
+        
+        Test();
+    }
+
+    private void Test()
+    {
         //test
         ConsoleUtils.Log("ø™ ºµ»¥˝", DateTime.Now);
         TimerChain chain = null;
@@ -71,7 +78,7 @@ public class Root : MonoBehaviour
 
         TimerUtils.Once(2100, () =>
         {
-            ConsoleUtils.Log("≤‚ ‘Õ£÷π", DateTime.Now,chain.GetId());
+            ConsoleUtils.Log("≤‚ ‘Õ£÷π", DateTime.Now, chain.GetId());
             TimerUtils.Clear(chain);
         });
     }

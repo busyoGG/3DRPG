@@ -26,6 +26,8 @@ public class ConversationView : BaseView
 
     private DialogConfigData _curDialog;
 
+    private TimerChain _timer;
+
     protected override void BindItem()
     {
         _btnConversation = main.GetChildAt(0).asButton;
@@ -54,16 +56,20 @@ public class ConversationView : BaseView
 
     protected override void OnShow()
     {
-        base.OnShow();
         UIManager.Ins().SetFocus(true);
     }
 
     protected override void OnHide()
     {
-        base.OnHide();
+        ConsoleUtils.Log("关闭对话");
         UIManager.Ins().SetFocus(false);
     }
 
+    /// <summary>
+    /// 开始对话
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="obj"></param>
     private void SelectionRenderer(int index, GObject obj)
     {
         GButton btnSelection = obj.asButton;
@@ -95,11 +101,48 @@ public class ConversationView : BaseView
 
         GTextField content = _btnAuto.GetChildAt(3).asTextField;
         content.text = _isAuto ? _strAuto[1] : _strAuto[0];
+
+        if (_isAuto)
+        {
+            StartAuto();
+        }
+        else
+        {
+            StopAuto();
+        }
     }
 
-    private void OnSelectionClick()
+    /// <summary>
+    /// 自动播放
+    /// </summary>
+    private void OnAutoDialog()
     {
-        _curDialog = DialogManager.Ins().Next(_curDialog, _listSelection.selectedIndex);
+        OnClickDialog(0);
+
+        if (_isAuto && _curDialog != null && _curDialog.selection.Count == 0)
+        {
+            if (_timer == null)
+            {
+                _timer = TimerUtils.Once((int)(_curDialog.autoSpeed * 1000), OnAutoDialog);
+            }
+            else
+            {
+                _timer.Once((int)(_curDialog.autoSpeed * 1000), OnAutoDialog);
+            }
+        }
+        else
+        {
+            StopAuto();
+        }
+    }
+
+    /// <summary>
+    /// 手动播放
+    /// </summary>
+    /// <param name="selection"></param>
+    private void OnClickDialog(int selection)
+    {
+        _curDialog = DialogManager.Ins().Next(_curDialog, selection);
         bool next = _curDialog != null;
         if (next)
         {
@@ -110,33 +153,61 @@ public class ConversationView : BaseView
         {
             UIManager.Ins().Hide(this);
         }
+    }
 
-        if (_isAuto)
+    /// <summary>
+    /// 开始自动
+    /// </summary>
+    private void StartAuto()
+    {
+        if (_timer == null)
         {
-            //_dialogCo = StartCoroutine(AutoDialogue());
+            _timer = TimerUtils.Once((int)(_curDialog.autoSpeed * 1000), OnAutoDialog);
+        }
+        else
+        {
+            _timer.Once((int)(_curDialog.autoSpeed * 1000), OnAutoDialog);
         }
     }
 
+    private void StopAuto()
+    {
+        if (_timer != null)
+        {
+            _timer.Clear();
+            _timer = null;
+        }
+    }
+
+    /// <summary>
+    /// 点击选项
+    /// </summary>
+    private void OnSelectionClick()
+    {
+        if (_isAuto)
+        {
+            StartAuto();
+        }
+        else
+        {
+            OnClickDialog(_listSelection.selectedIndex);
+        }
+    }
+
+    /// <summary>
+    /// 点击对话
+    /// </summary>
     private void OnConversationClick()
     {
         if (!_listSelection.visible)
         {
-            _curDialog = DialogManager.Ins().Next(_curDialog, 0);
-            bool next = _curDialog != null;
-            if (next)
+            if (_isAuto)
             {
-                RefreshConversation();
-                ChangeSelection();
+                StartAuto();
             }
             else
             {
-                UIManager.Ins().Hide(this);
-            }
-
-            if (_isAuto)
-            {
-                //StopCoroutine(_dialogCo);
-                //_dialogCo = StartCoroutine(AutoDialogue());
+                OnClickDialog(0);
             }
         }
     }

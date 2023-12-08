@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using UnityEngine;
 
 public class TimerTask
 {
@@ -18,19 +15,29 @@ public class TimerTask
 
     public DateTime dateTime;
 
-    public TimerTask(int id, int interval, Action action, int loopTimes, int delay)
+    public TimerType type;
+
+    public TimerTask(int id, int interval, Action action, int loopTimes, int delay,TimerType type)
     {
         this.id = id;
         this.interval = interval;
         this.action = action;
         this.loopTimes = loopTimes;
         this.delay = delay;
+        this.type = type;
         dateTime = DateTime.Now.AddMilliseconds(interval + delay);
     }
 
     public void Run()
     {
-        action.Invoke();
+        if (type == TimerType.Sync)
+        {
+            TimerUtils.AddAction(action);
+        }
+        else
+        {
+            RunAsync();
+        }
     }
 
     public async Task RunAsync()

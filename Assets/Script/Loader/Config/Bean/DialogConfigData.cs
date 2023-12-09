@@ -10,6 +10,7 @@ namespace Bean{
 		public List<string> selection;
 		public List<DialogConfigData> next;
 		public DialogConfigData(){
+			selection = new List<string>();
 			next = new List<DialogConfigData>();
 		}
 		public DialogConfigData(DialogConfigData obj){

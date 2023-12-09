@@ -171,10 +171,15 @@ public class ConfigEditor : EditorWindow
             Dictionary<string, bool> dicClass = new Dictionary<string, bool>();
             string propName = key.ToString();
             if (propName == "id") continue;
-            JsonData child = json[0][propName];
-            object type = child.GetJsonType();
 
-            if (type.Equals(JsonType.Array))
+            JsonData child = json[0][propName];
+            object type = child == null ? JsonType.None : child.GetJsonType();
+
+            if (type.Equals(JsonType.None))
+            {
+                listClass.Add("\t\tpublic " + clsName + " " + propName + ";\r\n");
+            }
+            else if (type.Equals(JsonType.Array))
             {
                 //属性为数组
                 if (child.Count == 0)
@@ -185,14 +190,27 @@ public class ConfigEditor : EditorWindow
 
                     strList += "List<";
                     strListEnd += ">";
-                    strList += clsName + strListEnd;
+
+                    string[] propSplit = propName.Split('|');
+                    string strType;
+
+                    if (propSplit.Length > 1)
+                    {
+                        //strList += propSplit[1] + strListEnd;
+                        strType = propSplit[1];
+                    }
+                    else
+                    {
+                        strType = clsName;
+                    }
+                    strList += strType + strListEnd;
 
                     Debug.Log("list数组 ==== " + strList);
 
                     //cls += "\t\tpublic " + strList + " " + propName + ";\r\n";
-                    listClass.Add("\t\tpublic " + strList + " " + propName + ";\r\n");
+                    listClass.Add("\t\tpublic " + strList + " " + propSplit[0] + ";\r\n");
 
-                    string strConstructorChild = "\t\t\t" + propName + " = new List<" + clsName + ">();\r\n";
+                    string strConstructorChild = "\t\t\t" + propSplit[0] + " = new List<" + strType + ">();\r\n";
                     strConstructor += strConstructorChild;
                 }
                 else
@@ -234,6 +252,9 @@ public class ConfigEditor : EditorWindow
 
                         //strListClass += "\t\tpublic " + strList + " " + propName + ";\r\n";
                         listClass.Add("\t\tpublic " + strList + " " + propName + ";\r\n");
+
+                        string strConstructorChild = "\t\t\t" + propName + " = new List<" + strListClassName + ">();\r\n";
+                        strConstructor += strConstructorChild;
                     }
                     else
                     {
@@ -254,8 +275,8 @@ public class ConfigEditor : EditorWindow
                         //cls += "\t\tpublic " + strList + " " + propName + ";\r\n";
                         listClass.Add("\t\tpublic " + strList + " " + propName + ";\r\n");
 
-                        string strConstructorChild = "\t\t\t" + propName + " = new List<" + GeneratorUtils.GetType(tempType) + ">\r\n";
-                        strConstructorChild += strList;
+                        string strConstructorChild = "\t\t\t" + propName + " = new List<" + GeneratorUtils.GetType(tempType) + ">();\r\n";
+                        strConstructor += strConstructorChild;
                     }
                 }
             }
@@ -344,7 +365,7 @@ public class ConfigEditor : EditorWindow
         //保存数据类
         Debug.Log("生成类" + cls);
         string strFolder;
-        if(folder == "Configs")
+        if (folder == "Configs")
         {
             strFolder = "";
         }

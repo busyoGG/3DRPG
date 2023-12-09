@@ -2,25 +2,33 @@ using System;
 using System.Collections.Generic;
 namespace Bean{
 	public class MissionConfigData: ConfigBaseData, ICloneable{
-		public MissionConfigData missionId;
-		public MissionConfigData stepId;
-		public MissionConfigData title;
-		public MissionConfigData desc;
-		public MissionConfigData type;
-		public MissionConfigData filter;
-		public MissionConfigData target;
-		public MissionConfigData targetDescribe;
-		public MissionConfigData targetNum;
-		public MissionConfigData completeNum;
-		public MissionConfigData award;
-		public MissionConfigData awardNum;
-		public MissionConfigData isPreCount;
+		public int missionId;
+		public int stepId;
+		public string title;
+		public string desc;
+		public MissionType type;
+		public MissionFilter filter;
+		public List<int> target;
+		public List<string> targetDescribe;
+		public List<int> targetNum;
+		public List<int> completeNum;
+		public List<int> award;
+		public List<int> awardNum;
+		public bool isPreCount;
 		public MissionConfigData next;
-		public MissionConfigData unlockMission;
-		public MissionConfigData branch;
-		public MissionConfigData branchBelong;
-		public MissionConfigData isPreUnlock;
+		public List<int> unlockMission;
+		public List<int> branch;
+		public int branchBelong;
+		public int isPreUnlock;
 		public MissionConfigData(){
+			target = new List<int>();
+			targetDescribe = new List<string>();
+			targetNum = new List<int>();
+			completeNum = new List<int>();
+			award = new List<int>();
+			awardNum = new List<int>();
+			unlockMission = new List<int>();
+			branch = new List<int>();
 		}
 		public MissionConfigData(MissionConfigData obj){
 			missionId = obj.missionId;

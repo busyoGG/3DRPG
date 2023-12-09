@@ -13,8 +13,12 @@
     "targetDescribe": [
       "任务目标描述"
     ],
-    "targetNum": 1,
-    "completeNum": 0,
+    "targetNum": [
+      1
+    ],
+    "completeNum": [
+      0
+    ],
     "award": [
       1
     ],
@@ -23,8 +27,8 @@
     ],
     "isPreCount": false,
     "next": null,
-    "unlockMission": [],
-    "branch": [],
+    "unlockMission|int": [],
+    "branch|int": [],
     "branchBelong": 1,
     "isPreUnlock": 1
   }

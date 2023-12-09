@@ -183,3 +183,17 @@ public enum TimerType
     Sync,
     Async
 }
+
+public enum MissionType
+{
+    Find,
+    Collection,
+    Kill
+}
+
+public enum MissionFilter
+{
+    Main,
+    Sub,
+    Branch//这个类型一定放最后 因为该类型不参与计算，枚举数不能影响计算
+}

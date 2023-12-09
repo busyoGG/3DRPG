@@ -7,6 +7,7 @@ namespace Bean{
 	public class ConfigsNameConfig
 	{
 		public const string DialogConfig = "DialogConfig";
+		public const string MissionConfig = "MissionConfig";
 		public const string SkillConfig = "SkillConfig";
 	}
 }

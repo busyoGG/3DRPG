@@ -1,0 +1,31 @@
+[
+  {
+    "id": 0,
+    "missionId": 1,
+    "stepId": 0,
+    "title": "测试新手任务",
+    "desc": "这是一个测试用的新手任务描述",
+    "type|MissionType": "Collecte",
+    "filter|MissionFilter": "Main",
+    "target": [
+      0
+    ],
+    "targetDescribe": [
+      "任务目标描述"
+    ],
+    "targetNum": 1,
+    "completeNum": 0,
+    "award": [
+      1
+    ],
+    "awardNum": [
+      1
+    ],
+    "isPreCount": false,
+    "next": null,
+    "unlockMission": [],
+    "branch": [],
+    "branchBelong": 1,
+    "isPreUnlock": 1
+  }
+]

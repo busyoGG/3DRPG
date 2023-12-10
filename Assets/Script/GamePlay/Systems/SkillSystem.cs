@@ -8,7 +8,7 @@ public class SkillSystem : ECSSystem
     private string _idle = "Idle";
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(SkillComp), typeof(AniComp), typeof(LogicAniComp));
+        return ECSManager.Ins().AllOf(typeof(SkillComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -16,15 +16,15 @@ public class SkillSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             SkillComp skill = entity.Get<SkillComp>();
-            AniComp ani = entity.Get<AniComp>();
-            LogicAniComp logicAni = entity.Get<LogicAniComp>();
+            //AniComp ani = entity.Get<AniComp>();
+            //LogicAniComp logicAni = entity.Get<LogicAniComp>();
 
             switch (skill.play)
             {
                 case SkillPlayStatus.Idle:
                     int skillId = 0;
-                    ani.curAni = _idle;
-                    logicAni.curAni = _idle;
+                    AniSingleton.Ins().SetCurAni(entity.id, _idle);
+                    AttackSingleton.Ins().SetAttackEnable(entity.id, false);
 
                     if (skill.status == InputStatus.Down)
                     {
@@ -66,8 +66,8 @@ public class SkillSystem : ECSSystem
                     skill.duration += _dt;
                     break;
                 case SkillPlayStatus.Play:
-                    ani.curAni = skill.skill.ani;
-                    logicAni.curAni = skill.skill.ani;
+                    AniSingleton.Ins().SetCurAni(entity.id, skill.skill.ani);
+                    AttackSingleton.Ins().SetAttackEnable(entity.id, skill.skill.attackEnable);
                     //释放技能
                     if (skill.duration >= skill.skill.skillTime)
                     {
@@ -102,8 +102,9 @@ public class SkillSystem : ECSSystem
 
                         if (skill.skill != null)
                         {
-                            ani.lastAni = _idle;
-                            logicAni.lastAni = _idle;
+                            AniSingleton.Ins().SetCurAni(entity.id, _idle);
+                            AttackSingleton.Ins().SetAttackEnable(entity.id, false);
+
                             skill.duration = 0;
                             ConsoleUtils.Log("下一招", skill.skill.name);
                             //有后续技能

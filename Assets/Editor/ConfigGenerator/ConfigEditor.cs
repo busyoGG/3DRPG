@@ -4,11 +4,17 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 using LitJson;
-using PlasticPipe.PlasticProtocol.Server.Stubs;
 
 public class ConfigEditor : EditorWindow
 {
-    private string _jsonUrl = string.Empty;
+    /// <summary>
+    /// 配置文件路径
+    /// </summary>
+    private string _jsonUrl;
+    /// <summary>
+    /// 配置类输出路径
+    /// </summary>
+    private string _outputUrl;
 
     private Dictionary<string, List<FileInfo>> _allConfigs = new Dictionary<string, List<FileInfo>>();
 
@@ -33,14 +39,14 @@ public class ConfigEditor : EditorWindow
     private void OnEnable()
     {
         _jsonUrl = Application.dataPath + "/Configs/";
+        _outputUrl = Application.dataPath + "/Script/Loader/Config/";
         //获取所有配置
         GetAllConfigs();
         //监听配置文件夹变化
         Debug.Log("启动文件夹监听");
-        string jsonUrl = Application.dataPath + "/Configs/";
         FileSystemWatcher watcher = new FileSystemWatcher();
         watcher.IncludeSubdirectories = true;
-        watcher.Path = jsonUrl;
+        watcher.Path = _jsonUrl;
         watcher.NotifyFilter = NotifyFilters.LastWrite;
         watcher.Filter = "*.json";
         FileSystemEventHandler changeHandle = new FileSystemEventHandler(OnJsonFileChanged);
@@ -120,7 +126,7 @@ public class ConfigEditor : EditorWindow
             "\t{\r\n" +
             "\t\tpublic int id;\r\n" +
             "\t}\r\n}";
-        string output = Application.dataPath + "/Script/Loader/Config/ConfigBaseData.cs";
+        string output = _outputUrl + "ConfigBaseData.cs";
         GeneratorUtils.WriteFile(output, baseClass);
 
         //创建所有数据类
@@ -154,12 +160,10 @@ public class ConfigEditor : EditorWindow
         listClass.Add("using System;\r\n" +
             "using System.Collections.Generic;\r\n" +
             "namespace " + ns + "{\r\n");
+
         //创建类头
-        //listClass.Add("\tpublic class " + clsName +
-        //    ": IComparable<" + clsName + ">, ICloneable{");
         listClass.Add("\tpublic class " + clsName +
             ": ConfigBaseData, ICloneable{\r\n");
-
 
         //创建构造函数
         string strConstructor = "\t\tpublic " + clsName + "(){\r\n";
@@ -283,14 +287,25 @@ public class ConfigEditor : EditorWindow
             else if (type.Equals(JsonType.Object))
             {
                 //属性为对象
-                //创建附属类
-                string strListClassName = GeneratorUtils.UpperCaseFirstChar(propName) + "Data";
-                if (!dicClass.ContainsKey(strListClassName))
+                string[] propSplits = propName.Split("|");
+                if (propSplits.Length > 1)
                 {
-                    GeneratorUtils.GenerateSubClass(child, strListClassName, listClass, dicClass);
-                    dicClass.Add(strListClassName, true);
+                    listClass.Add("\t\tpublic Dictionary<" + propSplits[1] + "," + propSplits[2] + "> " + propSplits[0] + ";\r\n");
+
+                    string strConstructorChild = "\t\t\t" + propSplits[0] + " = new Dictionary<" + propSplits[1] + "," + propSplits[2] + ">();\r\n";
+                    strConstructor += strConstructorChild;
                 }
-                listClass.Add("\t\tpublic " + strListClassName + " " + propName + ";\r\n");
+                else
+                {
+                    //创建附属类
+                    string strListClassName = GeneratorUtils.UpperCaseFirstChar(propName) + "Data";
+                    if (!dicClass.ContainsKey(strListClassName))
+                    {
+                        GeneratorUtils.GenerateSubClass(child, strListClassName, listClass, dicClass);
+                        dicClass.Add(strListClassName, true);
+                    }
+                    listClass.Add("\t\tpublic " + strListClassName + " " + propName + ";\r\n");
+                }
             }
             else
             {
@@ -318,11 +333,6 @@ public class ConfigEditor : EditorWindow
 
             listProps.Add(propName);
         }
-
-        //cls += "\r\n}" +
-        //    "\r\n}";
-
-
 
         strConstructor += "\t\t}\r\n";
 
@@ -373,7 +383,7 @@ public class ConfigEditor : EditorWindow
         {
             strFolder = folder + "/";
         }
-        string output = Application.dataPath + "/Script/Loader/Config/Bean/" + strFolder + clsName + ".cs";
+        string output = _outputUrl + "Bean/" + strFolder + clsName + ".cs";
         GeneratorUtils.WriteFile(output, cls);
     }
 
@@ -420,7 +430,7 @@ public class ConfigEditor : EditorWindow
             "}";
 
         Debug.Log("生成配置表路径配置\n" + cls);
-        GeneratorUtils.WriteFile(Application.dataPath + "/Script/Loader/Config/ConfigsPathConfig.cs", cls);
+        GeneratorUtils.WriteFile(_outputUrl + "ConfigsPathConfig.cs", cls);
     }
 
     //-----自动函数-----

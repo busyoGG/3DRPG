@@ -14,6 +14,7 @@ namespace Bean{
 		public int forceResetTime;
 		public string ani;
 		public List<SkillConfigData> next;
+		public bool attackEnable;
 		public SkillConfigData(){
 			next = new List<SkillConfigData>();
 		}
@@ -30,6 +31,7 @@ namespace Bean{
 			forceResetTime = obj.forceResetTime;
 			ani = obj.ani;
 			next = obj.next;
+			attackEnable = obj.attackEnable;
 		}
 		public object Clone()
 		{

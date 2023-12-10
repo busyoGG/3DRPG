@@ -13,12 +13,10 @@
     "targetDescribe": [
       "任务目标描述"
     ],
-    "targetNum": [
-      1
-    ],
-    "completeNum": [
-      0
-    ],
+    "targetNum|int|int": {
+      "0": 1
+    },
+    "completeNum|int|int": {},
     "award": [
       1
     ],

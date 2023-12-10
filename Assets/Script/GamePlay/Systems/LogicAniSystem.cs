@@ -29,7 +29,9 @@ public class LogicAniSystem : ECSSystem
             TransformComp transform = entity.Get<TransformComp>();
             LogicAniComp logicAni = entity.Get<LogicAniComp>();
 
-            if (logicAni.curAni != logicAni.lastAni)
+            string curAni = AniSingleton.Ins().GetCurAni(logicAni.root.id);
+
+            if (curAni != logicAni.lastAni)
             {
                 logicAni.isChange = true;
             }
@@ -37,72 +39,67 @@ public class LogicAniSystem : ECSSystem
             if (logicAni.isChange)
             {
                 logicAni.isChange = false;
-                logicAni.lastAni = logicAni.curAni;
+                logicAni.lastAni = curAni;
                 logicAni.frame = 0;
             }
 
-            Play(logicAni, transform);
+            Play(logicAni, curAni);
+
+            //±£´æµ±Ç°transform
+            transform.position = logicAni.aniBox.position;
+            transform.rotation = logicAni.aniBox.rot;
+            transform.scale = logicAni.aniBox.size;
         }
     }
 
-    private void Play(LogicAniComp logicAni,TransformComp transform)
+    private void Play(LogicAniComp logicAni, string curAni)
     {
-        Dictionary<string, List<List<Vector3>>> aniClip;
-        logicAni.aniClips.TryGetValue(logicAni.curAni, out aniClip);
-        if (aniClip == null) return;
+        List<List<Vector3>> vec3 = logicAni.aniClips[curAni];
+        //int keyframe = logicAni.frame % logicAni.aniClips[curAni][0].Count;
+        int keyframe = logicAni.frame;
 
-        Quaternion tranQ = Quaternion.identity;
+        TransformComp rootTransform = logicAni.root.Get<TransformComp>();
 
-        foreach (var data in logicAni.aniBox)
-        {
-            string path = data.Item1;
-            List<List<Vector3>> vec3;
-            aniClip.TryGetValue(path, out vec3);
+        OBBData obb = logicAni.aniBox;
+        Vector3[] axes = obb.axes;
 
-            if (vec3 == null) continue;
+        Quaternion qua = rootTransform.rotation * Quaternion.Euler(vec3[1][keyframe]);
 
-            int keyframe = logicAni.frame % aniClip[path].Count;
+        axes[0] = qua * Vector3.right;
+        axes[1] = qua * Vector3.up;
+        axes[2] = qua * Vector3.forward;
 
-            OBBData obb = data.Item2;
-            Vector3[] axes = obb.axes;
+        obb.axes = axes;
 
+        obb.position = rootTransform.position + qua * vec3[0][keyframe];
 
-            Quaternion qua = transform.rotation * Quaternion.Euler(vec3[keyframe][1]);
+        obb.size = vec3[2][keyframe];
 
-            axes[0] = qua * Vector3.right;
-            axes[1] = qua * Vector3.up;
-            axes[2] = qua * Vector3.forward;
-
-            obb.axes = axes;
-
-            obb.position = transform.position + qua * vec3[keyframe][0];
-
-            //obb.size = vec3[keyframe][2];
-        }
         logicAni.frame++;
+        if(logicAni.frame > logicAni.aniClips[curAni][0].Count - 1)
+        {
+            logicAni.frame = 0;
+        }
     }
 
     public override void OnDrawGizmos(List<Entity> entities)
     {
         foreach (var entity in entities)
         {
-            LogicAniComp logicAni = entity.Get<LogicAniComp>();
+            //LogicAniComp logicAni = entity.Get<LogicAniComp>();
+            TransformComp transform = entity.Get<TransformComp>();
 
             Gizmos.color = Color.blue;
 
-            for (int i = 0; i < logicAni.aniBox.Count; i++)
-            {
-                Matrix4x4 matrix = Gizmos.matrix;
-                Matrix4x4 matrixDef = matrix;
+            Matrix4x4 matrix = Gizmos.matrix;
+            Matrix4x4 matrixDef = matrix;
 
-                matrix = Matrix4x4.TRS(logicAni.aniBox[i].Item2.position, logicAni.aniBox[i].Item2.rot, Vector3.one);
+            matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
 
-                Gizmos.matrix = matrix;
-                Gizmos.DrawWireCube(Vector3.zero, logicAni.aniBox[i].Item2.size);
+            Gizmos.matrix = matrix;
+            Gizmos.DrawWireCube(Vector3.zero, transform.scale);
 
-                Gizmos.matrix = matrixDef;
-            }
-
+            Gizmos.matrix = matrixDef;
         }
     }
 }

@@ -4,8 +4,6 @@ using UnityEngine;
 using LitJson;
 using System.IO;
 using System.Text;
-using Bean;
-using Codice.Utils;
 
 public class GeneratorUtils
 {

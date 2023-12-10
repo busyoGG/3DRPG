@@ -66,10 +66,10 @@ public class PlayerController : MonoBehaviour
 
                 //¼¼ÄÜ¼àÌý
                 if (key == InputKey.A || key == InputKey.D || key == InputKey.W || key == InputKey.S || key == InputKey.Space ||
-                key == InputKey.LeftAlt || key == InputKey.X) { }
+                isAlt || key == InputKey.X) { }
                 else
                 {
-                    if (!isAlt || (key != InputKey.MouseLeft && key != InputKey.MouseRight))
+                    if (key == InputKey.MouseLeft || key == InputKey.MouseRight)
                     {
                         _skill.key = key;
                         _skill.status = status;

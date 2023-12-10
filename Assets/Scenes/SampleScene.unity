@@ -340,6 +340,8 @@ MonoBehaviour:
   _isSkill: 0
   _isAni: 0
   _isTransform: 0
+  _isDialog: 0
+  _isAttack: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -354,8 +356,13 @@ MonoBehaviour:
   _defAni: 
   _logicAni:
     list: []
-  _triggerFunc: 0
+  _logicAniRoot: {fileID: 0}
+  _triggerFunc: 
   _isTriggerPositive: 0
+  _randomId: 
+  _maxDelta: 0
+  _minDelta: 0
+  _targetName: 
 --- !u!65 &616471584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -677,6 +684,7 @@ GameObject:
   - component: {fileID: 918035873}
   - component: {fileID: 918035872}
   - component: {fileID: 918035871}
+  - component: {fileID: 918035874}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -771,6 +779,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 918035869}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &918035874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 918035869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2259e1542527f4c459a7e8f78930af4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isMainCharacter: 0
+  _isMove: 0
+  _isJump: 0
+  _isCollide: 0
+  _isTrigger: 1
+  _isQTree: 1
+  _isClimb: 0
+  _isSkill: 1
+  _isAni: 0
+  _isTransform: 1
+  _isDialog: 0
+  _isAttack: 1
+  _moveSpeed: 0.1
+  _jumpSpeed: 1
+  _gravity: 9.8
+  _jumpScale: 1
+  _collideType: 1
+  _isStatic: 1
+  _isCustomAABB: 0
+  _aabbSize: {x: 1, y: 1, z: 1}
+  _cameraScript: {fileID: 0}
+  _skillMap:
+    list:
+    - Key: -1
+      Value: 1
+  _defAni: 
+  _logicAni:
+    list: []
+  _logicAniRoot: {fileID: 1365198093}
+  _triggerFunc: 01000000
+  _isTriggerPositive: 1
+  _randomId: 
+  _maxDelta: 0
+  _minDelta: 0
+  _targetName: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +1021,8 @@ MonoBehaviour:
   _isSkill: 0
   _isAni: 0
   _isTransform: 0
+  _isDialog: 0
+  _isAttack: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -980,8 +1037,13 @@ MonoBehaviour:
   _defAni: 
   _logicAni:
     list: []
-  _triggerFunc: 0
+  _logicAniRoot: {fileID: 0}
+  _triggerFunc: 
   _isTriggerPositive: 0
+  _randomId: 
+  _maxDelta: 0
+  _minDelta: 0
+  _targetName: 
 --- !u!65 &1005002486
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1209,6 +1271,8 @@ MonoBehaviour:
   _isSkill: 1
   _isAni: 1
   _isTransform: 1
+  _isDialog: 0
+  _isAttack: 0
   _moveSpeed: 0.03
   _jumpSpeed: 8
   _gravity: 9.8
@@ -1229,8 +1293,13 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: d8cd9a0ede55dfe4aa0bf73c952d1d0a, type: 2}
     - Key: Attack1
       Value: {fileID: 11400000, guid: ca655ea7e89fc574b85f75effc6b48eb, type: 2}
-  _triggerFunc: 0
+  _logicAniRoot: {fileID: 0}
+  _triggerFunc: 0000000001000000
   _isTriggerPositive: 1
+  _randomId: 
+  _maxDelta: 0
+  _minDelta: 0
+  _targetName: 
 --- !u!65 &1365198100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1315,6 +1384,8 @@ MonoBehaviour:
   _isSkill: 0
   _isAni: 0
   _isTransform: 0
+  _isDialog: 0
+  _isAttack: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1329,8 +1400,13 @@ MonoBehaviour:
   _defAni: 
   _logicAni:
     list: []
-  _triggerFunc: 0
+  _logicAniRoot: {fileID: 0}
+  _triggerFunc: 
   _isTriggerPositive: 0
+  _randomId: 
+  _maxDelta: 0
+  _minDelta: 0
+  _targetName: 
 --- !u!65 &1725057876
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1459,6 +1535,8 @@ MonoBehaviour:
   _isSkill: 0
   _isAni: 0
   _isTransform: 0
+  _isDialog: 0
+  _isAttack: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1473,8 +1551,13 @@ MonoBehaviour:
   _defAni: 
   _logicAni:
     list: []
-  _triggerFunc: 1
+  _logicAniRoot: {fileID: 0}
+  _triggerFunc: 00000000
   _isTriggerPositive: 0
+  _randomId: 
+  _maxDelta: 0
+  _minDelta: 0
+  _targetName: 
 --- !u!65 &1752253664
 BoxCollider:
   m_ObjectHideFlags: 0

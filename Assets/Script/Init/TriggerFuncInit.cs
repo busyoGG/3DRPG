@@ -46,6 +46,18 @@ public class TriggerFuncInit : Singleton<TriggerFuncInit>
                     });
                 };
                 return baseClass;
+            case TriggerFunction.Attack:
+                baseClass.OnTriggerEnter = (Entity self, Entity other) =>
+                {
+                    AttackComp attack = other.Get<AttackComp>();
+                    //bool isAttack = other.Has<AttackComp>();
+
+                    if (attack != null && self.id != attack.entityId)
+                    {
+                        ConsoleUtils.Log(self.id, "±»", other.id, "¹¥»÷");
+                    }
+                };
+                break;
         }
         return baseClass;
     }

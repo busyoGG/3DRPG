@@ -10,8 +10,8 @@ namespace Bean{
 		public MissionFilter filter;
 		public List<int> target;
 		public List<string> targetDescribe;
-		public List<int> targetNum;
-		public List<int> completeNum;
+		public Dictionary<int,int> targetNum;
+		public Dictionary<int,int> completeNum;
 		public List<int> award;
 		public List<int> awardNum;
 		public bool isPreCount;
@@ -23,8 +23,8 @@ namespace Bean{
 		public MissionConfigData(){
 			target = new List<int>();
 			targetDescribe = new List<string>();
-			targetNum = new List<int>();
-			completeNum = new List<int>();
+			targetNum = new Dictionary<int,int>();
+			completeNum = new Dictionary<int,int>();
 			award = new List<int>();
 			awardNum = new List<int>();
 			unlockMission = new List<int>();

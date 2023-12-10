@@ -5,7 +5,7 @@ using UnityEngine;
 [CompRegister(typeof(AniComp))]
 public class AniComp : Comp
 {
-    public string curAni;
+    //public string curAni;
 
     public string lastAni;
 
@@ -17,7 +17,7 @@ public class AniComp : Comp
 
     public override void Reset()
     {
-        curAni = string.Empty; 
+        //curAni = string.Empty; 
         lastAni = string.Empty; 
         speed = 0f;
         isChange = true;

@@ -9,19 +9,25 @@ public class TriggerComp : Comp
     /// </summary>
     public bool isPositive;
 
-    public Action<Entity, Entity> OnTriggerEnter;
+    public bool isEnable;
 
-    public Action<Entity, Entity> OnTriggerExit;
+    public Dictionary<TriggerFunction, Action<Entity, Entity>> OnTriggerEnter = new Dictionary<TriggerFunction, Action<Entity, Entity>>();
 
-    public Action<Entity, Entity> OnTriggerKeeping;
+    public Dictionary<TriggerFunction, Action<Entity, Entity>> OnTriggerExit = new Dictionary<TriggerFunction, Action<Entity, Entity>>();
 
-    public Dictionary<int, TriggerStatus> status = new Dictionary<int, TriggerStatus>();
+    public Dictionary<TriggerFunction, Action<Entity, Entity>> OnTriggerKeeping = new Dictionary<TriggerFunction, Action<Entity, Entity>>();
+
+    public List<TriggerFunction> triggerFunc = new List<TriggerFunction>();
+
+    public Dictionary<int, Dictionary<TriggerFunction, TriggerStatus>> status = new Dictionary<int, Dictionary<TriggerFunction, TriggerStatus>>();
     public override void Reset()
     {
-        OnTriggerEnter = null;
-        OnTriggerExit = null;
-        OnTriggerKeeping = null;
+        OnTriggerEnter.Clear();
+        OnTriggerExit.Clear();
+        OnTriggerKeeping.Clear();
         isPositive = false;
         status.Clear();
+        triggerFunc.Clear();
+        isEnable = true;
     }
 }

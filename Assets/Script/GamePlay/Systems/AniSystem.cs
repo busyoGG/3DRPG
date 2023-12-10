@@ -14,8 +14,9 @@ public class AniSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             AniComp ani = entity.Get<AniComp>();
+            string curAni = AniSingleton.Ins().GetCurAni(entity.id);
 
-            if (ani.curAni != ani.lastAni)
+            if (curAni != ani.lastAni)
             {
                 ani.isChange = true;
             }
@@ -23,8 +24,8 @@ public class AniSystem : ECSSystem
             if (ani.isChange)
             {
                 ani.isChange = false;
-                ani.lastAni = ani.curAni;
-                ani.animator.Play(ani.curAni, 0, 0);
+                ani.lastAni = curAni;
+                ani.animator.Play(curAni, 0, 0);
             }
         }
     }

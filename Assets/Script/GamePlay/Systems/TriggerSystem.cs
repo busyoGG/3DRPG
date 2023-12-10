@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,30 +17,58 @@ public class TriggerSystem : ECSSystem
         {
             TriggerComp trigger = entity.Get<TriggerComp>();
 
-            List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
+            AttackComp attack = entity.Get<AttackComp>();
 
-            //初始化本实体触发的所有触发器状态
-            foreach (var obj in objs)
+            //判断是否攻击节点
+            if(attack != null)
             {
-                if (obj.entity.id == entity.id) continue;
-                TriggerComp triggerComp = obj.entity.Get<TriggerComp>();
+                //判断是否可以触发
+                bool attackEnable = AttackSingleton.Ins().GetAttackEnable(attack.entityId);
+                if (!attackEnable) continue;
+                int i = 0;
+            }
 
-                if (triggerComp != null)
+            if (trigger.isPositive)
+            {
+                List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
+
+                //初始化本实体触发的所有触发器状态
+                foreach (var obj in objs)
                 {
-                    TriggerStatus state;
-                    triggerComp.status.TryGetValue(entity.id, out state);
+                    if (obj.entity.id == entity.id || attack != null && attack.entityId == obj.entity.id) continue;
+                    TriggerComp triggerComp = obj.entity.Get<TriggerComp>();
 
-                    if (!triggerComp.status.ContainsKey(entity.id))
+                    if (triggerComp != null)
                     {
-                        triggerComp.status.Add(entity.id, TriggerStatus.Enter);
-                    }
-                    else if (state == TriggerStatus.Exit)
-                    {
-                        triggerComp.status[entity.id] = TriggerStatus.Keeping;
-                    }
-                    else if (state == TriggerStatus.Idle)
-                    {
-                        triggerComp.status[entity.id] = TriggerStatus.Enter;
+                        foreach(var triggerFunc in trigger.triggerFunc)
+                        {
+                            Dictionary<TriggerFunction, TriggerStatus> states;
+                            triggerComp.status.TryGetValue(entity.id, out states);
+
+                            if(states == null)
+                            {
+                                states = new Dictionary<TriggerFunction, TriggerStatus>();
+                                triggerComp.status.Add(entity.id, states);
+                            }
+
+                            TriggerStatus state;
+                            states.TryGetValue(triggerFunc,out state);
+
+                            if (!states.ContainsKey(triggerFunc))
+                            {
+                                //triggerComp.status.Add(entity.id, TriggerStatus.Enter);
+                                states[triggerFunc] = TriggerStatus.Enter;
+                            }
+                            else if (state == TriggerStatus.Exit)
+                            {
+                                //triggerComp.status[entity.id] = TriggerStatus.Keeping;
+                                states[triggerFunc] = TriggerStatus.Keeping;
+                            }
+                            else if (state == TriggerStatus.Idle)
+                            {
+                                states[triggerFunc] = TriggerStatus.Enter;
+                            }
+                        }
                     }
                 }
             }
@@ -49,33 +78,40 @@ public class TriggerSystem : ECSSystem
             //执行本实体所有触发事件
             foreach (var key in keys)
             {
-                TriggerStatus state = trigger.status[key];
                 Entity triggerEntity = ECSManager.Ins().GetEntity(key);
-                switch (state)
+
+                foreach(var triggerFunc in trigger.triggerFunc)
                 {
-                    case TriggerStatus.Enter:
-                        if (trigger.OnTriggerEnter != null)
-                        {
-                            trigger.OnTriggerEnter.Invoke(entity, triggerEntity);
-                        }
-                        trigger.status[key] = TriggerStatus.Keeping;
-                        break;
-                    case TriggerStatus.Keeping:
-                        if (trigger.OnTriggerKeeping != null)
-                        {
-                            //trigger.OnTriggerKeeping(entity, triggerEntity);
-                            trigger.OnTriggerKeeping.Invoke(entity, triggerEntity);
-                        }
-                        trigger.status[key] = TriggerStatus.Exit;
-                        break;
-                    case TriggerStatus.Exit:
-                        if (trigger.OnTriggerExit != null)
-                        {
-                            //trigger.OnTriggerExit(entity, triggerEntity);
-                            trigger.OnTriggerExit.Invoke(entity, triggerEntity);
-                        }
-                        trigger.status[key] = TriggerStatus.Idle;
-                        break;
+                    TriggerStatus state;
+                    trigger.status[key].TryGetValue(triggerFunc,out state);
+                    Action<Entity, Entity> action;
+                    switch (state)
+                    {
+                        case TriggerStatus.Enter:
+                            trigger.OnTriggerEnter.TryGetValue(triggerFunc, out action);
+                            if (action != null)
+                            {
+                                action.Invoke(entity, triggerEntity);
+                            }
+                            trigger.status[key][triggerFunc] = TriggerStatus.Keeping;
+                            break;
+                        case TriggerStatus.Keeping:
+                            trigger.OnTriggerKeeping.TryGetValue(triggerFunc, out action);
+                            if (action != null)
+                            {
+                                action.Invoke(entity, triggerEntity);
+                            }
+                            trigger.status[key][triggerFunc] = TriggerStatus.Exit;
+                            break;
+                        case TriggerStatus.Exit:
+                            trigger.OnTriggerExit.TryGetValue(triggerFunc, out action);
+                            if (action != null)
+                            {
+                                action.Invoke(entity, triggerEntity);
+                            }
+                            trigger.status[key][triggerFunc] = TriggerStatus.Idle;
+                            break;
+                    }
                 }
             }
         }

@@ -12,6 +12,7 @@
     "defaultForceTimes": 0,
     "forceResetTime": 0,
     "ani": "Attack1",
-    "next": []
+    "next": [],
+    "attackEnable": true
   }
 ]

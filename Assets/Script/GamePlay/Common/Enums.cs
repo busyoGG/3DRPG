@@ -159,17 +159,18 @@ public enum SkillTrigger
     Charge
 }
 
+/// <summary>
+/// 触发器触发类型
+/// </summary>
 public enum TriggerFunction
 {
-    [InspectorName("无触发")] None,
-    [InspectorName("交互")] Interactive
+    [InspectorName("交互")] Interactive,
+    [InspectorName("攻击")] Attack
 }
 
-public enum SkillEntity
-{
-    Cube
-}
-
+/// <summary>
+/// 交互类型
+/// </summary>
 public enum InteractionType
 {
     None,
@@ -178,12 +179,18 @@ public enum InteractionType
     Interaction
 }
 
+/// <summary>
+/// 定时器类型
+/// </summary>
 public enum TimerType
 {
     Sync,
     Async
 }
 
+/// <summary>
+/// 任务类型
+/// </summary>
 public enum MissionType
 {
     Find,
@@ -191,6 +198,9 @@ public enum MissionType
     Kill
 }
 
+/// <summary>
+/// 任务分类
+/// </summary>
 public enum MissionFilter
 {
     Main,

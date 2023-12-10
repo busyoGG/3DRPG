@@ -24,6 +24,8 @@ public class CompInitEditor : Editor
 
     private SerializedProperty _randomId;
 
+    private SerializedProperty _logicAniRoot;
+
 
     private void OnEnable()
     {
@@ -33,6 +35,7 @@ public class CompInitEditor : Editor
         _triggerFunc = serializedObject.FindProperty("_triggerFunc");
         _logicAni = serializedObject.FindProperty("_logicAni");
         _randomId = serializedObject.FindProperty("_randomId");
+        _logicAniRoot = serializedObject.FindProperty("_logicAniRoot");
     }
 
     public override void OnInspectorGUI()
@@ -46,13 +49,15 @@ public class CompInitEditor : Editor
         {
             EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(_cam, new GUIContent("主相机"));
-            compInit._isSkill = EditorGUILayout.Toggle("是否有技能", compInit._isSkill);
-            if (compInit._isSkill)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(_skill, new GUIContent("技能"));
-                EditorGUI.indentLevel--;
-            }
+
+            EditorGUI.indentLevel--;
+        }
+
+        compInit._isSkill = EditorGUILayout.Toggle("是否有技能", compInit._isSkill);
+        if (compInit._isSkill)
+        {
+            EditorGUI.indentLevel++;
+            EditorGUILayout.PropertyField(_skill, new GUIContent("技能"));
             EditorGUI.indentLevel--;
         }
 
@@ -99,7 +104,7 @@ public class CompInitEditor : Editor
         if (compInit._isTrigger)
         {
             EditorGUI.indentLevel++;
-            compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发",compInit._isTriggerPositive);
+            compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发", compInit._isTriggerPositive);
             EditorGUILayout.PropertyField(_triggerFunc, new GUIContent("触发类型"));
             EditorGUI.indentLevel--;
         }
@@ -119,7 +124,7 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel--;
         }
 
-        compInit._isAni = EditorGUILayout.Toggle("是否有动画", compInit._isAni) || compInit._isSkill;
+        compInit._isAni = EditorGUILayout.Toggle("是否有动画", compInit._isAni) || compInit._isSkill && !compInit._logicAniRoot;
         if (compInit._isAni)
         {
             EditorGUI.indentLevel++;
@@ -138,6 +143,10 @@ public class CompInitEditor : Editor
             compInit._minDelta = EditorGUILayout.FloatField("最短间隔", compInit._minDelta);
             EditorGUI.indentLevel--;
         }
+
+        EditorGUILayout.PropertyField(_logicAniRoot, new GUIContent("逻辑动画父节点"));
+
+        compInit._isAttack = EditorGUILayout.Toggle("是否武器", compInit._isAttack);
 
         serializedObject.ApplyModifiedProperties();
     }

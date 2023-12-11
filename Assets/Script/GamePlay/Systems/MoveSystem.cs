@@ -9,8 +9,6 @@ using UnityEngine.UIElements;
 
 public class MoveSystem : ECSSystem
 {
-    private Quaternion _rotation = Quaternion.identity;
-    private Vector3 _forward = Vector3.zero;
 
     public override ECSMatcher Filter()
     {
@@ -51,22 +49,6 @@ public class MoveSystem : ECSSystem
                 move.nextPostition = transform.position + inputForward * move.speed;
 
                 move.isMove = true;
-
-                //转向
-                if (!inputForward.Equals(Vector3.zero))
-                {
-                    Vector3 target = transform.position;
-                    target.y = transform.position.y;
-                    //设置转向方向
-                    _forward.x = inputForward.x;
-                    _forward.z = inputForward.z;
-                    //转向
-                    if (_forward.x != 0 && _forward.z != 0)
-                    {
-                        _rotation.SetLookRotation(_forward);
-                        transform.rotation = _rotation;
-                    }
-                }
             }
             else
             {

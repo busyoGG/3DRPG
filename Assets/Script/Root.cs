@@ -14,9 +14,11 @@ public class Root : MonoBehaviour
 
     public CameraScript camera;
 
-    private TestWorld _world;
+    private LogicWorld _logicWorld;
 
     private PhysicWorld _physicWorld;
+
+    private RenderWorld _renderWorld;
 
     private bool _start;
     // Start is called before the first frame update
@@ -42,8 +44,9 @@ public class Root : MonoBehaviour
         //    }
         //});
         //t.Start();
-        _world = new TestWorld();
+        _logicWorld = new LogicWorld();
         _physicWorld = new PhysicWorld();
+        _renderWorld = new RenderWorld();
 
         _start = true;
 
@@ -97,20 +100,22 @@ public class Root : MonoBehaviour
         MapManager.Ins().Update();
         MapManager.Ins().RefreshChunk();
 
-        _world.Update();
-        _physicWorld.Update();
+        _renderWorld.Update();
     }
 
     private void FixedUpdate()
     {
+        _logicWorld.Update();
+        _physicWorld.Update();
     }
 
     void OnDrawGizmos()
     {
         if (_start)
         {
-            _world.DrawGrizmos();
-            _physicWorld.DrawGrizmos();
+            //_logicWorld.DrawGrizmos();
+            //_physicWorld.DrawGrizmos();
+            //_renderWorld.DrawGrizmos();
         }
     }
 }

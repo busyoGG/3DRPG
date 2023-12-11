@@ -15,6 +15,8 @@ public class LogicAniComp : Comp
 
     public int frame;
 
+    public Dictionary<string, bool> isLoop = new Dictionary<string, bool>();
+
     //public string path;
 
     //public Dictionary<string, Dictionary<string, List<List<Vector3>>>> aniClips;
@@ -39,5 +41,6 @@ public class LogicAniComp : Comp
         //aniBox = new List<(string, OBBData)>();
         aniBox = null;
         root = null;
+        isLoop.Clear();
     }
 }

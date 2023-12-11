@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,8 @@ public abstract class ECSWorld
 {
     private List<ECSSystem> _systems = new List<ECSSystem>();
 
+    private float _time = 0;
+
     public ECSWorld() {
         SystemAdd();
         Init();
@@ -13,6 +16,7 @@ public abstract class ECSWorld
 
     public void Init()
     {
+        _time = Time.time;
         foreach (var system in _systems)
         {
             system.Init();
@@ -23,10 +27,13 @@ public abstract class ECSWorld
 
     public void Update()
     {
+        float dt = Time.time - _time;
         foreach (var system in _systems)
         {
-            system.Execute(Time.deltaTime);
+            system.Execute(dt);
         }
+        _time += dt;
+        //ConsoleUtils.Log("º‰∏Ù ±º‰",dt);
     }
 
     public void DrawGrizmos()

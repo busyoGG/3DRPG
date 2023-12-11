@@ -66,8 +66,11 @@ public class SkillSystem : ECSSystem
                     skill.duration += _dt;
                     break;
                 case SkillPlayStatus.Play:
-                    AniSingleton.Ins().SetCurAni(entity.id, skill.skill.ani);
-                    AttackSingleton.Ins().SetAttackEnable(entity.id, skill.skill.attackEnable);
+                    if (skill.duration == 0)
+                    {
+                        AniSingleton.Ins().SetCurAni(entity.id, skill.skill.ani, true);
+                        AttackSingleton.Ins().SetAttackEnable(entity.id, skill.skill.attackEnable);
+                    }
                     //释放技能
                     if (skill.duration >= skill.skill.skillTime)
                     {
@@ -80,10 +83,10 @@ public class SkillSystem : ECSSystem
                 case SkillPlayStatus.End:
 
                     skill.duration += _dt;
-                    //ConsoleUtils.Log("连招结束", skill.duration);
 
                     if (skill.duration >= skill.skill.outOfTime)
                     {
+                        ConsoleUtils.Log("连招结束", skill.duration);
                         //连招超时
                         skill.duration = 0;
                         skill.play = SkillPlayStatus.Idle;
@@ -102,7 +105,7 @@ public class SkillSystem : ECSSystem
 
                         if (skill.skill != null)
                         {
-                            AniSingleton.Ins().SetCurAni(entity.id, _idle);
+                            AniSingleton.Ins().SetCurAni(entity.id, _idle, true);
                             AttackSingleton.Ins().SetAttackEnable(entity.id, false);
 
                             skill.duration = 0;

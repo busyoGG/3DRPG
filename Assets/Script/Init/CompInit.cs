@@ -109,7 +109,7 @@ public class CompInit : MonoBehaviour
 
     private IEnumerator LateInit()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.1f);
         Init();
     }
 
@@ -325,6 +325,7 @@ public class CompInit : MonoBehaviour
         }
 
         Dictionary<string, List<List<Vector3>>> aniClips = new Dictionary<string, List<List<Vector3>>>();
+        Dictionary<string,bool> loopStatus = new Dictionary<string,bool>();
 
         foreach (var data in logicAni)
         {
@@ -332,6 +333,7 @@ public class CompInit : MonoBehaviour
             AnimationData aniClip = data.Value;
 
             aniClips.Add(key, new List<List<Vector3>>());
+            loopStatus.Add(key, aniClip.isLoop);
 
             List<Vector3> resPos = new List<Vector3>();
             List<Vector3> resEuler = new List<Vector3>();
@@ -395,6 +397,7 @@ public class CompInit : MonoBehaviour
 
         logicAniComp.aniBox = obb;
         logicAniComp.root = rootInit._entity;
+        logicAniComp.isLoop = loopStatus;
     }
 
     //private void InitChild(Transform parent, ref List<(string, OBBData)> aniBox, SerializableDictionary<string, AnimationData> aniDic,

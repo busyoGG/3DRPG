@@ -30,14 +30,16 @@ public class LogicAniSystem : ECSSystem
             LogicAniComp logicAni = entity.Get<LogicAniComp>();
 
             string curAni = AniSingleton.Ins().GetCurAni(logicAni.root.id);
+            bool isForce = AniSingleton.Ins().GetForceLogic(logicAni.root.id);
 
             if (curAni != logicAni.lastAni)
             {
                 logicAni.isChange = true;
             }
 
-            if (logicAni.isChange)
+            if (logicAni.isChange || isForce)
             {
+                AniSingleton.Ins().SetForceLogic(logicAni.root.id, false);
                 logicAni.isChange = false;
                 logicAni.lastAni = curAni;
                 logicAni.frame = 0;
@@ -58,6 +60,8 @@ public class LogicAniSystem : ECSSystem
         //int keyframe = logicAni.frame % logicAni.aniClips[curAni][0].Count;
         int keyframe = logicAni.frame;
 
+        if (keyframe > logicAni.aniClips[curAni][0].Count - 1) return;
+
         TransformComp rootTransform = logicAni.root.Get<TransformComp>();
 
         OBBData obb = logicAni.aniBox;
@@ -71,14 +75,18 @@ public class LogicAniSystem : ECSSystem
 
         obb.axes = axes;
 
-        obb.position = rootTransform.position + qua * vec3[0][keyframe];
+        obb.position = rootTransform.position + rootTransform.rotation * vec3[0][keyframe];
 
         obb.size = vec3[2][keyframe];
 
         logicAni.frame++;
-        if(logicAni.frame > logicAni.aniClips[curAni][0].Count - 1)
+
+        if (logicAni.isLoop[curAni])
         {
-            logicAni.frame = 0;
+            if (logicAni.frame > logicAni.aniClips[curAni][0].Count - 1)
+            {
+                logicAni.frame = 0;
+            }
         }
     }
 

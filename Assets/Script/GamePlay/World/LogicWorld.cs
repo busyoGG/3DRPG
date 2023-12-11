@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestWorld : ECSWorld
+public class LogicWorld : ECSWorld
 {
     public override void SystemAdd()
     {
+        Add(new QTreeSystem());
+        Add(new QObjFindingSystem());
         Add(new TransformSystem());
         Add(new ClimbSystem());
         Add(new MoveSystem());
@@ -13,11 +15,7 @@ public class TestWorld : ECSWorld
         Add(new ClimbUpSystem());
         Add(new WeaponSystem());
         Add(new TriggerSystem());
-        Add(new OffsetSystem());
-        Add(new QTreeSystem());
-        Add(new CollideGizmosSystem());
-        Add(new SkillSystem());
+        Add(new LogicAniSystem());
         Add(new AniSystem());
-        Add(new RenderSystem());
     }
 }

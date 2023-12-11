@@ -11,6 +11,14 @@ public class TransformComp : Comp
 
     public Vector3 scale;
 
+    public Vector3 lastPosition;
+
+    public Quaternion lastRotation;
+
+    public Vector3 lastScale;
+
+    public bool changed = false;
+
     //public Entity parent;
 
     //public List<Entity> children;
@@ -19,6 +27,9 @@ public class TransformComp : Comp
         position = Vector3.zero;
         rotation = Quaternion.identity;
         scale = Vector3.one;
+        lastPosition = Vector3.zero;
+        lastRotation = Quaternion.identity;
+        lastScale = Vector3.one;
         //parent = null;
         //children = new List<Entity>();
     }

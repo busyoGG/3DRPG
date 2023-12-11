@@ -6,6 +6,7 @@ public class AnimationData : ScriptableObject
 {
     public float frameDelta;
     public int frameCount;
+    public bool isLoop;
     
     public SerializableDictionary<string, List<Trans>> transforms;
     //public SerializableDictionary<string, List<Vector3>> positions;

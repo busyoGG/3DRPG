@@ -19,9 +19,39 @@ public class RenderSystem : ECSSystem
 
             Transform transformNode = render.node.transform;
 
-            transformNode.rotation = transform.rotation;
-            transformNode.position = transform.position;
+            if (transform.changed)
+            {
+                transform.changed = false;
+                transform.lastPosition = transformNode.position;
+                transform.lastRotation = transformNode.rotation;
+                render.curStep = 0;
+            }
 
+            transformNode.rotation = transform.rotation;
+            //transformNode.position = transform.position;
+
+            render.curStep += _dt;
+            //ConsoleUtils.Log("帧间隔", _dt, render.curStep);
+
+            float ratio = render.curStep / render.totalStep;
+            if (ratio > 1)
+            {
+                ratio = 1;
+            }
+
+            if (ratio <= 1)
+            {
+                transformNode.position = Vector3.Lerp(transform.lastPosition, transform.position, ratio);
+                transformNode.rotation = Quaternion.Lerp(transform.lastRotation, transform.rotation, ratio);
+
+                if (ratio == 1)
+                {
+                    render.curStep = 0;
+                    transform.lastPosition = transform.position;
+                    transform.lastRotation = transform.rotation;
+                    transform.lastScale = transform.scale;
+                }
+            }
         }
     }
 }

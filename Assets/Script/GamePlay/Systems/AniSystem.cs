@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,14 +16,16 @@ public class AniSystem : ECSSystem
         {
             AniComp ani = entity.Get<AniComp>();
             string curAni = AniSingleton.Ins().GetCurAni(entity.id);
+            bool isForce = AniSingleton.Ins().GetForce(entity.id);
 
             if (curAni != ani.lastAni)
             {
                 ani.isChange = true;
             }
 
-            if (ani.isChange)
+            if (ani.isChange || isForce)
             {
+                AniSingleton.Ins().SetForce(entity.id, false);
                 ani.isChange = false;
                 ani.lastAni = curAni;
                 ani.animator.Play(curAni, 0, 0);

@@ -47,8 +47,9 @@ public class ConvertAnimationDataEditor : EditorWindow
         var path = AssetDatabase.GetAssetPath(animAsset);
         var asset = AssetDatabase.LoadAssetAtPath<AnimationData>(path);
 
-        asset.frameDelta = 1f / 60f;
+        asset.frameDelta = 1f / 20f;
         asset.frameCount = Mathf.CeilToInt(clip.length / asset.frameDelta) + 1;
+        asset.isLoop = clip.isLooping;
         //asset.positions = new SerializableDictionary<string, List<Vector3>>();
         //asset.eulers = new SerializableDictionary<string, List<Vector3>>();
         //asset.scales = new SerializableDictionary<string, List<Vector3>>();

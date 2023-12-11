@@ -6,6 +6,8 @@ public class AttackSingleton : Singleton<AttackSingleton>
 {
     private Dictionary<int, bool> _attackEnable = new Dictionary<int, bool>();
 
+    private Dictionary<int, PropData> _propDatas = new Dictionary<int, PropData>();
+
     public bool GetAttackEnable(int id)
     {
         bool isEnable;
@@ -24,4 +26,28 @@ public class AttackSingleton : Singleton<AttackSingleton>
             _attackEnable.Add(id, isEnable);   
         }
     }
+
+    public PropData GetPropData(int id)
+    {
+        PropData prop;
+        _propDatas.TryGetValue(id, out prop);
+        if(prop == null)
+        {
+            prop = new PropData();
+            _propDatas.Add(id, prop);
+        }
+        return prop;
+    }
+
+    //public void SetPropData(int id, PropData prop)
+    //{
+    //    if (_propDatas.ContainsKey(id))
+    //    {
+    //        _propDatas[id] = prop;
+    //    }
+    //    else
+    //    {
+    //        _propDatas.Add(id, prop);
+    //    }
+    //}
 }

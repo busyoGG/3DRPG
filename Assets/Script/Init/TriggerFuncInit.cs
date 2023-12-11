@@ -49,12 +49,15 @@ public class TriggerFuncInit : Singleton<TriggerFuncInit>
             case TriggerFunction.Attack:
                 baseClass.OnTriggerEnter = (Entity self, Entity other) =>
                 {
-                    AttackComp attack = other.Get<AttackComp>();
+                    AttackComp attackSelf = self.Get<AttackComp>();
+                    AttackComp attackOther = other.Get<AttackComp>();
                     //bool isAttack = other.Has<AttackComp>();
+                    //PropComp prop = self.Get<PropComp>();
+                    PropData prop = AttackSingleton.Ins().GetPropData(attackSelf.entityId);
 
-                    if (attack != null && self.id != attack.entityId)
+                    if (attackSelf.group != -1 && attackSelf.group != attackOther.group)
                     {
-                        ConsoleUtils.Log(self.id, "被", other.id, "攻击");
+                        ConsoleUtils.Log(self.id, "被", other.id, "攻击","属性值", prop);
                     }
                 };
                 break;

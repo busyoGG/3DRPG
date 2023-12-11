@@ -53,6 +53,16 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel--;
         }
 
+        compInit._isRole = EditorGUILayout.Toggle("是否角色", compInit._isRole);
+        if(compInit._isRole)
+        {
+            EditorGUI.indentLevel++;
+            compInit._hp = EditorGUILayout.IntField("生命值", compInit._hp);
+            compInit._mp = EditorGUILayout.IntField("法力值", compInit._mp);
+            compInit._shield = EditorGUILayout.IntField("护盾值", compInit._shield);
+            EditorGUI.indentLevel--;
+        }
+
         compInit._isSkill = EditorGUILayout.Toggle("是否有技能", compInit._isSkill);
         if (compInit._isSkill)
         {
@@ -146,7 +156,15 @@ public class CompInitEditor : Editor
 
         EditorGUILayout.PropertyField(_logicAniRoot, new GUIContent("逻辑动画父节点"));
 
-        compInit._isAttack = EditorGUILayout.Toggle("是否武器", compInit._isAttack);
+        compInit._isAttack = EditorGUILayout.Toggle("是否结算伤害(攻击/被攻击)", compInit._isAttack) || compInit._triggerFunc.Contains(TriggerFunction.Attack);
+        if (compInit._isAttack || compInit._isRole)
+        {
+            EditorGUI.indentLevel++;
+            compInit._group = EditorGUILayout.IntField("组别",compInit._group);
+            EditorGUI.indentLevel--;
+        }
+
+        compInit._isWeapon = EditorGUILayout.Toggle("是否武器", compInit._isWeapon);
 
         serializedObject.ApplyModifiedProperties();
     }

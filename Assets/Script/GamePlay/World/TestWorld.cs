@@ -11,6 +11,7 @@ public class TestWorld : ECSWorld
         Add(new MoveSystem());
         Add(new JumpSystem());
         Add(new ClimbUpSystem());
+        Add(new WeaponSystem());
         Add(new TriggerSystem());
         Add(new OffsetSystem());
         Add(new QTreeSystem());

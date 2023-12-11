@@ -20,6 +20,8 @@ public class CompInit : MonoBehaviour
     public bool _isTransform = false;
     public bool _isDialog = false;
     public bool _isAttack = false;
+    public bool _isWeapon = false;
+    public bool _isRole = false;
 
     //-----move-start-----
     /// <summary>
@@ -80,6 +82,16 @@ public class CompInit : MonoBehaviour
 
     public string _targetName;
     //-----dialog-end-----
+
+    //-----attack-start-----
+    public int _group;
+    //-----attack-end-----
+
+    //-----role-start-----
+    public int _hp;
+    public int _mp;
+    public int _shield;
+    //-----role-end-----
 
     private Entity _entity;
 
@@ -171,7 +183,7 @@ public class CompInit : MonoBehaviour
         {
             TriggerComp trigger = entity.Add<TriggerComp>();
 
-           foreach(var data in _triggerFunc)
+            foreach (var data in _triggerFunc)
             {
                 TriggerBase script = TriggerFuncInit.Ins().GetTriggerFunc(data);
 
@@ -210,6 +222,20 @@ public class CompInit : MonoBehaviour
             player.player = entity;
         }
 
+        if (_isRole)
+        {
+            //PropComp prop = entity.Add<PropComp>();
+            PropData prop = AttackSingleton.Ins().GetPropData(entity.id);
+            prop.hp = _hp;
+            prop.mp = _mp;
+            prop.sheild = _shield;
+            //prop.group = _group;
+            //prop.hp = _hp;
+            //prop.mp = _mp;
+            //prop.sheild = _shield;
+            //prop.group = _group;
+        }
+
         if (_isClimb)
         {
             entity.Add<ClimbComp>();
@@ -243,12 +269,26 @@ public class CompInit : MonoBehaviour
         {
             LogicAniComp logicAni = entity.Add<LogicAniComp>();
             InitLogicAni(_logicAniRoot, logicAni);
+        }
 
-            if(_isAttack)
+        if (_isAttack)
+        {
+            AttackComp attackComp = entity.Add<AttackComp>();
+            attackComp.group = _group;
+            if (_logicAniRoot)
             {
-                AttackComp attackComp = entity.Add<AttackComp>();
                 attackComp.entityId = _logicAniRoot.GetComponent<CompInit>()._entity.id;
             }
+            else
+            {
+                attackComp.entityId = entity.id;
+            }
+        }
+
+        if (_isWeapon)
+        {
+            WeaponComp weapon = entity.Add<WeaponComp>();
+            weapon.entityId = _logicAniRoot.GetComponent<CompInit>()._entity.id;
         }
     }
 

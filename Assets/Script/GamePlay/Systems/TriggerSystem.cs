@@ -17,16 +17,18 @@ public class TriggerSystem : ECSSystem
         {
             TriggerComp trigger = entity.Get<TriggerComp>();
 
-            AttackComp attack = entity.Get<AttackComp>();
+            if (!trigger.isEnable) continue;
 
-            //判断是否攻击节点
-            if(attack != null)
-            {
-                //判断是否可以触发
-                bool attackEnable = AttackSingleton.Ins().GetAttackEnable(attack.entityId);
-                if (!attackEnable) continue;
-                int i = 0;
-            }
+            //AttackComp attack = entity.Get<AttackComp>();
+
+            ////判断是否攻击节点
+            //if(attack != null)
+            //{
+            //    //判断是否可以触发
+            //    bool attackEnable = AttackSingleton.Ins().GetAttackEnable(attack.entityId);
+            //    if (!attackEnable) continue;
+            //    int i = 0;
+            //}
 
             if (trigger.isPositive)
             {
@@ -35,7 +37,7 @@ public class TriggerSystem : ECSSystem
                 //初始化本实体触发的所有触发器状态
                 foreach (var obj in objs)
                 {
-                    if (obj.entity.id == entity.id || attack != null && attack.entityId == obj.entity.id) continue;
+                    if (obj.entity.id == entity.id) continue;
                     TriggerComp triggerComp = obj.entity.Get<TriggerComp>();
 
                     if (triggerComp != null)

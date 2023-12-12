@@ -6,7 +6,7 @@ public class OffsetSystem : ECSSystem
 {
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(MoveComp), typeof(CollideComp));
+        return ECSManager.Ins().AllOf(typeof(MoveComp), typeof(CollideComp),typeof(BoxComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -37,8 +37,9 @@ public class OffsetSystem : ECSSystem
         foreach (Entity entity in entities)
         {
             CollideComp colider = entity.Get<CollideComp>();
+            BoxComp box = entity.Get<BoxComp>();
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(colider.position, colider.position + colider.totalOffset * 100);
+            Gizmos.DrawLine(box.position, box.position + colider.totalOffset * 100);
         }
     }
 }

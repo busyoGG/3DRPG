@@ -3,7 +3,7 @@ using System.Drawing;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class OBBData
+public class OBBData : ICollide
 {
     public Vector3 position
     {
@@ -37,7 +37,8 @@ public class OBBData
     }
     private Vector3 _halfSize;
 
-    public Vector3[] axes { 
+    public Vector3[] axes
+    {
         get
         {
             return _axes;
@@ -51,7 +52,8 @@ public class OBBData
         }
     }
 
-    public Quaternion rot { 
+    public Quaternion rot
+    {
         get
         {
             return _rot;
@@ -168,22 +170,23 @@ public class OBBData
     }
 
     public AABBData _aabb;
+    public override bool Interactive(OBBData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
 
-    //private void GetMaxMin()
-    //{
-    //    _max = vertexts[0];
-    //    _min = vertexts[0];
-    //    for (int i = 1, len = vertexts.Length; i < len; i++)
-    //    {
-    //        if (_max.x < vertexts[i].x && _max.y < vertexts[i].y && _max.z < vertexts[i].z)
-    //        {
-    //            _max = vertexts[i];
-    //        }
+    public override bool Interactive(AABBData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
 
-    //        if (_min.x > vertexts[i].x && _min.y > vertexts[i].y && _min.z > vertexts[i].z)
-    //        {
-    //            _min = vertexts[i];
-    //        }
-    //    }
-    //}
+    public override bool Interactive(CircleData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override bool Interactive(RayData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
 }

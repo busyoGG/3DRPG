@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class CollisionSingleton : Singleton<CollisionSingleton>
 {
-    private Dictionary<int, List<CollideComp>> _colliders = new Dictionary<int, List<CollideComp>>();
+    private Dictionary<int, List<BoxComp>> _colliders = new Dictionary<int, List<BoxComp>>();
 
-    public List<CollideComp> GetColliders(int id)
+    public List<BoxComp> GetColliders(int id)
     {
-        List<CollideComp> collideComps;
-        _colliders.TryGetValue(id, out collideComps);
-        if (collideComps == null)
+        List<BoxComp> BoxComps;
+        _colliders.TryGetValue(id, out BoxComps);
+        if (BoxComps == null)
         {
-            collideComps = new List<CollideComp>();
-            _colliders.Add(id, collideComps);
+            BoxComps = new List<BoxComp>();
+            _colliders.Add(id, BoxComps);
         }
-        return collideComps;
+        return BoxComps;
     }
 }

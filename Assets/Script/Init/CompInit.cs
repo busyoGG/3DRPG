@@ -43,7 +43,7 @@ public class CompInit : MonoBehaviour
     //-----move-end-----
 
     //-----collide-start-----
-    public CollisionType _collideType = CollisionType.AABB;
+    public CollisionType _boxType = CollisionType.AABB;
     public bool _isStatic = true;
     //-----collide-end-----
 
@@ -151,31 +151,6 @@ public class CompInit : MonoBehaviour
         if (_isCollide)
         {
             CollideComp collide = entity.Add<CollideComp>();
-            collide.type = _collideType;
-            switch (_collideType)
-            {
-                case CollisionType.AABB:
-                    AABBData aabb = new AABBData();
-                    aabb.position = bound.center;
-                    aabb.size = bound.size;
-                    collide.aabb = aabb;
-                    collide.position = aabb.position;
-                    break;
-                case CollisionType.OBB:
-                    OBBData obb = new OBBData();
-                    obb.position = transform.position;
-                    obb.size = transform.localScale;
-                    obb.axes = new Vector3[3]
-                    {
-                        transform.right,
-                        transform.up,
-                        transform.forward,
-                    };
-                    obb.rot = transform.rotation;
-                    collide.obb = obb;
-                    collide.position = obb.position;
-                    break;
-            }
             collide.isStatic = _isStatic;
         }
 
@@ -195,6 +170,36 @@ public class CompInit : MonoBehaviour
             }
 
             trigger.isPositive = _isTriggerPositive;
+        }
+
+        if(_isTrigger || _isCollide)
+        {
+            BoxComp box = entity.Add<BoxComp>();
+            box.type = _boxType;
+            switch (_boxType)
+            {
+                case CollisionType.AABB:
+                    AABBData aabb = new AABBData();
+                    aabb.position = bound.center;
+                    aabb.size = bound.size;
+                    box.aabb = aabb;
+                    box.position = aabb.position;
+                    break;
+                case CollisionType.OBB:
+                    OBBData obb = new OBBData();
+                    obb.position = transform.position;
+                    obb.size = transform.localScale;
+                    obb.axes = new Vector3[3]
+                    {
+                        transform.right,
+                        transform.up,
+                        transform.forward,
+                    };
+                    obb.rot = transform.rotation;
+                    box.obb = obb;
+                    box.position = obb.position;
+                    break;
+            }
         }
 
         if (_isQTree)

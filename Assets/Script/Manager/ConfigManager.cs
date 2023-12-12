@@ -4,7 +4,6 @@ using UnityEngine;
 using System.Linq;
 using LitJson;
 using Bean;
-using System;
 using System.Text.RegularExpressions;
 
 public class ConfigManager:Singleton<ConfigManager>
@@ -35,7 +34,6 @@ public class ConfigManager:Singleton<ConfigManager>
         {
             string config = FileUtils.ReadFile(Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
 
-            //Regex regex = new Regex("(\\|).*(?=\")");
             config = Regex.Replace(config, "(\\|).*(?=\")", "");
 
             Debug.Log("配置读取路径 - " + Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");

@@ -1,12 +1,9 @@
 using LitJson;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class ConsoleUtils
 {
-
-
     private static string PrintDic(dynamic dic)
     {
         string res = "{ ";

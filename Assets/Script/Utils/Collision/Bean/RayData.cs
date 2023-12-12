@@ -1,6 +1,6 @@
 
 using UnityEngine;
-public class RayData
+public class RayData: ICollide
 {
     public Vector3 origin;
 
@@ -12,7 +12,7 @@ public class RayData
     {
         get
         {
-            if(_target == null)
+            if (_target == null)
             {
                 _target = origin + forward * length;
             }
@@ -21,4 +21,23 @@ public class RayData
     }
 
     private Vector3 _target;
+
+    public override bool Interactive(AABBData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override bool Interactive(OBBData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override bool Interactive(CircleData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+    //public override bool Interactive(RayData ohter, out Vector3 point)
+    //{
+    //    return CollideFunction.CheckCollide(this, ohter, out point);
+    //}
 }

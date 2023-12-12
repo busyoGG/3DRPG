@@ -12,7 +12,7 @@ public class CompInitEditor : Editor
     private bool _moveGroup = true;
     private bool _collideGroup = true;
 
-    private SerializedProperty _collideType;
+    private SerializedProperty _boxType;
 
     private SerializedProperty _cam;
 
@@ -29,7 +29,7 @@ public class CompInitEditor : Editor
 
     private void OnEnable()
     {
-        _collideType = serializedObject.FindProperty("_collideType");
+        _boxType = serializedObject.FindProperty("_boxType");
         _cam = serializedObject.FindProperty("_cameraScript");
         _skill = serializedObject.FindProperty("_skillMap");
         _triggerFunc = serializedObject.FindProperty("_triggerFunc");
@@ -102,7 +102,6 @@ public class CompInitEditor : Editor
             _collideGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_collideGroup, "碰撞组件属性");
             if (_collideGroup)
             {
-                EditorGUILayout.PropertyField(_collideType, new GUIContent("碰撞类型"));
                 compInit._isStatic = EditorGUILayout.Toggle("是否静态物体", compInit._isStatic);
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
@@ -117,6 +116,11 @@ public class CompInitEditor : Editor
             compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发", compInit._isTriggerPositive);
             EditorGUILayout.PropertyField(_triggerFunc, new GUIContent("触发类型"));
             EditorGUI.indentLevel--;
+        }
+
+        if(compInit._isCollide || compInit._isTrigger)
+        {
+            EditorGUILayout.PropertyField(_boxType, new GUIContent("碰撞类型"));
         }
 
         compInit._isQTree = EditorGUILayout.Toggle("QTreeComp", compInit._isQTree) || compInit._isCollide;

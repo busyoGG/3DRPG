@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AABBData
+public class AABBData : ICollide
 {
     public CollisionType type = CollisionType.AABB;
 
@@ -100,7 +100,7 @@ public class AABBData
     {
         get
         {
-            if(_vertexts == null)
+            if (_vertexts == null)
             {
                 _vertexts = new Vector3[8];
                 int i = 0;
@@ -128,4 +128,24 @@ public class AABBData
     }
 
     private Vector3[] _vertexts;
+
+    public override bool Interactive(AABBData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override bool Interactive(OBBData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override bool Interactive(CircleData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override bool Interactive(RayData ohter, out Vector3 point)
+    {
+        return CollideFunction.CheckCollide(this, ohter, out point);
+    }
 }

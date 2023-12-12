@@ -23,6 +23,12 @@ public class Root : MonoBehaviour
     private RenderWorld _renderWorld;
 
     private bool _start;
+
+    //private void TestType<T>(IBaseTest<T> insTest)
+    //{
+    //    ConsoleUtils.Log("调用ibasetype");
+    //}
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -92,6 +98,7 @@ public class Root : MonoBehaviour
         //MissionConfigData data = JsonMapper.ToObject<MissionConfigData>("{ 'filter':2 }");
         //ConsoleUtils.Log("测试枚举", data);
         //ConsoleUtils.Log("测试枚举", JsonMapper.ToObject<MissionFilter>("2"));
+
     }
 
     private void Start()
@@ -108,22 +115,22 @@ public class Root : MonoBehaviour
         MapManager.Ins().Update();
         MapManager.Ins().RefreshChunk();
 
+        _logicWorld.Update();
+        _physicWorld.Update();
         _renderWorld.Update();
     }
 
     private void FixedUpdate()
     {
-        _logicWorld.Update();
-        _physicWorld.Update();
     }
 
     void OnDrawGizmos()
     {
         if (_start)
         {
-            //_logicWorld.DrawGrizmos();
-            //_physicWorld.DrawGrizmos();
-            //_renderWorld.DrawGrizmos();
+            _logicWorld.DrawGrizmos();
+            _physicWorld.DrawGrizmos();
+            _renderWorld.DrawGrizmos();
         }
     }
 }

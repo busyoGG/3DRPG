@@ -7,9 +7,9 @@ public class PhysicWorld : ECSWorld
     public override void SystemAdd()
     {
         Add(new FallSystem());
-        Add(new CollideRefreshSystem());
+        Add(new BoxRefreshSystem());
         Add(new CollideSystem());
-        Add(new CollideGizmosSystem());
+        Add(new BoxGizmosSystem());
         Add(new OffsetSystem());
     }
 }

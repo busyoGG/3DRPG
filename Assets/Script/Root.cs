@@ -3,6 +3,8 @@ using System.Reflection;
 using System;
 using UnityEditor;
 using System.Collections.Generic;
+using LitJson;
+using Bean;
 
 public class Root : MonoBehaviour
 {
@@ -29,6 +31,7 @@ public class Root : MonoBehaviour
         InputManager.Ins().Init();
         SkillManager.Ins().Init();
         DialogManager.Ins().Init();
+        MissionManager.Ins().Init();
         //InputManager.Ins().AddKeyboardInputCallback(KeyCode.Space,InputStatus.Up, () =>
         //{
         //    ConsoleUtils.Log("按下了空格");
@@ -62,7 +65,7 @@ public class Root : MonoBehaviour
             }
         };
 
-        
+
         Test();
     }
 
@@ -84,6 +87,11 @@ public class Root : MonoBehaviour
             ConsoleUtils.Log("测试停止", DateTime.Now, chain.GetId());
             TimerUtils.Clear(chain);
         });
+
+        //JsonReader jr = new JsonReader("2");
+        //MissionConfigData data = JsonMapper.ToObject<MissionConfigData>("{ 'filter':2 }");
+        //ConsoleUtils.Log("测试枚举", data);
+        //ConsoleUtils.Log("测试枚举", JsonMapper.ToObject<MissionFilter>("2"));
     }
 
     private void Start()

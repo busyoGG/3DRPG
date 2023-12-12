@@ -8,6 +8,9 @@
     <component id="ge668" name="DialogButton.xml" path="/Comp/Conversation/"/>
     <component id="kyv39" name="SelectionButton.xml" path="/Comp/Conversation/"/>
     <component id="kyv3a" name="AutoButton.xml" path="/Comp/Conversation/"/>
+    <component id="j7n1b" name="MissionView.xml" path="/" exported="true"/>
+    <component id="j7n1c" name="NormalButton.xml" path="/Comp/Mission/" exported="true"/>
+    <component id="j7n1d" name="BranchButton.xml" path="/Comp/Mission/" exported="true"/>
   </resources>
   <publish name=""/>
 </packageDescription>

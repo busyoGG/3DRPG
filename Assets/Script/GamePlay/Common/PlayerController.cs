@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -94,6 +95,10 @@ public class PlayerController : MonoBehaviour
                 break;
             case InputKey.S:
                 _forward.z = -1f;
+                break;
+            case InputKey.J:
+                UIManager.Ins().Show<MissionView>("MissionView");
+                EventManager.TriggerEvent("show_mission", new ArrayList() { MissionManager.Ins().GetNotBranchMission() });
                 break;
             case InputKey.Space:
                 if (_canJump)

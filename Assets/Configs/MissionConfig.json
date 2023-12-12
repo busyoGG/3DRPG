@@ -5,8 +5,41 @@
     "stepId": 0,
     "title": "测试新手任务",
     "desc": "这是一个测试用的新手任务描述",
-    "type|MissionType": "Collecte",
-    "filter|MissionFilter": "Main",
+    "type|MissionType": 0,
+    "filter|MissionFilter": 0,
+    "target": [
+      0
+    ],
+    "targetDescribe": [
+      "任务目标描述"
+    ],
+    "targetNum|int|int": {
+      "0": 0
+    },
+    "completeNum|int|int": {},
+    "award": [
+      1
+    ],
+    "awardNum": [
+      1
+    ],
+    "isPreCount": false,
+    "next": null,
+    "unlockMission|int": [],
+    "branch|int": [
+      2
+    ],
+    "branchBelong": 1,
+    "isPreUnlock": true
+  },
+  {
+    "id": 1,
+    "missionId": 2,
+    "stepId": 0,
+    "title": "测试分支任务",
+    "desc": "这是一个测试用的分支任务描述",
+    "type|MissionType": 0,
+    "filter|MissionFilter": 2,
     "target": [
       0
     ],
@@ -28,6 +61,6 @@
     "unlockMission|int": [],
     "branch|int": [],
     "branchBelong": 1,
-    "isPreUnlock": 1
+    "isPreUnlock": true
   }
 ]

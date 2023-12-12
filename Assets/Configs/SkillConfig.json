@@ -6,7 +6,7 @@
     "skillTime": 0.2,
     "outOfTime": 0.5,
     "holdingTime": 0,
-    "trigger|SkillTrigger": "Click",
+    "trigger|SkillTrigger": 0,
     "isCanForceStop": false,
     "forceTimes": 0,
     "defaultForceTimes": 0,

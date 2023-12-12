@@ -24,13 +24,13 @@ public class UIManager : Singleton<UIManager>
 
     private bool _focus = false;
 
-    private class UIPack
+    public class UIPack
     {
         public static string Main = "Main";
         public static string Game = "Game";
     }
 
-    private class UIUrl
+    public class UIUrl
     {
         public static string Main = "UI/Main";
         public static string Game = "UI/Game";

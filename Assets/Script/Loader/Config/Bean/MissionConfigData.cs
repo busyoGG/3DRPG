@@ -19,7 +19,7 @@ namespace Bean{
 		public List<int> unlockMission;
 		public List<int> branch;
 		public int branchBelong;
-		public int isPreUnlock;
+		public bool isPreUnlock;
 		public MissionConfigData(){
 			target = new List<int>();
 			targetDescribe = new List<string>();

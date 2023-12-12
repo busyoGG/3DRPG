@@ -53,11 +53,11 @@ public class TriggerFuncInit : Singleton<TriggerFuncInit>
                     AttackComp attackOther = other.Get<AttackComp>();
                     //bool isAttack = other.Has<AttackComp>();
                     //PropComp prop = self.Get<PropComp>();
-                    PropData prop = AttackSingleton.Ins().GetPropData(attackSelf.entityId);
 
                     if (attackSelf.group != -1 && attackSelf.group != attackOther.group)
                     {
-                        ConsoleUtils.Log(self.id, "被", other.id, "攻击","属性值", prop);
+                        PropData prop = AttackSingleton.Ins().GetPropData(attackSelf.entityId);
+                        ConsoleUtils.Log(self.id, "被", other.id, "攻击", "属性值", prop);
                     }
                 };
                 break;

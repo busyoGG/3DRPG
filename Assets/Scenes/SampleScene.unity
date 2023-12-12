@@ -343,6 +343,7 @@ MonoBehaviour:
   _isDialog: 0
   _isAttack: 0
   _isWeapon: 0
+  _isRole: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -365,6 +366,9 @@ MonoBehaviour:
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!65 &616471584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -806,6 +810,7 @@ MonoBehaviour:
   _isDialog: 0
   _isAttack: 1
   _isWeapon: 0
+  _isRole: 0
   _moveSpeed: 0.1
   _jumpSpeed: 1
   _gravity: 9.8
@@ -830,6 +835,9 @@ MonoBehaviour:
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -1028,6 +1036,7 @@ MonoBehaviour:
   _isDialog: 0
   _isAttack: 0
   _isWeapon: 0
+  _isRole: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1050,6 +1059,9 @@ MonoBehaviour:
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!65 &1005002486
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1278,9 +1290,10 @@ MonoBehaviour:
   _isAni: 1
   _isTransform: 1
   _isDialog: 0
-  _isAttack: 0
+  _isAttack: 1
   _isWeapon: 0
-  _moveSpeed: 0.03
+  _isRole: 0
+  _moveSpeed: 0.3
   _jumpSpeed: 8
   _gravity: 9.8
   _jumpScale: 2
@@ -1301,13 +1314,16 @@ MonoBehaviour:
     - Key: Attack1
       Value: {fileID: 11400000, guid: ca655ea7e89fc574b85f75effc6b48eb, type: 2}
   _logicAniRoot: {fileID: 0}
-  _triggerFunc: 0000000001000000
+  _triggerFunc: 00000000
   _isTriggerPositive: 1
   _randomId: 
   _maxDelta: 0
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!65 &1365198100
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1393,8 +1409,9 @@ MonoBehaviour:
   _isAni: 0
   _isTransform: 1
   _isDialog: 0
-  _isAttack: 0
+  _isAttack: 1
   _isWeapon: 0
+  _isRole: 0
   _moveSpeed: 0.1
   _jumpSpeed: 1
   _gravity: 9.8
@@ -1417,6 +1434,9 @@ MonoBehaviour:
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!65 &1445839485
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1548,6 +1568,7 @@ MonoBehaviour:
   _isDialog: 0
   _isAttack: 0
   _isWeapon: 0
+  _isRole: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1570,6 +1591,9 @@ MonoBehaviour:
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!65 &1725057876
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1701,6 +1725,7 @@ MonoBehaviour:
   _isDialog: 0
   _isAttack: 0
   _isWeapon: 0
+  _isRole: 0
   _moveSpeed: 0
   _jumpSpeed: 0
   _gravity: 0
@@ -1723,6 +1748,9 @@ MonoBehaviour:
   _minDelta: 0
   _targetName: 
   _group: 0
+  _hp: 0
+  _mp: 0
+  _shield: 0
 --- !u!65 &1752253664
 BoxCollider:
   m_ObjectHideFlags: 0

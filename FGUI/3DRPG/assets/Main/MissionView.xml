@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0_j7n1" name="n0" xy="0,0" size="1920,1080" touchable="false" type="rect" lineSize="5" fillColor="#33333333" corner="20">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n1_j7n1" name="n1" xy="426,14" size="10,1050" touchable="false" type="rect" lineSize="0" fillColor="#cc000000" corner="5">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <list id="n2_j7n1" name="n2" xy="16,22" size="400,1037" selectionMode="none" overflow="scroll" lineGap="20" defaultItem="ui://lu13wm6nj7n1c"/>
+  </displayList>
+</component>

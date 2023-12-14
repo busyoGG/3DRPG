@@ -26,7 +26,7 @@ public class LogicAniComp : Comp
     //public List<AnimationData> aniClips;
 
     //public List<(string, OBBData)> aniBox;
-    public OBBData aniBox;
+    //public OBBData aniBox;
 
     public Entity root;
 
@@ -39,7 +39,7 @@ public class LogicAniComp : Comp
         speed = 1;
         isChange = true;
         //aniBox = new List<(string, OBBData)>();
-        aniBox = null;
+        //aniBox = null;
         root = null;
         isLoop.Clear();
     }

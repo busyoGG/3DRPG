@@ -19,15 +19,7 @@ public class OffsetSystem : ECSSystem
             //Åö×²Æ«ÒÆ
             if (!collider.totalOffset.Equals(Vector3.zero))
             {
-                if (move.isSlope)
-                {
-                    move.nextPostition += move.forwardOffsetQua * collider.totalOffset;
-                }
-                else
-                {
-                    move.nextPostition += collider.totalOffset;
-                }
-                //ConsoleUtils.Log("Æ«ÒÆÁ¿", move.nextPostition,collider.totalOffset);
+                move.nextPostition += collider.totalOffset;
             }
         }
     }

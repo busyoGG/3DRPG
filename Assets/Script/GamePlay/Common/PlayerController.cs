@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour
                 return;
             case InputKey.X:
                 _move.isClimb = false;
+                _move.fixedForward = _move.forward;
                 return;
             default:
                 return;
@@ -116,7 +117,10 @@ public class PlayerController : MonoBehaviour
         if (_canMove)
         {
             Vector3 res = _forward.normalized;
-            InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
+            //InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
+            _move.forward = cam.GetRotation(false) * res;
+            _move.forward.y = 0;
+            _move.inputForward = res;
         }
         else
         {
@@ -140,7 +144,10 @@ public class PlayerController : MonoBehaviour
                 return;
         }
         Vector3 res = _forward.normalized;
-        InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
+        //InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
+        _move.forward = cam.GetRotation(false) * res;
+        _move.forward.y = 0;
+        _move.inputForward = res;
     }
 
     public void SetControlType(ControlType type)

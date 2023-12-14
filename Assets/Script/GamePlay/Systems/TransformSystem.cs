@@ -18,7 +18,7 @@ public class TransformSystem : ECSSystem
             TransformComp transform = entity.Get<TransformComp>();
             MoveComp move = entity.Get<MoveComp>();
 
-            Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
+            //Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
 
             if (transform.position != move.nextPostition)
             {
@@ -27,13 +27,13 @@ public class TransformSystem : ECSSystem
             }
 
             //转向
-            if (!inputForward.Equals(Vector3.zero))
+            if (!move.forward.Equals(Vector3.zero))
             {
                 Vector3 target = transform.position;
                 target.y = transform.position.y;
                 //设置转向方向
-                _forward.x = inputForward.x;
-                _forward.z = inputForward.z;
+                _forward.x = move.forward.x;
+                _forward.z = move.forward.z;
                 //转向
                 if (_forward.x != 0 && _forward.z != 0)
                 {

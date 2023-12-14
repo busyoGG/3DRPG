@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEngine.EventSystems.EventTrigger;
 
 public class ClimbUpSystem : ECSSystem
 {
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(ClimbUpComp), typeof(MoveComp));
+        return ECSManager.Ins().AllOf(typeof(ClimbUpComp), typeof(MoveComp),typeof(CollideComp),typeof(BoxComp));
     }
 
     public override void OnEnter(List<Entity> entities)
@@ -16,11 +17,14 @@ public class ClimbUpSystem : ECSSystem
         {
             ClimbUpComp climbUp = entity.Get<ClimbUpComp>();
             MoveComp move = entity.Get<MoveComp>();
-            //此处暂时硬编码为上升1高度
+            BoxComp box = entity.Get<BoxComp>();
+            //此处暂时硬编码为上升1.2高度
             climbUp.targetY = move.nextPostition.y + 1.2f;
-            climbUp.climbOffset = move.climbOffset;
-            //设置为自动攀爬状态
-            move.isClimbTop = 2;
+
+            CollideComp collider = entity.Get<CollideComp>();
+            Vector3 dir = collider.closestCenter - box.position;
+            dir.y = 0;
+            climbUp.climbOffset = dir.normalized;
         }
     }
 
@@ -40,7 +44,7 @@ public class ClimbUpSystem : ECSSystem
             {
                 if (climbUp.progress < 1f)
                 {
-                    move.nextPostition += -climbUp.climbOffset * 0.2f;
+                    move.nextPostition += climbUp.climbOffset * 0.2f;
                 }
                 else
                 {
@@ -58,7 +62,7 @@ public class ClimbUpSystem : ECSSystem
         {
             MoveComp move = entity.Get<MoveComp>();
             move.isClimb = false;
-            move.isClimbTop = 0;
+            //move.isClimbTop = 0;
         }
     }
 }

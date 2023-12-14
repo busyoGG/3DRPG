@@ -19,158 +19,83 @@ public class CollideSystem : ECSSystem
     {
         foreach (var entity in entities)
         {
-            CollideComp collider = entity.Get<CollideComp>();
             BoxComp box = entity.Get<BoxComp>();
+            if (!box.isPositive) continue;
 
-            if (collider.isStatic) continue;
-
-            //collider.totalOffset = Vector3.zero;
+            CollideComp collider = entity.Get<CollideComp>();
 
             MoveComp move = entity.Get<MoveComp>();
             //初始化碰撞数组
-            List<BoxComp> colliders = CollisionSingleton.Ins().GetColliders(entity.id);
-            List<BoxComp> collidedComps = new List<BoxComp>();
 
-            List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
+            LinkedList<(int, Entity)> intersectObjs = IntersectSingleton.Ins().GetIntersectObjs(entity.id);
 
-            Vector3 point;
-
-            foreach (var obj in objs)
-            {
-                if (obj.entity.id == entity.id) continue;
-                BoxComp boxComp = obj.entity.Get<BoxComp>();
-                if (boxComp != null)
-                {
-                    bool isCollided = CheckCollide(box, boxComp, out point);
-                    if (isCollided)
-                    {
-                        if (!colliders.Contains(boxComp))
-                        {
-                            colliders.Insert(0, boxComp);
-                        }
-                        collidedComps.Add(boxComp);
-                    }
-                }
-            }
-
-            //证true的属性需要满足条件才初始化为true
-            if (colliders.Count > 0 && move.isClimbTop != 2)
-            {
-                move.isClimbTop = 1;
-                move.isTop = true;
-            }
-            move.isSlope = false;
-
+            //重置斜面旋转
+            move.up = Quaternion.identity;
+            //重置排斥
+            collider.totalOffset = Vector3.zero;
+            //重置最高点
+            collider.closestTop = CollideUtils._maxValue;
+            //初始化最近点距离
             float minClose = float.MaxValue;
-            //按顺序检测碰撞
-            for (int i = colliders.Count - 1; i >= 0; i--)
+
+            foreach (var intersectObj in intersectObjs)
             {
-                BoxComp boxComp = colliders[i];
-                if (!collidedComps.Contains(boxComp))
+                Entity other = intersectObj.Item2;
+
+                CollideComp collideComp = other.Get<CollideComp>();
+                if (collideComp != null)
                 {
-                    colliders.RemoveAt(i);
-                }
-                else
-                {
+                    BoxComp boxComp = other.Get<BoxComp>();
+
                     float len;
                     Vector3 normal = GetNormal(box, boxComp, out len);
-                    if (boxComp.position.y >= 1 && normal.y > 0)
+
+                    //自己最高点
+                    _tempVec = box.position;
+                    _tempVec.y = box.maxY;
+                    Vector3 higherest = GetClosestPoint(_tempVec, boxComp);
+                    //障碍物最高点
+                    collider.closestTop = higherest;
+
+                    if (move.isClimb)
                     {
-                        //计算坡道法线
-                        move.isSlope = true;
-                        //防止滑坡
-
-                        Quaternion rotation = Quaternion.identity;
-                        rotation.SetFromToRotation(Vector3.up, normal);
-
-                        move.forwardOffset = normal;
-                        move.forwardOffsetQua = rotation;
-
-                        if (move.isClimbTop == 2)
+                        //判断是否爬到顶部 没有的话就计算攀爬法线
+                        if (_tempVec.y - higherest.y < 0.1f)
                         {
-                            collider.totalOffset += normal * len;
+                            Vector3 closest = GetClosestPoint(box.position, boxComp);
+                            Vector3 dir = box.position - closest;
+                            if (dir.magnitude - move.speed <= minClose)
+                            {
+                                minClose = dir.magnitude;
+
+                                collider.closestCenter = closest;
+                            }
                         }
-                        //刷新包围盒
-                        RefreshCollider(box, normal * len);
                     }
                     else
                     {
-                        if (move.isClimb && move.isClimbTop != 2)
+                        if (normal.y > 0)
                         {
-                            //攀爬用偏移
-                            Vector3 closest = GetClosestPoint(boxComp.position, boxComp);
-                            //攀爬最高点
-                            _tempVec = boxComp.position;
-                            switch (boxComp.type)
-                            {
-                                case CollisionType.AABB:
-                                    _tempVec.y = boxComp.aabb.max.y;
-                                    break;
-                                case CollisionType.OBB:
-                                    _tempVec.y = boxComp.obb.maxY;
-                                    break;
-                            }
-                            Vector3 higherest = GetClosestPoint(_tempVec, boxComp);
-                            //判断是否爬到顶部 没有的话就计算攀爬法线
-                            if (_tempVec.y - higherest.y < 0.1f)
-                            {
-                                move.isClimbTop = 0;
-                                //计算攀爬法线
-                                Vector3 dir = boxComp.position - closest;
-                                if (dir.magnitude - move.speed <= minClose)
-                                {
-                                    minClose = dir.magnitude;
-
-                                    Quaternion rotation = Quaternion.identity;
-                                    rotation.SetFromToRotation(Vector3.up, dir);
-
-                                    move.climbOffset = dir * 2;
-                                    move.climbOffsetQua = rotation;
-
-                                    switch (boxComp.type)
-                                    {
-                                        case CollisionType.AABB:
-                                            collider.totalOffset = closest + dir.normalized * (boxComp.aabb.halfSize.z - move.speed) - move.nextPostition;
-                                            break;
-                                        case CollisionType.OBB:
-                                            collider.totalOffset = closest + dir.normalized * (boxComp.obb.halfSize.z - move.speed) - move.nextPostition;
-                                            break;
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                ConsoleUtils.Log("到顶");
-                            }
+                            //设置斜面旋转
+                            move.up.SetFromToRotation(Vector3.up, normal);
+                            move.fixedForward = move.up * move.curForwad;
                         }
-                        else
-                        {
-
-                            //计算偏移法线
-                            if ((collider.totalOffset.y > 0 || move.nextPostition.y <= 1) && normal.y < 0)
-                            {
-                                normal.y = 0;
-                            }
-                            collider.totalOffset += normal * len;
-                            //刷新包围盒
-                            RefreshCollider(box, normal * len);
-                        }
-
                     }
-                    //判断是否站在顶部
-                    if (boxComp.minY < boxComp.maxY)
-                    {
-                        move.isTop = false;
-                    }
+
+                    Vector3 offset = normal * len;
+                    collider.totalOffset += offset;
+                    RefreshCollider(box, offset);
                 }
             }
 
-            move.forwardOffset = move.forwardOffset.normalized;
-
-            if (!move.isClimb)
+            float over = Mathf.Abs(Vector3.Dot(Vector3.down, move.fixedForward));
+            if(over > 0 && over < 0.8 || box.minY >= collider.closestTop.y)
             {
-                //没有攀爬 重置攀爬到顶状态
-                move.isClimbTop = 0;
+                move.isOnPlane = true;
+            }
+            else
+            {
+                move.isOnPlane = false;
             }
         }
     }
@@ -197,81 +122,27 @@ public class CollideSystem : ECSSystem
         }
     }
 
-    public bool CheckCollide(BoxComp box1, BoxComp box2, out Vector3 point)
-    {
-        switch (box1.type)
-        {
-            case CollisionType.AABB:
-                return SubCheckCollide(box1.aabb, box2, out point);
-            case CollisionType.OBB:
-                return SubCheckCollide(box1.obb, box2, out point);
-            case CollisionType.Circle:
-                return SubCheckCollide(box1.circle, box2, out point);
-            case CollisionType.Ray:
-                return SubCheckCollide(box1.ray, box2, out point);
-        }
-        point = CollideUtils._minValue;
-        return false;
-    }
-
-    public bool SubCheckCollide(ICollide data1, BoxComp box2, out Vector3 point)
-    {
-        switch (box2.type)
-        {
-            case CollisionType.AABB:
-                //return data1.Interactive(box2.aabb, out point);
-                return data1.Interactive(box2.aabb, out point);
-            case CollisionType.OBB:
-                return data1.Interactive(box2.obb, out point);
-            case CollisionType.Circle:
-                return data1.Interactive(box2.circle, out point);
-            case CollisionType.Ray:
-                return data1.Interactive(box2.ray, out point);
-        }
-        point = CollideUtils._minValue;
-        return false;
-    }
-
     public Vector3 GetNormal(BoxComp box1, BoxComp box2, out float len)
     {
         switch (box1.type)
         {
-            case CollisionType.Circle:
-                break;
             case CollisionType.AABB:
-                switch (box2.type)
-                {
-                    case CollisionType.Circle:
-                    case CollisionType.AABB:
-                        return CollideUtils.GetCollideNormal(box1.aabb, box2.aabb, out len);
-                    case CollisionType.OBB:
-                        return CollideUtils.GetCollideNormal(box1.aabb.obb, box2.obb, out len);
-                    case CollisionType.Ray:
-                        break;
-                }
-                break;
+                return GetNormal(box1.aabb, box2, out len);
             case CollisionType.OBB:
-                switch (box2.type)
-                {
-                    case CollisionType.Circle:
-                    case CollisionType.AABB:
-                        return CollideUtils.GetCollideNormal(box1.obb, box2.aabb.obb, out len);
-                    case CollisionType.OBB:
-                        return CollideUtils.GetCollideNormal(box1.obb, box2.obb, out len);
-                    case CollisionType.Ray:
-                        break;
-                }
-                break;
-            case CollisionType.Ray:
-                switch (box2.type)
-                {
-                    case CollisionType.Circle:
-                    case CollisionType.AABB:
-                    case CollisionType.OBB:
-                    case CollisionType.Ray:
-                        break;
-                }
-                break;
+                return GetNormal(box1.obb, box2, out len);
+        }
+        len = 0;
+        return Vector3.zero;
+    }
+
+    private Vector3 GetNormal(ICollide data1, BoxComp box2, out float len)
+    {
+        switch (box2.type)
+        {
+            case CollisionType.AABB:
+                return data1.GetNormal(box2.aabb, out len);
+            case CollisionType.OBB:
+                return data1.GetNormal(box2.obb, out len);
         }
         len = 0;
         return Vector3.zero;

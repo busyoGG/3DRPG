@@ -99,12 +99,12 @@ public class CompInitEditor : Editor
         if (compInit._isCollide)
         {
             EditorGUI.indentLevel++;
-            _collideGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_collideGroup, "碰撞组件属性");
-            if (_collideGroup)
-            {
-                compInit._isStatic = EditorGUILayout.Toggle("是否静态物体", compInit._isStatic);
-            }
-            EditorGUILayout.EndFoldoutHeaderGroup();
+            //_collideGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_collideGroup, "碰撞组件属性");
+            //if (_collideGroup)
+            //{
+            //    compInit._isStatic = EditorGUILayout.Toggle("是否静态物体", compInit._isStatic);
+            //}
+            //EditorGUILayout.EndFoldoutHeaderGroup();
             EditorGUI.indentLevel--;
         }
 
@@ -113,7 +113,6 @@ public class CompInitEditor : Editor
         if (compInit._isTrigger)
         {
             EditorGUI.indentLevel++;
-            compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发", compInit._isTriggerPositive);
             EditorGUILayout.PropertyField(_triggerFunc, new GUIContent("触发类型"));
             EditorGUI.indentLevel--;
         }
@@ -121,6 +120,7 @@ public class CompInitEditor : Editor
         if(compInit._isCollide || compInit._isTrigger)
         {
             EditorGUILayout.PropertyField(_boxType, new GUIContent("碰撞类型"));
+            compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发", compInit._isTriggerPositive);
         }
 
         compInit._isQTree = EditorGUILayout.Toggle("QTreeComp", compInit._isQTree) || compInit._isCollide;

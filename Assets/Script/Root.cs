@@ -115,13 +115,13 @@ public class Root : MonoBehaviour
         MapManager.Ins().Update();
         MapManager.Ins().RefreshChunk();
 
-        _logicWorld.Update();
-        _physicWorld.Update();
         _renderWorld.Update();
     }
 
     private void FixedUpdate()
     {
+        _logicWorld.Update();
+        _physicWorld.Update();
     }
 
     void OnDrawGizmos()

@@ -8,7 +8,7 @@ public class TriggerSystem : ECSSystem
 {
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(TriggerComp), typeof(QTreeComp));
+        return ECSManager.Ins().AllOf(typeof(TriggerComp), typeof(QTreeComp), typeof(BoxComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -32,29 +32,32 @@ public class TriggerSystem : ECSSystem
 
             if (trigger.isPositive)
             {
-                List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
+                //List<QTreeObj> objs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
+                //QTreeComp qtree = entity.Get<QTreeComp>();
+
+                LinkedList<(int, Entity)> intersectObjs = IntersectSingleton.Ins().GetIntersectObjs(entity.id);
 
                 //初始化本实体触发的所有触发器状态
-                foreach (var obj in objs)
+                foreach (var obj in intersectObjs)
                 {
-                    if (obj.entity.id == entity.id) continue;
-                    TriggerComp triggerComp = obj.entity.Get<TriggerComp>();
+                    if (obj.Item2.id == entity.id) continue;
+                    TriggerComp triggerComp = obj.Item2.Get<TriggerComp>();
 
                     if (triggerComp != null)
                     {
-                        foreach(var triggerFunc in trigger.triggerFunc)
+                        foreach (var triggerFunc in trigger.triggerFunc)
                         {
                             Dictionary<TriggerFunction, TriggerStatus> states;
                             triggerComp.status.TryGetValue(entity.id, out states);
 
-                            if(states == null)
+                            if (states == null)
                             {
                                 states = new Dictionary<TriggerFunction, TriggerStatus>();
                                 triggerComp.status.Add(entity.id, states);
                             }
 
                             TriggerStatus state;
-                            states.TryGetValue(triggerFunc,out state);
+                            states.TryGetValue(triggerFunc, out state);
 
                             if (!states.ContainsKey(triggerFunc))
                             {
@@ -82,10 +85,10 @@ public class TriggerSystem : ECSSystem
             {
                 Entity triggerEntity = ECSManager.Ins().GetEntity(key);
 
-                foreach(var triggerFunc in trigger.triggerFunc)
+                foreach (var triggerFunc in trigger.triggerFunc)
                 {
                     TriggerStatus state;
-                    trigger.status[key].TryGetValue(triggerFunc,out state);
+                    trigger.status[key].TryGetValue(triggerFunc, out state);
                     Action<Entity, Entity> action;
                     switch (state)
                     {

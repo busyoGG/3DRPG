@@ -8,6 +8,8 @@ public class PhysicWorld : ECSWorld
     {
         Add(new FallSystem());
         Add(new BoxRefreshSystem());
+        Add(new IntersectSystem());
+        Add(new TriggerSystem());
         Add(new CollideSystem());
         Add(new BoxGizmosSystem());
         Add(new OffsetSystem());

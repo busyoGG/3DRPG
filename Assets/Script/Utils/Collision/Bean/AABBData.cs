@@ -148,4 +148,14 @@ public class AABBData : ICollide
     {
         return CollideFunction.CheckCollide(this, ohter, out point);
     }
+
+    public override Vector3 GetNormal(AABBData other, out float len)
+    {
+        return CollideUtils.GetCollideNormal(this, other, out len);
+    }
+
+    public override Vector3 GetNormal(OBBData other, out float len)
+    {
+        return CollideUtils.GetCollideNormal(obb, other, out len);
+    }
 }

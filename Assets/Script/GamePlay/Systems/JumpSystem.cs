@@ -23,6 +23,7 @@ public class JumpSystem : ECSSystem
             {
                 move.isJump = true;
                 jump.startJump = false;
+                move.fixedForward = move.forward;
             }
         }
     }

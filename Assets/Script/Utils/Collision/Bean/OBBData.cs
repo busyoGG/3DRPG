@@ -61,6 +61,12 @@ public class OBBData : ICollide
         set
         {
             _rot = value;
+            _axes = new Vector3[3]
+            {
+                _rot * Vector3.right,
+                _rot * Vector3.up,
+                _rot * Vector3.forward,
+            };
         }
     }
 
@@ -188,5 +194,15 @@ public class OBBData : ICollide
     public override bool Interactive(RayData ohter, out Vector3 point)
     {
         return CollideFunction.CheckCollide(this, ohter, out point);
+    }
+
+    public override Vector3 GetNormal(AABBData other, out float len)
+    {
+        return CollideUtils.GetCollideNormal(aabb, other, out len);
+    }
+
+    public override Vector3 GetNormal(OBBData other, out float len)
+    {
+        return CollideUtils.GetCollideNormal(this, other, out len);
     }
 }

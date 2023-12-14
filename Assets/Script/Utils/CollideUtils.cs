@@ -6,6 +6,7 @@ using UnityEngine;
 public class CollideUtils
 {
     public static Vector3 _minValue = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+    public static Vector3 _maxValue = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
 
     public static Dictionary<string, Vector3[]> _seperatingAxes = new Dictionary<string, Vector3[]>();
 
@@ -22,8 +23,8 @@ public class CollideUtils
     public static bool CollisionAABB(AABBData data1, AABBData data2)
     {
         //包围盒1的最小值比包围盒2的最大值还大 或 包围盒1的最大值比包围盒2的最小值还小 则不碰撞
-        if (data1.max.x < data2.min.x || data1.max.y < data2.min.y || data1.max.z < data2.min.z ||
-            data1.min.x > data2.max.x || data1.min.y > data2.max.y || data1.min.z > data2.max.z)
+        if (data2.min.x - data1.max.x > 0.001 || data2.min.y - data1.max.y > 0.001 || data2.min.z - data1.max.z > 0.001 ||
+            data1.min.x - data2.max.x > 0.001 || data1.min.y - data2.max.y > 0.001 || data1.min.z - data2.max.z >  0.001)
         {
             return false;
         }
@@ -119,7 +120,7 @@ public class CollideUtils
         limit[0] = GetProjectionLimit(vertexs1, axis);
         limit[1] = GetProjectionLimit(vertexs2, axis);
         //两个包围盒极限值不相交，则不碰撞
-        bool res = limit[0].x > limit[1].y || limit[1].x > limit[0].y;
+        bool res = limit[0].x - limit[1].y >= 0.001 || limit[1].x - limit[0].y >= 0.001;
         return res;
     }
 
@@ -624,7 +625,7 @@ public class CollideUtils
             {
                 overlap = Mathf.Min(limit[0].y, limit[1].y) - Mathf.Max(limit[0].x, limit[1].x);
             }
-            if (overlap > 0)
+            if (overlap >= -0.001)
             {
 
                 if (overlap < minOverlap)
@@ -641,7 +642,7 @@ public class CollideUtils
             }
         }
 
-        len = minOverlap * 2;
+        len = minOverlap / normal.magnitude;
         //len = minOverlap;
         Vector3 dis = data1.position - data2.position;
         float amount = normal.x * dis.x + normal.y * dis.y + normal.z * dis.z;
@@ -653,7 +654,7 @@ public class CollideUtils
         {
             ConsoleUtils.Log("超长");
         }
-        return normal;
+        return normal.normalized;
     }
 
     //TODO GJK检测

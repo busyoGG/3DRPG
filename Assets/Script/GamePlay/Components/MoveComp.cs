@@ -23,53 +23,54 @@ public class MoveComp : Comp
 
     public float gravity;
     /// <summary>
-    /// 是否移动
-    /// </summary>
-    public bool isMove;
-    /// <summary>
-    /// 是否在顶部
-    /// </summary>
-    public bool isTop;
-    /// <summary>
-    /// 是否坡
-    /// </summary>
-    public bool isSlope;
-    /// <summary>
     /// 是否攀爬
     /// </summary>
     public bool isClimb;
+    ///// <summary>
+    ///// 是否爬到顶 0未到顶 1到顶 2自动攀爬
+    ///// </summary>
+    //public int isClimbTop;
+    public bool isOnPlane;
+
+    public Vector3 inputForward;
+
+    public Vector3 forward;
+
+    public Vector3 curForwad;
+
+    public Vector3 fixedForward;
     /// <summary>
-    /// 是否爬到顶 0未到顶 1到顶 2自动攀爬
+    /// 上方向
     /// </summary>
-    public int isClimbTop;
+    public Quaternion up;
 
-    public Vector3 forwardOffset;
+    //public Vector3 climbOffset;
 
-    public Quaternion forwardOffsetQua;
-
-    public Vector3 climbOffset;
-
-    public Quaternion climbOffsetQua;
+    //public Quaternion climbOffsetQua;
 
     public override void Reset()
     {
-        isMove = false;
+        //isMove = false;
         //lastPosition = Vector3.zero;
         nextPostition = Vector3.zero;
-        forwardOffset = Vector3.zero;
-        forwardOffsetQua = Quaternion.identity;
-        climbOffset = Vector3.zero;
-        climbOffsetQua = Quaternion.identity;
-        //forward = Vector3.zero;
+        //climbOffset = Vector3.zero;
+        //climbOffsetQua = Quaternion.identity;
+        up = Quaternion.identity;
+        inputForward = Vector3.zero;
+        forward = Vector3.zero;
+        curForwad = Vector3.zero;
+        fixedForward = Vector3.zero;
+
         speed = 0f;
         fallTime = 0f;
         gravity = 9.8f;
-        isTop = false;
-        isSlope = false;
+        //isTop = false;
+        //isSlope = false;
         isJump = false;
         isClimb = false;
         jumpScale = 0f;
         jumpSpeed = 0f;
-        isClimbTop = 0;
+        //isClimbTop = 0;
+        isOnPlane = true;
     }
 }

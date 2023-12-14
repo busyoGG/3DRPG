@@ -19,15 +19,16 @@ public class QObjFindingSystem : ECSSystem
 
             bool isFind = collider != null || trigger != null && trigger.isPositive;
 
-            List<QTreeObj> qTreeObjs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
-            qTreeObjs.Clear();
-
+            //List<QTreeObj> qTreeObjs = QTreeSingleton.Ins().GetQtreeObjs(entity.id);
+            //qTreeObjs.Clear();
             if (isFind)
             {
                 QTreeComp qTree = entity.Get<QTreeComp>();
                 AABBData bounds = qTree.qObj.bounds;
                 List<QTreeObj> objs = QtreeManager.Ins().Find(MapManager.Ins().GetIndex(bounds.position), bounds);
-                qTreeObjs.AddRange(objs);
+                //qTreeObjs.AddRange(objs);
+                qTree.foundObjs.Clear();
+                qTree.foundObjs.AddRange(objs);
             }
         }
     }

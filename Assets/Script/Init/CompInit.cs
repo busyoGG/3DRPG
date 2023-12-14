@@ -44,7 +44,7 @@ public class CompInit : MonoBehaviour
 
     //-----collide-start-----
     public CollisionType _boxType = CollisionType.AABB;
-    public bool _isStatic = true;
+    //public bool _isStatic = true;
     //-----collide-end-----
 
     //-----qtree-start-----
@@ -151,7 +151,7 @@ public class CompInit : MonoBehaviour
         if (_isCollide)
         {
             CollideComp collide = entity.Add<CollideComp>();
-            collide.isStatic = _isStatic;
+            //collide.isStatic = _isStatic;
         }
 
         if (_isTrigger)
@@ -200,6 +200,7 @@ public class CompInit : MonoBehaviour
                     box.position = obb.position;
                     break;
             }
+            box.isPositive = _isTriggerPositive;
         }
 
         if (_isQTree)
@@ -389,18 +390,18 @@ public class CompInit : MonoBehaviour
 
         logicAniComp.aniClips = aniClips;
 
-        OBBData obb = new OBBData();
-        obb.position = transform.position;
-        obb.size = transform.localScale;
-        obb.axes = new Vector3[3]
-        {
-                transform.right,
-                transform.up,
-                transform.forward,
-        };
-        obb.rot = transform.rotation;
+        //OBBData obb = new OBBData();
+        //obb.position = transform.position;
+        //obb.size = transform.localScale;
+        //obb.axes = new Vector3[3]
+        //{
+        //        transform.right,
+        //        transform.up,
+        //        transform.forward,
+        //};
+        //obb.rot = transform.rotation;
 
-        logicAniComp.aniBox = obb;
+        //logicAniComp.aniBox = obb;
         logicAniComp.root = rootInit._entity;
         logicAniComp.isLoop = loopStatus;
     }

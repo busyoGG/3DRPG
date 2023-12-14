@@ -13,14 +13,14 @@ public class DialogManager : Singleton<DialogManager>
     {
         Dictionary<int, DialogConfigData> configs = ConfigManager.Ins().GetConfig<DialogConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.DialogConfig);
 
-        foreach (var config in configs)
+        foreach (var config in configs.Values)
         {
-            if (!_configs.ContainsKey(config.Key))
+            if (!_configs.ContainsKey(config.dialogId))
             {
-                _configs.Add(config.Key, new List<DialogConfigData>());
+                _configs.Add(config.dialogId, new List<DialogConfigData>());
             }
 
-            _configs[config.Key].Add(config.Value);
+            _configs[config.dialogId].Add(config);
         }
 
         int[] keys = _configs.Keys.ToArray();

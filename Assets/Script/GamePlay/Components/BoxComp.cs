@@ -17,6 +17,8 @@ public class BoxComp : Comp
 
     public RayData ray;
 
+    public bool isPositive;
+
     public float maxY
     {
         get
@@ -63,5 +65,6 @@ public class BoxComp : Comp
         aabb = null;
         obb = null;
         ray = null;
+        isPositive = false;
     }
 }

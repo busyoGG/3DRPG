@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEditor.AnimatedValues;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class LogicAniSystem : ECSSystem
 {
@@ -17,7 +18,7 @@ public class LogicAniSystem : ECSSystem
 
     public override ECSMatcher Filter()
     {
-        return ECSManager.Ins().AllOf(typeof(LogicAniComp), typeof(TransformComp));
+        return ECSManager.Ins().AllOf(typeof(LogicAniComp), typeof(TransformComp), typeof(BoxComp));
     }
 
     public override void OnUpdate(List<Entity> entities)
@@ -28,6 +29,7 @@ public class LogicAniSystem : ECSSystem
 
             TransformComp transform = entity.Get<TransformComp>();
             LogicAniComp logicAni = entity.Get<LogicAniComp>();
+            BoxComp box = entity.Get<BoxComp>();
 
             string curAni = AniSingleton.Ins().GetCurAni(logicAni.root.id);
             bool isForce = AniSingleton.Ins().GetForceLogic(logicAni.root.id);
@@ -45,16 +47,16 @@ public class LogicAniSystem : ECSSystem
                 logicAni.frame = 0;
             }
 
-            Play(logicAni, curAni);
+            Play(logicAni, box, curAni);
 
             //±£´æµ±Ç°transform
-            transform.position = logicAni.aniBox.position;
-            transform.rotation = logicAni.aniBox.rot;
-            transform.scale = logicAni.aniBox.size;
+            transform.position = box.obb.position;
+            transform.rotation = box.obb.rot;
+            transform.scale = box.obb.size;
         }
     }
 
-    private void Play(LogicAniComp logicAni, string curAni)
+    private void Play(LogicAniComp logicAni, BoxComp box, string curAni)
     {
         List<List<Vector3>> vec3 = logicAni.aniClips[curAni];
         //int keyframe = logicAni.frame % logicAni.aniClips[curAni][0].Count;
@@ -64,7 +66,7 @@ public class LogicAniSystem : ECSSystem
 
         TransformComp rootTransform = logicAni.root.Get<TransformComp>();
 
-        OBBData obb = logicAni.aniBox;
+        OBBData obb = box.obb;
         Vector3[] axes = obb.axes;
 
         Quaternion qua = rootTransform.rotation * Quaternion.Euler(vec3[1][keyframe]);

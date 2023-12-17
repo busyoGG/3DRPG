@@ -2,6 +2,7 @@ using FairyGUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -9,8 +10,9 @@ public class TriggerList : BaseView
 {
     GList _list;
 
-    private List<Action> _items = new List<Action>();
+    private Dictionary<int, (string, Action)> _itemsDic = new Dictionary<int, (string, Action)>();
 
+    private List<(string, Action)> _items = new List<(string, Action)>();
 
     protected override void BindItem()
     {
@@ -23,6 +25,11 @@ public class TriggerList : BaseView
     protected override void InitListener()
     {
         EventManager.AddListening(id, "ChangeItem", ChangeItem);
+    }
+
+    protected override void InitAction()
+    {
+        _list.onClickItem.Set(OnButtonClick);
     }
 
     protected override void OnShow()
@@ -39,7 +46,12 @@ public class TriggerList : BaseView
 
     private void ItemRenderer(int index, GObject obj)
     {
+        GButton button = obj.asButton;
+        GTextField content = button.GetChildAt(3).asTextField;
 
+        content.text = _items[index].Item1;
+
+        //button.onClick.Set(OnPressButton);
     }
 
     private void OnPressButton()
@@ -52,7 +64,7 @@ public class TriggerList : BaseView
             int selection = _list.selectedIndex;
             if (selection < _items.Count)
             {
-                Action action = _items[selection];
+                Action action = _items[selection].Item2;
                 _items.RemoveAt(selection);
                 RefreshList();
                 action.Invoke();
@@ -60,27 +72,40 @@ public class TriggerList : BaseView
         }
     }
 
+    private void OnButtonClick()
+    {
+        int selection = _list.selectedIndex;
+        if (selection < _items.Count)
+        {
+            Action action = _items[selection].Item2;
+            _items.RemoveAt(selection);
+            RefreshList();
+            action.Invoke();
+        }
+    }
+
     private void ChangeItem(ArrayList data)
     {
         bool isAdd = (bool)data[0];
-        Action action = (Action)data[1];
+        int id = (int)data[1];
         if (isAdd)
         {
-            _items.Add(action);
+            string target = (string)data[2];
+            Action action = (Action)data[3];
+            _itemsDic.Add(id, (target, action));
         }
         else
         {
-            if (_items.Contains(action))
-            {
-                _items.Remove(action);
-            }
+            _itemsDic.Remove(id);
+        }
+
+        _items.Clear();
+        foreach (var item in _itemsDic.Values)
+        {
+            _items.Add(item);
         }
 
         RefreshList();
-        //else
-        //{
-        //    UIManager.Ins().Show<TriggerList>(name);
-        //}
     }
 
     private void RefreshList()

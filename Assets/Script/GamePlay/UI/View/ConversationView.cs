@@ -61,7 +61,6 @@ public class ConversationView : BaseView
 
     protected override void OnHide()
     {
-        ConsoleUtils.Log("关闭对话");
         UIManager.Ins().SetFocus(false);
     }
 
@@ -182,8 +181,11 @@ public class ConversationView : BaseView
     /// <summary>
     /// 点击选项
     /// </summary>
-    private void OnSelectionClick()
+    private void OnSelectionClick(EventContext context)
     {
+        GButton button = (GButton)context.sender;
+        _listSelection.selectedIndex = _listSelection.GetChildIndex(button);
+
         if (_isAuto)
         {
             StartAuto();
@@ -236,6 +238,7 @@ public class ConversationView : BaseView
     /// </summary>
     private void RefreshSelection()
     {
+        _listSelection.numItems = _selection.Count;
         if (_curDialog.selection.Count > 0)
         {
             _listSelection.visible = true;

@@ -3,12 +3,65 @@
     "id": 0,
     "dialogId": 1,
     "stepId": 0,
+    "branchId": 0,
     "target": "NPC",
-    "content": "这是一段测试对话",
+    "content": "你好",
     "autoSpeed": 0.5,
-    "selection": [
-      "null"
+    "selection|string": [],
+    "next|int": [
+      1
+    ]
+  },
+  {
+    "id": 1,
+    "dialogId": 1,
+    "stepId": 1,
+    "branchId": 0,
+    "target": "NPC",
+    "content": "欢迎来到对话测试功能",
+    "autoSpeed": 0.5,
+    "selection|string": [
+      "分支1",
+      "分支2"
     ],
-    "next": []
+    "next|int": [
+      2,
+      3
+    ]
+  },
+  {
+    "id": 2,
+    "dialogId": 1,
+    "stepId": 2,
+    "branchId": 0,
+    "target": "NPC",
+    "content": "您选择了分支1",
+    "autoSpeed": 0.5,
+    "selection|string": [],
+    "next|int": [
+      4
+    ]
+  },
+  {
+    "id": 3,
+    "dialogId": 1,
+    "stepId": 2,
+    "branchId": 1,
+    "target": "NPC",
+    "content": "您选择了分支2",
+    "autoSpeed": 0.5,
+    "selection|string": [],
+    "next|int": []
+  },
+  {
+    "id": 4,
+    "dialogId": 1,
+    "stepId": 3,
+    "branchId": 0,
+    "target": "NPC",
+    "content": "分支1后续",
+    "autoSpeed": 0.5,
+    "selection|string": [],
+    "next|int": []
   }
 ]

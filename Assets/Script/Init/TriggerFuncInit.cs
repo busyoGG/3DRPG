@@ -2,11 +2,14 @@
 using Bean;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class TriggerFuncInit : Singleton<TriggerFuncInit>
 {
+    DialogConfigData _dialogConfig;
+
+    Entity _item;
+
     public TriggerBase GetTriggerFunc(TriggerFunction type)
     {
         TriggerBase baseClass = new TriggerBase();
@@ -14,24 +17,21 @@ public class TriggerFuncInit : Singleton<TriggerFuncInit>
         {
             case TriggerFunction.Interactive:
 
-                //int dialogId = 0;
-                DialogConfigData config = DialogManager.Ins().GetDialog(1, 0);
-
-                Action action = () =>
-                {
-                    UIManager.Ins().Show<ConversationView>("ConversationView");
-                    EventManager.TriggerEvent("start_conversation", new ArrayList() { config });
-                };
-
                 baseClass.OnTriggerEnter = (Entity self, Entity other) =>
                 {
+                    DialogComp dialog = self.Get<DialogComp>();
+
+                    int randomId = UnityEngine.Random.Range(0, dialog.randomIds.Count - 1);
+
                     UIManager.Ins().Show<TriggerList>("TriggerList");
+                    _dialogConfig = DialogManager.Ins().GetDialog(dialog.randomIds[randomId]);
 
                     EventManager.TriggerEvent("ChangeItem", new ArrayList()
                     {
                         true,
-                        action,
-                        config.target
+                        self.id,
+                        _dialogConfig.target,
+                        (Action)ShowDialog
                     });
                 };
 
@@ -42,7 +42,7 @@ public class TriggerFuncInit : Singleton<TriggerFuncInit>
                     EventManager.TriggerEvent("ChangeItem", new ArrayList()
                     {
                         false,
-                        action
+                        self.id
                     });
                 };
                 return baseClass;
@@ -61,7 +61,51 @@ public class TriggerFuncInit : Singleton<TriggerFuncInit>
                     }
                 };
                 break;
+            case TriggerFunction.Collect:
+                baseClass.OnTriggerEnter = (Entity self, Entity other) =>
+                {
+                    _item = self;
+                    UIManager.Ins().Show<TriggerList>("TriggerList");
+                    EventManager.TriggerEvent("ChangeItem", new ArrayList()
+                    {
+                        true,
+                        self.id,
+                        "测试道具0",
+                        (Action)PickUpItem
+                    });
+                };
+
+                baseClass.OnTriggerExit = (Entity self, Entity other) =>
+                {
+                    //UIManager.Ins().Hide(UIManager.Ins().Get<TriggerList>("TriggerList"));
+
+                    EventManager.TriggerEvent("ChangeItem", new ArrayList()
+                    {
+                        false,
+                        self.id
+                    });
+                };
+                break;
         }
         return baseClass;
     }
+
+    /// <summary>
+    /// 展示对话
+    /// </summary>
+    /// <param name="config"></param>
+    public void ShowDialog()
+    {
+        UIManager.Ins().Show<ConversationView>("ConversationView");
+        EventManager.TriggerEvent("start_conversation", new ArrayList() { _dialogConfig });
+    }
+
+    private void PickUpItem()
+    {
+        ConsoleUtils.Log("捡起道具", _item.id);
+        ECSManager.Ins().RemoveEntity(_item);
+        _item = null;
+        MissionManager.Ins().SetCompleteNum(2, 0, 1);
+    }
 }
+

@@ -32,12 +32,14 @@ public class Root : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        PoolManager.Ins().Init();
         TimerUtils.Init();
         ECSManager.Ins().Init();
         InputManager.Ins().Init();
         SkillManager.Ins().Init();
         DialogManager.Ins().Init();
         MissionManager.Ins().Init();
+        PropManager.Ins().Init();   
         //InputManager.Ins().AddKeyboardInputCallback(KeyCode.Space,InputStatus.Up, () =>
         //{
         //    ConsoleUtils.Log("按下了空格");

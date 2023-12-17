@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="400,120" extention="Button">
-  <controller name="button" pages="0,up,1,down" selected="0"/>
+  <controller name="button" pages="0,up,1,down" selected="1"/>
   <displayList>
     <graph id="n0_ge66" name="n0" xy="0,0" size="400,120" touchable="false" type="rect" lineSize="5" fillColor="#33333333" corner="20">
       <gearDisplay controller="button" pages="0"/>
@@ -17,7 +17,7 @@
       <relation target="" sidePair="width-width"/>
     </richtext>
     <list id="n5_j7n1" name="n5" xy="33,124" size="362,257" overflow="scroll" scrollBarFlags="128" lineGap="10" defaultItem="ui://lu13wm6nj7n1c">
-      <gearDisplay controller="button" pages="1"/>
+      <gearDisplay controller="button" pages="0"/>
       <item/>
     </list>
   </displayList>

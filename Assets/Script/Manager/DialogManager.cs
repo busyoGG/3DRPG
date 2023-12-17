@@ -7,29 +7,18 @@ using UnityEngine;
 
 public class DialogManager : Singleton<DialogManager>
 {
-    public Dictionary<int, List<DialogConfigData>> _configs = new Dictionary<int, List<DialogConfigData>>();
+    private Dictionary<int, DialogConfigData> _allConfigs;
+    public Dictionary<int, DialogConfigData> _rootConfigs = new Dictionary<int, DialogConfigData>();
 
     public void Init()
     {
-        Dictionary<int, DialogConfigData> configs = ConfigManager.Ins().GetConfig<DialogConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.DialogConfig);
+        _allConfigs = ConfigManager.Ins().GetConfig<DialogConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.DialogConfig);
 
-        foreach (var config in configs.Values)
+        foreach (var config in _allConfigs.Values)
         {
-            if (!_configs.ContainsKey(config.dialogId))
+            if (!_rootConfigs.ContainsKey(config.dialogId) && config.stepId == 0)
             {
-                _configs.Add(config.dialogId, new List<DialogConfigData>());
-            }
-
-            _configs[config.dialogId].Add(config);
-        }
-
-        int[] keys = _configs.Keys.ToArray();
-        for (int i = 0; i < keys.Length; i++)
-        {
-            var list = _configs[keys[i]];
-            for (int j = 0; j < list.Count; j++)
-            {
-                list[j].selection.Remove("null");
+                _rootConfigs.Add(config.dialogId, config);
             }
         }
     }
@@ -40,18 +29,9 @@ public class DialogManager : Singleton<DialogManager>
     /// <param name="dialogId"></param>
     /// <param name="stepId"></param>
     /// <returns></returns>
-    public DialogConfigData GetDialog(int dialogId,int stepId)
+    public DialogConfigData GetDialog(int dialogId)
     {
-        List<DialogConfigData> list;
-        _configs.TryGetValue(dialogId, out list);
-        if(list != null)
-        {
-            if(stepId < list.Count)
-            {
-                return list[stepId];
-            }
-        }
-        return null;
+        return _rootConfigs[dialogId];
     }
 
     /// <summary>
@@ -60,13 +40,13 @@ public class DialogManager : Singleton<DialogManager>
     /// <param name="cur"></param>
     /// <param name="selection"></param>
     /// <returns></returns>
-    public DialogConfigData Next(DialogConfigData cur,int selection)
+    public DialogConfigData Next(DialogConfigData cur, int selection)
     {
         if (cur.selection.Count == 0)
         {
             if (cur.next.Count > 0)
             {
-                return cur.next[0];
+                return _allConfigs[cur.next[0]];
             }
             else
             {
@@ -75,7 +55,7 @@ public class DialogManager : Singleton<DialogManager>
         }
         else
         {
-            return cur.next[selection];
+            return _allConfigs[cur.next[selection]];
         }
     }
 }

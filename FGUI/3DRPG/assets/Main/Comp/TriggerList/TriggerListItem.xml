@@ -16,5 +16,5 @@
     </graph>
     <text id="n3_ge66" name="content" xy="18,17" size="361,67" fontSize="40" vAlign="middle" autoSize="none" text="交互"/>
   </displayList>
-  <Button mode="Radio"/>
+  <Button mode="Check"/>
 </component>

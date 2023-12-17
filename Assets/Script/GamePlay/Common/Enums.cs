@@ -165,7 +165,8 @@ public enum SkillTrigger
 public enum TriggerFunction
 {
     [InspectorName("交互")] Interactive,
-    [InspectorName("攻击")] Attack
+    [InspectorName("攻击")] Attack,
+    [InspectorName("收集")] Collect
 }
 
 /// <summary>
@@ -206,4 +207,24 @@ public enum MissionFilter
     Main,
     Sub,
     Branch//这个类型一定放最后 因为该类型不参与计算，枚举数不能影响计算
+}
+
+/// <summary>
+/// buff类型
+/// </summary>
+public enum BuffType
+{
+    Damage,
+    Bonus,
+    Heal
+}
+
+/// <summary>
+/// buff类别
+/// </summary>
+public enum BuffFilter
+{
+    Directly,
+    Keep,
+    Delay
 }

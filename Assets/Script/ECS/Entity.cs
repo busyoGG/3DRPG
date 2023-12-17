@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static Unity.Burst.Intrinsics.X86.Avx;
 
@@ -215,12 +216,12 @@ public class Entity
 
     public void Clear()
     {
-        foreach(var data in _compsInEntity)
+        foreach(var data in _compsInEntity.ToList())
         {
             Remove(data.Key);
         }
 
-        foreach(var data in _compsRemoved)
+        foreach(var data in _compsRemoved.ToList())
         {
             ECSManager.Ins().RemoveComp(data.Value);
         }

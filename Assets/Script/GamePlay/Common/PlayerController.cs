@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
                 break;
             case InputKey.J:
                 UIManager.Ins().Show<MissionView>("MissionView");
-                EventManager.TriggerEvent("show_mission", new ArrayList() { MissionManager.Ins().GetNotBranchMission() });
+                EventManager.TriggerEvent("show_mission_list", new ArrayList() { MissionManager.Ins().GetNotBranchMission() });
                 break;
             case InputKey.Space:
                 if (_canJump)

@@ -27,6 +27,11 @@ public class AttackSingleton : Singleton<AttackSingleton>
         }
     }
 
+    public Dictionary<int, PropData> GetPropData()
+    {
+        return _propDatas;
+    }
+
     public PropData GetPropData(int id)
     {
         PropData prop;

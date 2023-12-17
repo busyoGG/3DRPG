@@ -11,6 +11,10 @@
     <component id="j7n1b" name="MissionView.xml" path="/" exported="true"/>
     <component id="j7n1c" name="NormalButton.xml" path="/Comp/Mission/" exported="true"/>
     <component id="j7n1d" name="BranchButton.xml" path="/Comp/Mission/" exported="true"/>
+    <component id="oqlje" name="RequestItem.xml" path="/Comp/Mission/"/>
+    <component id="oqljf" name="AwardButton.xml" path="/Comp/Mission/"/>
+    <component id="oqljg" name="MissionDetail.xml" path="/Comp/Mission/"/>
+    <component id="oqljh" name="CloseButton.xml" path="/Comp/Common/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

@@ -98,6 +98,13 @@ public class UIManager : Singleton<UIManager>
         //ªÒ»°ui
         //T ui = Get<T>(name);
         T ui;
+
+        ui = Get<T>(name);
+        if(ui != null)
+        {
+            return ui;
+        }
+
         BaseView baseView;
         _uiViewPool.TryGetValue(name, out baseView);
 

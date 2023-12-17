@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1920,1080">
   <displayList>
-    <graph id="n0_j7n1" name="n0" xy="0,0" size="1920,1080" touchable="false" type="rect" lineSize="5" fillColor="#33333333" corner="20">
+    <graph id="n0_j7n1" name="n0" xy="0,0" size="1920,1080" touchable="false" type="rect" lineSize="5" fillColor="#99333333" corner="20">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
     <graph id="n1_j7n1" name="n1" xy="426,14" size="10,1050" touchable="false" type="rect" lineSize="0" fillColor="#cc000000" corner="5">
       <relation target="" sidePair="width-width,height-height"/>
     </graph>
     <list id="n2_j7n1" name="n2" xy="16,22" size="400,1037" selectionMode="none" overflow="scroll" lineGap="20" defaultItem="ui://lu13wm6nj7n1c"/>
+    <component id="n3_oqlj" name="n3" src="oqljg" fileName="Comp/Mission/MissionDetail.xml" xy="506,31" visible="false"/>
+    <text id="n7_oqlj" name="n7" xy="975,462" size="443,133" fontSize="100" autoSize="none" text="暂无任务"/>
+    <component id="n8_oqlj" name="n8" src="oqljh" fileName="Comp/Common/CloseButton.xml" xy="1818,16"/>
   </displayList>
 </component>

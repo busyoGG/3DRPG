@@ -62,5 +62,36 @@
     "branch|int": [],
     "branchBelong": 1,
     "isPreUnlock": true
+  },
+  {
+    "id": 2,
+    "missionId": 1,
+    "stepId": 1,
+    "title": "测试新手任务第二步",
+    "desc": "这是一个测试用的新手任务描述2",
+    "type|MissionType": 0,
+    "filter|MissionFilter": 0,
+    "target": [
+      0
+    ],
+    "targetDescribe": [
+      "任务目标描述"
+    ],
+    "targetNum|int|int": {
+      "0": 2
+    },
+    "completeNum|int|int": {},
+    "award": [
+      1
+    ],
+    "awardNum": [
+      1
+    ],
+    "isPreCount": false,
+    "next": null,
+    "unlockMission|int": [],
+    "branch|int": [],
+    "branchBelong": 1,
+    "isPreUnlock": false
   }
 ]

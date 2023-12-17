@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1320,1022">
+  <displayList>
+    <text id="n3_oqlj" name="n3" xy="0,0" size="1312,82" fontSize="50" autoSize="none" text="任务名"/>
+    <list id="n4_oqlj" name="n4" xy="0,99" size="1316,300" overflow="scroll" lineGap="10" defaultItem="ui://lu13wm6noqlje">
+      <relation target="n3_oqlj" sidePair="top-bottom"/>
+      <item/>
+    </list>
+    <richtext id="n5_oqlj" name="n5" xy="1,418" size="1318,444" fontSize="40" autoSize="none" text="任务内容">
+      <relation target="n4_oqlj" sidePair="top-bottom"/>
+    </richtext>
+    <list id="n6_oqlj" name="n6" xy="1,892" size="1319,130" layout="row" overflow="scroll" scroll="horizontal" margin="10,10,10,10" colGap="20" defaultItem="ui://lu13wm6noqljf" autoItemSize="false">
+      <item/>
+    </list>
+  </displayList>
+</component>

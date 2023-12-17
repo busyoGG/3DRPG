@@ -153,8 +153,8 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel++;
             compInit._targetName = EditorGUILayout.TextField("对话角色", compInit._targetName);
             EditorGUILayout.PropertyField(_randomId, new GUIContent("随机对话数据"));
-            compInit._maxDelta = EditorGUILayout.FloatField("最长间隔", compInit._maxDelta);
-            compInit._minDelta = EditorGUILayout.FloatField("最短间隔", compInit._minDelta);
+            //compInit._maxDelta = EditorGUILayout.FloatField("最长间隔", compInit._maxDelta);
+            //compInit._minDelta = EditorGUILayout.FloatField("最短间隔", compInit._minDelta);
             EditorGUI.indentLevel--;
         }
 

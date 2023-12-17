@@ -76,9 +76,9 @@ public class CompInit : MonoBehaviour
     //-----dialog-start-----
     public List<int> _randomId;
 
-    public float _maxDelta;
+    //public float _maxDelta;
 
-    public float _minDelta;
+    //public float _minDelta;
 
     public string _targetName;
     //-----dialog-end-----
@@ -234,7 +234,7 @@ public class CompInit : MonoBehaviour
             PropData prop = AttackSingleton.Ins().GetPropData(entity.id);
             prop.hp = _hp;
             prop.mp = _mp;
-            prop.sheild = _shield;
+            //prop.sheild = _shield;
             //prop.group = _group;
             //prop.hp = _hp;
             //prop.mp = _mp;
@@ -295,6 +295,13 @@ public class CompInit : MonoBehaviour
         {
             WeaponComp weapon = entity.Add<WeaponComp>();
             weapon.entityId = _logicAniRoot.GetComponent<CompInit>()._entity.id;
+        }
+
+        if (_isDialog)
+        {
+            DialogComp dialog = entity.Add<DialogComp>();
+            dialog.name = _targetName;
+            dialog.randomIds = _randomId;
         }
     }
 
@@ -390,98 +397,7 @@ public class CompInit : MonoBehaviour
 
         logicAniComp.aniClips = aniClips;
 
-        //OBBData obb = new OBBData();
-        //obb.position = transform.position;
-        //obb.size = transform.localScale;
-        //obb.axes = new Vector3[3]
-        //{
-        //        transform.right,
-        //        transform.up,
-        //        transform.forward,
-        //};
-        //obb.rot = transform.rotation;
-
-        //logicAniComp.aniBox = obb;
         logicAniComp.root = rootInit._entity;
         logicAniComp.isLoop = loopStatus;
     }
-
-    //private void InitChild(Transform parent, ref List<(string, OBBData)> aniBox, SerializableDictionary<string, AnimationData> aniDic,
-    //    ref Dictionary<string, Dictionary<string, List<List<Vector3>>>> aniData, List<Trans> parentVec3, int depth = 1)
-    //{
-    //    for (int i = 0; i < parent.childCount; i++)
-    //    {
-    //        Transform child = parent.GetChild(i);
-    //        string path = depth == 1 ? child.name : parent.name + "/" + child.name;
-    //        //保存包围盒
-    //        OBBData obb = new OBBData();
-    //        obb.position = child.position;
-    //        obb.size = child.localScale;
-    //        obb.axes = new Vector3[3]
-    //        {
-    //            child.right,
-    //            child.up,
-    //            child.forward,
-    //        };
-    //        obb.rot = child.rotation;
-
-    //        aniBox.Add((path, obb));
-
-    //        List<Trans> vec3 = null;
-    //        //计算坐标
-    //        foreach (var data in aniDic)
-    //        {
-    //            string aniName = data.Key;
-    //            AnimationData ani = data.Value;
-
-    //            Dictionary<string, List<List<Vector3>>> childDic;
-    //            aniData.TryGetValue(aniName, out childDic);
-
-    //            if (childDic == null)
-    //            {
-    //                childDic = new Dictionary<string, List<List<Vector3>>>();
-    //                aniData.Add(aniName, childDic);
-    //            }
-
-    //            if (!childDic.ContainsKey(path))
-    //            {
-    //                ani.transforms.TryGetValue(path, out vec3);
-
-    //                if (vec3 != null)
-    //                {
-    //                    List<List<Vector3>> res = new List<List<Vector3>>();
-    //                    for (int j = 0; j < vec3.Count; j++)
-    //                    {
-    //                        res.Add(new List<Vector3>());
-    //                        //for (int k = 0; k < vec3[j].Count; k++)
-    //                        //{
-    //                        //    int index = k;
-    //                        //    if (k > parentVec3[j].Count - 1)
-    //                        //    {
-    //                        //        index = parentVec3[j].Count - 1;
-    //                        //    }
-    //                        //    res[j][k] = parentVec3[j][index] + vec3[j][k];
-    //                        //}
-    //                        if (parentVec3.Count > 0)
-    //                        {
-    //                            res[j].Add(parentVec3[j].position + vec3[j].position);
-    //                            res[j].Add(parentVec3[j].euler + vec3[j].euler);
-    //                            res[j].Add(parentVec3[j].scale + vec3[j].scale);
-    //                        }
-    //                        else
-    //                        {
-    //                            res[j].Add(vec3[j].position);
-    //                            res[j].Add(vec3[j].euler);
-    //                            res[j].Add(vec3[j].scale);
-    //                        }
-
-    //                    }
-    //                    childDic.Add(path, res);
-    //                }
-    //            }
-    //        }
-
-    //        InitChild(child, ref aniBox, aniDic, ref aniData, vec3, depth + 1);
-    //    }
-    //}
 }

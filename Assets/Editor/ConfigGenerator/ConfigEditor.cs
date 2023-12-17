@@ -265,21 +265,36 @@ public class ConfigEditor : EditorWindow
                         //最终类型非对象，该属性为纯数组
                         string strList = "";
                         string strListEnd = "";
+
+                        string[] propSplit = propName.Split('|');
+                        string strType = "";
+
                         for (int i = 0; i < loop; i++)
                         {
                             strList += "List<";
                             strListEnd += ">";
                             if (i == loop - 1)
                             {
-                                strList += GeneratorUtils.GetType(tempType) + strListEnd;
+                                
+                                if (propSplit.Length > 1)
+                                {
+                                    //strList += propSplit[1] + strListEnd;
+                                    strType = propSplit[1];
+                                }
+                                else
+                                {
+                                    strType = GeneratorUtils.GetType(tempType);
+                                }
+                                strList += strType + strListEnd;
+                                //strList += GeneratorUtils.GetType(tempType) + strListEnd;
                             }
                         }
                         Debug.Log("list数组 ==== " + strList);
 
                         //cls += "\t\tpublic " + strList + " " + propName + ";\r\n";
-                        listClass.Add("\t\tpublic " + strList + " " + propName + ";\r\n");
+                        listClass.Add("\t\tpublic " + strList + " " + propSplit[0] + ";\r\n");
 
-                        string strConstructorChild = "\t\t\t" + propName + " = new List<" + GeneratorUtils.GetType(tempType) + ">();\r\n";
+                        string strConstructorChild = "\t\t\t" + propSplit[0] + " = new List<" + strType + ">();\r\n";
                         strConstructor += strConstructorChild;
                     }
                 }

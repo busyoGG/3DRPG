@@ -32,7 +32,7 @@ public class ConfigManager:Singleton<ConfigManager>
         }
         else
         {
-            string config = FileUtils.ReadFile(Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
+            string config = FileUtils.ReadFile(Application.streamingAssetsPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
 
             config = Regex.Replace(config, "(\\|).*(?=\")", "");
 

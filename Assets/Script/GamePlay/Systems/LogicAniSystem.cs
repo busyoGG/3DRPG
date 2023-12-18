@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using UnityEditor.AnimatedValues;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class LogicAniSystem : ECSSystem
 {

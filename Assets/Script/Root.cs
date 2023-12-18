@@ -67,6 +67,7 @@ public class Root : MonoBehaviour
         //UIManager.Ins().Show<>("Root");
 
         //UIManager.Ins().AddUI<TriggerButtonUI>("TriggerButton", UI.transform);
+#if UNITY_EDITOR
         EditorApplication.playModeStateChanged += (PlayModeStateChange state) =>
         {
             //ConsoleUtils.Log("运行状态改变",state);
@@ -75,7 +76,7 @@ public class Root : MonoBehaviour
                 TimerUtils.Stop();
             }
         };
-
+#endif
 
         Test();
     }

@@ -56,13 +56,13 @@ public class PropManager : Singleton<PropManager>
         }
     }
 
-    public int GetDamage(int id,int damage)
+    public int GetDamage(int id)
     {
         PropData data = GetPropData(id);
 
         int res = 0;
         //TODO ÉËº¦¼ÆËã¹«Ê½
-        res = damage;
+        res = data.attack;
         return res;
     }
 }

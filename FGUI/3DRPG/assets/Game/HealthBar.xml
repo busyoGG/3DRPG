@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="300,50" pivot="0.5,0.5" anchor="true">
+  <displayList>
+    <graph id="n0_rhxu" name="n0" xy="0,0" size="300,50" type="rect" lineSize="0" fillColor="#99000000" corner="50"/>
+    <component id="n2_e921" name="n2" src="e9211" fileName="HealthBar/HpComp.xml" xy="4,4"/>
+  </displayList>
+</component>

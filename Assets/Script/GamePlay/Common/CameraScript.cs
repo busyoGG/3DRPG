@@ -80,6 +80,16 @@ public class CameraScript : MonoBehaviour
         return Quaternion.Euler(rot);
     }
 
+    public Vector3 GetPosition()
+    {
+        return transform.position;
+    }
+
+    public Transform GetCamera()
+    {
+        return transform;
+    }
+
     /// <summary>
     /// ¸üĞÂÎ»ÖÃ
     /// </summary>

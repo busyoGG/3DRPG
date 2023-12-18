@@ -6,5 +6,6 @@ public class RenderWorld : ECSWorld
     {
         Add(new SkillSystem());
         Add(new RenderSystem());
+        Add(new HealthBarSystem());
     }
 }

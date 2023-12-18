@@ -6,7 +6,7 @@ using UnityEngine;
 [CompRegister(typeof(HealthBarComp))]
 public class HealthBarComp : Comp
 {
-    public GComponent ui;
+    public HealthBar ui;
     public override void Reset()
     {
         ui = null;

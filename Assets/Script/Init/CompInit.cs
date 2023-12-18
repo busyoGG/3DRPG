@@ -22,6 +22,7 @@ public class CompInit : MonoBehaviour
     public bool _isAttack = false;
     public bool _isWeapon = false;
     public bool _isRole = false;
+    public bool _isHealthBar = false;
 
     //-----move-start-----
     /// <summary>
@@ -91,6 +92,7 @@ public class CompInit : MonoBehaviour
     public int _hp;
     public int _mp;
     public int _shield;
+    public int _attack;
     //-----role-end-----
 
     private Entity _entity;
@@ -234,6 +236,9 @@ public class CompInit : MonoBehaviour
             PropData prop = AttackSingleton.Ins().GetPropData(entity.id);
             prop.hp = _hp;
             prop.mp = _mp;
+            prop.curHp = _hp;
+            prop.curMp = _mp;
+            prop.attack = _attack;
             //prop.sheild = _shield;
             //prop.group = _group;
             //prop.hp = _hp;
@@ -302,6 +307,11 @@ public class CompInit : MonoBehaviour
             DialogComp dialog = entity.Add<DialogComp>();
             dialog.name = _targetName;
             dialog.randomIds = _randomId;
+        }
+
+        if(_isHealthBar)
+        {
+            entity.Add<HealthBarComp>();
         }
     }
 

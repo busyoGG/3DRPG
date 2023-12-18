@@ -5,6 +5,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using LitJson;
 using Bean;
+using UnityEngine.Rendering.Universal;
 
 public class Root : MonoBehaviour
 {
@@ -32,6 +33,8 @@ public class Root : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        Global.Cam = camera;
+
         PoolManager.Ins().Init();
         TimerUtils.Init();
         ECSManager.Ins().Init();

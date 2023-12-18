@@ -60,8 +60,11 @@ public class CompInitEditor : Editor
             compInit._hp = EditorGUILayout.IntField("生命值", compInit._hp);
             compInit._mp = EditorGUILayout.IntField("法力值", compInit._mp);
             compInit._shield = EditorGUILayout.IntField("护盾值", compInit._shield);
+            compInit._attack = EditorGUILayout.IntField("攻击力", compInit._attack);
             EditorGUI.indentLevel--;
         }
+
+        compInit._isHealthBar = EditorGUILayout.Toggle("是否显示血条",compInit._isHealthBar);
 
         compInit._isSkill = EditorGUILayout.Toggle("是否有技能", compInit._isSkill);
         if (compInit._isSkill)

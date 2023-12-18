@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="291,42" mask="n2_e921">
+  <displayList>
+    <graph id="n3_e921" name="n3" xy="0,0" size="291,42" type="rect" lineSize="0" fillColor="#ff00cc33" corner="21"/>
+    <graph id="n2_e921" name="n2" xy="0,0" pivot="1,0" size="291,42" type="rect" lineSize="0" fillColor="#ff00cc33" corner="21"/>
+  </displayList>
+</component>

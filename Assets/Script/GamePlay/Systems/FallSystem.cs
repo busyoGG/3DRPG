@@ -36,14 +36,14 @@ public class FallSystem : ECSSystem
                 {
                     move.nextPostition.y += -move.gravity * move.jumpScale * move.fallTime * _dt;
                 }
-
-                if (move.nextPostition.y < 1)
-                {
-                    move.isJump = false;
-                    move.fallTime = 0f;
-                    move.nextPostition.y = 1;
-                }
                 //transform.position = move.nextPostition;
+            }
+
+            if (move.nextPostition.y < Global.MinGround)
+            {
+                move.isJump = false;
+                move.fallTime = 0f;
+                move.nextPostition.y = Global.MinGround;
             }
         }
     }

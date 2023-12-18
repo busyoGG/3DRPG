@@ -15,13 +15,51 @@ public class BaseUIComp
 
     public string name { get; set; }
 
-    public virtual void OnAwake()
+    /// <summary>
+    /// 只在创建的时候执行
+    /// </summary>
+    public void OnAwake()
     {
+        BindItem();
+        InitListener();
+        InitAction();
+    }
 
+    public void Show()
+    {
+        main.visible = true;
+        OnShow();
+    }
+
+    public void Hide()
+    {
+        main.visible = false;
+        OnHide();
+    }
+
+    public bool GetVisible()
+    {
+        return main.visible;
     }
 
     public virtual void Reset()
     {
 
     }
+
+    /// <summary>
+    /// 每次展示的时候执行
+    /// </summary>
+    protected virtual void OnShow() { }
+
+    /// <summary>
+    /// 每次隐藏的时候执行
+    /// </summary>
+    protected virtual void OnHide() { }
+
+    protected virtual void InitAction() { }
+
+    protected virtual void BindItem() { }
+
+    protected virtual void InitListener() { }
 }

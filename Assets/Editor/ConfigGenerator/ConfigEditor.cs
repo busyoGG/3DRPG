@@ -38,7 +38,7 @@ public class ConfigEditor : EditorWindow
 
     private void OnEnable()
     {
-        _jsonUrl = Application.streamingAssetsPath + "/Configs/";
+        _jsonUrl = Application.dataPath + "/Configs/";
         _outputUrl = Application.dataPath + "/Script/Loader/Config/";
         //获取所有配置
         GetAllConfigs();

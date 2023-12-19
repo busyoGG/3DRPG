@@ -112,7 +112,7 @@ public class TimeWheel
 
                 foreach (var task in millisecond.ToList())
                 {
-                    if (DateTime.Now >= task.dateTime)
+                    if (task != null && DateTime.Now >= task.dateTime)
                     {
                         millisecond.Remove(task);
 

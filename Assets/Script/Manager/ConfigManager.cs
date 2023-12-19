@@ -6,7 +6,7 @@ using LitJson;
 using Bean;
 using System.Text.RegularExpressions;
 
-public class ConfigManager:Singleton<ConfigManager>
+public class ConfigManager : Singleton<ConfigManager>
 {
 
     private Dictionary<string, object> _configs = new Dictionary<string, object>();
@@ -32,8 +32,11 @@ public class ConfigManager:Singleton<ConfigManager>
         }
         else
         {
+#if UNITY_EDITOR
+            string config = FileUtils.ReadFile(Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
+#else
             string config = FileUtils.ReadFile(Application.streamingAssetsPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
-
+#endif
             config = Regex.Replace(config, "(\\|).*(?=\")", "");
 
             Debug.Log("配置读取路径 - " + Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");

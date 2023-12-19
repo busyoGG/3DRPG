@@ -212,6 +212,8 @@ public class UIManager : Singleton<UIManager>
 
             panel.CreateUI();
 
+            obj.transform.position = parent.position;
+
             ui.panel = panel;
             ui.main = panel.ui;
             ui.target = obj.transform;

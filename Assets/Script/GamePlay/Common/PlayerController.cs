@@ -29,8 +29,6 @@ public class PlayerController : MonoBehaviour
 
     SkillComp _skill;
 
-    public CameraScript cam { get; set; }
-
     void Start()
     {
         _move = player.Get<MoveComp>();
@@ -118,7 +116,7 @@ public class PlayerController : MonoBehaviour
         {
             Vector3 res = _forward.normalized;
             //InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
-            _move.forward = cam.GetRotation(false) * res;
+            _move.forward = Global.Cam.GetRotation(false) * res;
             _move.forward.y = 0;
             _move.inputForward = res;
         }
@@ -145,7 +143,7 @@ public class PlayerController : MonoBehaviour
         }
         Vector3 res = _forward.normalized;
         //InputSingleton.Ins().SetForward(player.id, res.x, res.z, cam.GetRotation(false));
-        _move.forward = cam.GetRotation(false) * res;
+        _move.forward = Global.Cam.GetRotation(false) * res;
         _move.forward.y = 0;
         _move.inputForward = res;
     }

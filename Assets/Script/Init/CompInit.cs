@@ -226,7 +226,6 @@ public class CompInit : MonoBehaviour
         if (_isMainCharacter)
         {
             PlayerController player = this.AddComponent<PlayerController>();
-            player.cam = _cameraScript;
             player.player = entity;
         }
 

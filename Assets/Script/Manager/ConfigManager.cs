@@ -35,7 +35,7 @@ public class ConfigManager : Singleton<ConfigManager>
 #if UNITY_EDITOR
             string config = FileUtils.ReadFile(Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
 #else
-            string config = FileUtils.ReadFile(Application.streamingAssetsPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
+            string config = FileUtils.ReadFile("Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
 #endif
             config = Regex.Replace(config, "(\\|).*(?=\")", "");
 

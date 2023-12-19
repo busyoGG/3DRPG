@@ -17,7 +17,9 @@ public class TimerTask
 
     public TimerType type;
 
-    public TimerTask(int id, int interval, Action action, int loopTimes, int delay,TimerType type)
+    public bool isRemove;
+
+    public TimerTask(int id, int interval, Action action, int loopTimes, int delay, TimerType type)
     {
         this.id = id;
         this.interval = interval;
@@ -25,6 +27,7 @@ public class TimerTask
         this.loopTimes = loopTimes;
         this.delay = delay;
         this.type = type;
+        isRemove = false;
         dateTime = DateTime.Now.AddMilliseconds(interval + delay);
     }
 
@@ -32,7 +35,7 @@ public class TimerTask
     {
         if (type == TimerType.Sync)
         {
-            TimerUtils.AddAction(action);
+            TimerUtils.AddAction(id, action);
         }
         else
         {
@@ -50,6 +53,10 @@ public class TimerTask
 
     public bool CheckLoop()
     {
+        if (isRemove)
+        {
+            return false;
+        }
         if (loopTimes < 0)
         {
             dateTime = DateTime.Now.AddMilliseconds(interval);

@@ -55,10 +55,10 @@ public class Launcher : MonoBehaviour
         switch (_initIndex++)
         {
             case 0:
-                LoadRes();
+                InitUtils();
                 break;
             case 1:
-                InitUtils();
+                LoadRes();
                 break;
             case 2:
                 InitManager();
@@ -77,20 +77,53 @@ public class Launcher : MonoBehaviour
 
     private void LoadRes()
     {
-        InitNext();
+        string[] configs = FileUtils.GetFolderFiles("Configs");
+        string[] mats = FileUtils.GetFolderFiles("Mats");
+        string[] animator = FileUtils.GetFolderFiles("Animator");
+        string[] scriptableObj = FileUtils.GetFolderFiles("ScriptableObject");
+        string[] animation = FileUtils.GetFolderFiles("Animation");
+
+        int total = configs.Length + mats.Length + animator.Length + scriptableObj.Length + animation.Length;
+
+        ConsoleUtils.Log(configs, mats, animator, scriptableObj, animation, "一共", total);
+
+        ResourceUtils.Load<TextAsset>(configs);
+        ResourceUtils.Load<Material>(mats);
+        ResourceUtils.Load<Animator>(animator);
+        ResourceUtils.Load<ScriptableObject>(scriptableObj);
+        ResourceUtils.Load<Animation>(animation);
+
+        ConsoleUtils.Log("测试获取", ResourceUtils.GetRes<TextAsset>(configs[0]));
+
+        TimerChain timer = null;
+
+        Action CheckEnd = () =>
+        {
+            int num = ResourceUtils.GetCacheNum();
+            ConsoleUtils.Log("加载进度", num / (float)total);
+            if (num >= total)
+            {
+                ConsoleUtils.Log("资源加载完成");
+                TimerUtils.Clear(timer);
+                InitNext();
+            }
+        };
+
+        timer = TimerUtils.Loop(100, CheckEnd);
+
     }
 
     private void InitGlobals()
     {
-        bool finded = false;
         TimerChain timer = null;
 
-        Action Finding = () => {
+        Action Finding = () =>
+        {
 
             Global.Cam = Camera.main.GetComponent<CameraScript>();
             Global.Controller = transform.GetChild(1).Find("Player").GetComponent<PlayerController>();
 
-            if(Global.Cam != null && Global.Controller != null)
+            if (Global.Cam != null && Global.Controller != null)
             {
                 TimerUtils.Clear(timer);
                 InitNext();

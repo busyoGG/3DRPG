@@ -53,11 +53,14 @@ public class LogicAniSystem : ECSSystem
 
     private void Play(LogicAniComp logicAni, BoxComp box, string curAni)
     {
-        List<List<Vector3>> vec3 = logicAni.aniClips[curAni];
+        if(curAni == null) return;
+
+        List<List<Vector3>> vec3;
+        logicAni.aniClips.TryGetValue(curAni, out vec3);
         //int keyframe = logicAni.frame % logicAni.aniClips[curAni][0].Count;
         int keyframe = logicAni.frame;
 
-        if (keyframe > logicAni.aniClips[curAni][0].Count - 1) return;
+        if (vec3 == null || keyframe > logicAni.aniClips[curAni][0].Count - 1) return;
 
         TransformComp rootTransform = logicAni.root.Get<TransformComp>();
 

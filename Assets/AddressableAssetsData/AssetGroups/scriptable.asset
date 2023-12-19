@@ -18,7 +18,7 @@ MonoBehaviour:
   m_GUID: c64ed98752c3f564f83c2fefe1fcbe26
   m_SerializeEntries:
   - m_GUID: 237efdb83efa96d43a9419f18bfead73
-    m_Address: Scriptable
+    m_Address: ScriptableObject
     m_ReadOnly: 0
     m_SerializedLabels:
     - scriptable

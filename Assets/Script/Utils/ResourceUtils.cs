@@ -15,6 +15,28 @@ public class ResourceUtils
     private static Dictionary<string, SceneInstance> _scene = new Dictionary<string, SceneInstance>();
 
     /// <summary>
+    /// 获取加载资源数量
+    /// </summary>
+    /// <returns></returns>
+    public static int GetCacheNum()
+    {
+        return _res.Count;
+    }
+
+    /// <summary>
+    /// 通过路径数组加载资源
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="urls"></param>
+    public static void Load<T>(string[] urls) where T : class
+    {
+        foreach (string url in urls)
+        {
+            Load<T>(url);
+        }
+    }
+
+    /// <summary>
     /// 加载资源
     /// </summary>
     /// <typeparam name="T"></typeparam>

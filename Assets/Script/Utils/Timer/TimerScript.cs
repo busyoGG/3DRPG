@@ -4,19 +4,27 @@ using UnityEngine;
 
 public class TimerScript : MonoBehaviour
 {
-    private Queue<Action> _actions = new Queue<Action>();
+    private Queue<(int, Action)> _actions = new Queue<(int, Action)>();
+
+    private Dictionary<int, bool> _register = new Dictionary<int, bool>();
 
     void Update()
     {
         while (_actions.Count > 0)
         {
-            Run(_actions.Dequeue());
+            (int, Action) item = _actions.Dequeue();
+            Run(item.Item2);
+            _register.Remove(item.Item1);
         }
     }
 
-    public void AddAction(Action action)
+    public void AddAction(int id, Action action)
     {
-        _actions.Enqueue(action);
+        if (!_register.ContainsKey(id))
+        {
+            _actions.Enqueue((id, action));
+            _register.Add(id, true);
+        }
     }
 
     private void Run(Action action)

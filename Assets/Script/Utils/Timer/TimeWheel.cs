@@ -130,7 +130,7 @@ public class TimeWheel
         }
     }
 
-    public int SetInterval(int id, int interval, Action action, int delay, int loopTimes)
+    public TimerTask SetInterval(int id, int interval, Action action, int delay, int loopTimes, bool isRemove = false)
     {
         if (id == -1)
         {
@@ -138,10 +138,10 @@ public class TimeWheel
         }
         TimerTask task = new TimerTask(id, interval, action, loopTimes, delay, TimerType.Sync);
         AddTask(task);
-        return task.id;
+        return task;
     }
 
-    public int SetTimeout(int id, int delay, Action action)
+    public TimerTask SetTimeout(int id, int delay, Action action)
     {
         if (id == -1)
         {
@@ -149,10 +149,10 @@ public class TimeWheel
         }
         TimerTask task = new TimerTask(id, 0, action, 1, delay, TimerType.Sync);
         AddTask(task);
-        return task.id;
+        return task;
     }
 
-    public int SetIntervalAsync(int id, int interval, Action action, int delay, int loopTimes)
+    public TimerTask SetIntervalAsync(int id, int interval, Action action, int delay, int loopTimes)
     {
         if (id == -1)
         {
@@ -160,10 +160,10 @@ public class TimeWheel
         }
         TimerTask task = new TimerTask(id, interval, action, loopTimes, delay, TimerType.Async);
         AddTask(task);
-        return task.id;
+        return task;
     }
 
-    public int SetTimeoutAsync(int id, int delay, Action action)
+    public TimerTask SetTimeoutAsync(int id, int delay, Action action)
     {
         if (id == -1)
         {
@@ -171,7 +171,7 @@ public class TimeWheel
         }
         TimerTask task = new TimerTask(id, 0, action, 1, delay, TimerType.Async);
         AddTask(task);
-        return task.id;
+        return task;
     }
 
     public void ClearInterval(int id, bool isAll = false)
@@ -222,7 +222,6 @@ public class TimeWheel
     private void AddTask(TimerTask task)
     {
         _month[task.dateTime.Month].AddLast(task);
-        ConsoleUtils.Log("添加任务", task.id);
     }
 
     private bool RemoveTask(Dictionary<int, LinkedList<TimerTask>> wheel, int id, bool isAll = false)
@@ -237,7 +236,7 @@ public class TimeWheel
                 {
                     if (task.id == id)
                     {
-                        ConsoleUtils.Log("清除任务", task.id);
+                        //ConsoleUtils.Log("清除任务", task.id, task.isRemove);
                         tasks.Remove(task);
                         res = true;
                     }

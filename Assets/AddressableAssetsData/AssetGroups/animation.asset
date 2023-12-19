@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: ani
+  m_Name: animation
   m_EditorClassIdentifier: 
-  m_GroupName: ani
+  m_GroupName: animation
   m_Data:
     m_SerializedData: []
-  m_GUID: 98d706c03883f7e4491a0f14d6f0bd60
+  m_GUID: 0a96b0dd35a90be43b4fe024d1999cda
   m_SerializeEntries:
-  - m_GUID: a4abf3ae7b15e33499d2e17e1fce6593
-    m_Address: Ani
+  - m_GUID: c91c38f2793d24b44b1a3b87729c6f62
+    m_Address: Animation
     m_ReadOnly: 0
     m_SerializedLabels:
-    - ani
+    - animation
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5f652d2e9c083fe438189d07de97002a, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: c3e3880aea718e84981aebe55e81cf69, type: 2}
-    - {fileID: 11400000, guid: bae6d519bd2af384ba7c4724982567d6, type: 2}
+    - {fileID: 11400000, guid: 9e6bb8c88641fa744a1e9c9202eea5ab, type: 2}
+    - {fileID: 11400000, guid: e4e0e820ae5e1ed49a984b8b85b05bf6, type: 2}

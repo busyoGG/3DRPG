@@ -90,8 +90,8 @@ public class TimerUtils
         return chain;
     }
 
-    public static void AddAction(Action action)
+    public static void AddAction(int id, Action action)
     {
-        _timerScript.AddAction(action);
+        _timerScript.AddAction(id, action);
     }
 }

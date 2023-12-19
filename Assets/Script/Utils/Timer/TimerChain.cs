@@ -4,7 +4,9 @@ public class TimerChain
 {
     private TimeWheel _timeWheel;
 
-    private int _id = -1;
+    //private int _id = -1;
+
+    private TimerTask _task;
 
     private int _delay = 0;
 
@@ -15,40 +17,42 @@ public class TimerChain
 
     public TimerChain Once(int delay, Action action)
     {
-        _id = _timeWheel.SetTimeout(_id, delay + _delay, action);
+        _task = _timeWheel.SetTimeout(_task != null ? _task.id : -1, delay + _delay, action);
         _delay = delay;
         return this;
     }
 
     public TimerChain Loop(int interval, Action action, int delay = 0, int loopTimes = -1)
     {
-        _id = _timeWheel.SetInterval(_id, interval, action, delay + _delay, loopTimes);
+        _task = _timeWheel.SetInterval(_task != null ? _task != null ? _task.id : -1 : -1, interval, action, delay + _delay, loopTimes); ;
         _delay = interval * loopTimes + delay;
         return this;
     }
 
     public TimerChain OnceAsync(int delay, Action action)
     {
-        _id = _timeWheel.SetTimeoutAsync(_id, delay + _delay, action);
+        _task = _timeWheel.SetTimeoutAsync(_task != null ? _task.id : -1, delay + _delay, action);
         _delay = delay;
         return this;
     }
 
     public TimerChain LoopAsync(int interval, Action action, int delay = 0, int loopTimes = -1)
     {
-        _id = _timeWheel.SetIntervalAsync(_id, interval, action, delay + _delay, loopTimes);
+        _task = _timeWheel.SetIntervalAsync(_task != null ? _task.id : -1, interval, action, delay + _delay, loopTimes);
         _delay = interval * loopTimes + delay;
         return this;
     }
 
     public TimerChain Clear()
     {
-        _timeWheel.ClearInterval(_id, true);
+        _task.isRemove = true;
+        _timeWheel.ClearInterval(_task != null ? _task.id : -1, true);
+        //ConsoleUtils.Log("Çå³ýÈÎÎñChain", _task.id);
         return this;
     }
 
     public int GetId()
     {
-        return _id;
+        return _task != null ? _task.id : -1;
     }
 }

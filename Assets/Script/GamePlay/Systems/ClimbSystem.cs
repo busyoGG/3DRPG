@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class ClimbSystem : ECSSystem
 {
@@ -28,7 +29,7 @@ public class ClimbSystem : ECSSystem
 
                 float sameSide = Vector3.Dot(collider.totalOffset.normalized, move.forward);
 
-                if (sameSide < -0.9f)
+                if (sameSide < -0.5f)
                 {
                     climb.enterTime += _dt;
                     if (climb.enterTime >= climb.targetTime)
@@ -44,46 +45,48 @@ public class ClimbSystem : ECSSystem
             }
             else
             {
-                //if (climb.firstClimb)
-                //{
-                //    climb.firstClimb = false;
+                Vector3 dir = (box.position - collider.closestCenter).normalized;
 
-                //    Vector3 originForward = move.forward;
-
-                //    Quaternion climbRot = Quaternion.identity;
-                //    climbRot.SetLookRotation(-move.climbOffset);
-
-                //    originForward = climbRot * originForward;
-
-                //    move.nextPostition += move.climbOffsetQua * originForward * move.speed;
-                //}
-                //else
-                //{
-                //    //if (move.isSlope || move.isTop)
-                //    //{
-                //    //    move.isClimb = false;
-                //    //}
-
-                //}
-
-
-                Vector3 dir = box.position - collider.closestCenter;
-
-                Quaternion qua = Quaternion.identity;
-                qua.SetLookRotation(-dir);
-
-                move.fixedForward = qua * move.curForwad;
-
-                move.up.SetFromToRotation(Vector3.up, dir);
-
-                move.fixedForward = move.up * move.fixedForward;
-
-                //攀爬到顶并且没有ClimbUpComp的情况下添加组件
-                if (box.maxY - collider.closestTop.y > 0.1f && !entity.Has<ClimbUpComp>())
+                if(dir.y < -0.7f)
                 {
-                    entity.Add<ClimbUpComp>();
+                    //头顶有障碍物
+                    move.isClimb = false;
                 }
+                else
+                {
+                    Quaternion qua = Quaternion.identity;
+                    qua.SetLookRotation(-dir);
 
+                    move.fixedForward = qua * move.curForwad;
+                    move.fixedForward.y = 0;
+
+                    move.up.SetFromToRotation(Vector3.up, dir);
+
+                    move.fixedForward = move.up * move.fixedForward;
+
+                    bool isClimbTop = entity.Has<ClimbUpComp>();
+
+                    if (box.maxY - collider.closestTop.y > 0.1f && !isClimbTop)
+                    {
+                        //攀爬到顶并且没有ClimbUpComp的情况下添加组件
+                        entity.Add<ClimbUpComp>();
+                    }
+                    else if (!isClimbTop)
+                    {
+                        //吸附
+                        Vector3 offset = Vector3.zero;
+                        switch (box.type)
+                        {
+                            case CollisionType.AABB:
+                                offset = collider.closestCenter + dir * box.aabb.halfSize.z - move.nextPostition;
+                                break;
+                            case CollisionType.OBB:
+                                offset = collider.closestCenter + dir * box.obb.halfSize.z - move.nextPostition;
+                                break;
+                        }
+                        move.nextPostition += offset;
+                    }
+                }
             }
 
             if (move.nextPostition.y < 1)
@@ -97,4 +100,34 @@ public class ClimbSystem : ECSSystem
             //}
         }
     }
+
+    public override void OnDrawGizmos(List<Entity> entities)
+    {
+        foreach (Entity entity in entities)
+        {
+            BoxComp box = entity.Get<BoxComp>();
+            CollideComp collider = entity.Get<CollideComp>();
+            MoveComp move = entity.Get<MoveComp>();
+
+            Vector3 dir = box.position - collider.closestCenter;
+
+            Gizmos.color = Color.black;
+            Gizmos.DrawLine(box.position, box.position + dir * 10);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(box.position, box.position + move.fixedForward * 10);
+            Gizmos.color = Color.white;
+        }
+    }
+
+    //private Vector3 GetClosestPoint(Vector3 position, BoxComp box)
+    //{
+    //    switch (box.type)
+    //    {
+    //        case CollisionType.AABB:
+    //            return CollideUtils.GetClosestPoint(position, box.aabb);
+    //        case CollisionType.OBB:
+    //            return CollideUtils.GetClosestPoint(position, box.obb);
+    //    }
+    //    return Vector3.zero;
+    //}
 }

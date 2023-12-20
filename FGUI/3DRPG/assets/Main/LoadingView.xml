@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="1920,1080">
+  <displayList>
+    <graph id="n0_zmzg" name="n0" xy="0,0" size="1920,1080" type="rect" fillColor="#ff333333"/>
+    <component id="n1_zmzg" name="n1" src="zmzgj" fileName="Comp/Loading/LoadingProgress.xml" xy="460,551"/>
+    <richtext id="n2_zmzg" name="n2" xy="703,416" size="548,92" fontSize="60" color="#ffffff" align="center" vAlign="middle" autoSize="none" text="加载中"/>
+  </displayList>
+</component>

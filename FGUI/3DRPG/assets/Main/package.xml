@@ -15,6 +15,8 @@
     <component id="oqljf" name="AwardButton.xml" path="/Comp/Mission/"/>
     <component id="oqljg" name="MissionDetail.xml" path="/Comp/Mission/"/>
     <component id="oqljh" name="CloseButton.xml" path="/Comp/Common/"/>
+    <component id="zmzgi" name="LoadingView.xml" path="/" exported="true"/>
+    <component id="zmzgj" name="LoadingProgress.xml" path="/Comp/Loading/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

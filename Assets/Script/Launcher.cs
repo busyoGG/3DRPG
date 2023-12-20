@@ -14,6 +14,12 @@ public class Launcher : MonoBehaviour
 
     private RenderWorld _renderWorld;
 
+    private LoadingView _loadingView;
+
+    private float _totalProgress = 5;
+
+    private float _completed = 0;
+
     void Start()
     {
         InitNext();
@@ -71,12 +77,18 @@ public class Launcher : MonoBehaviour
                 break;
             case 5:
                 _inited = true;
+                UIManager.Ins().Hide(_loadingView);
                 break;
         }
     }
 
     private void LoadRes()
     {
+        float last = _completed;
+        float completed = 0;
+        //展示加载页
+        _loadingView = UIManager.Ins().Show<LoadingView>("LoadingView");
+        //加载资源
         string[] configs = FileUtils.GetFolderFiles("Configs");
         string[] mats = FileUtils.GetFolderFiles("Mats");
         string[] animator = FileUtils.GetFolderFiles("Animator");
@@ -100,7 +112,11 @@ public class Launcher : MonoBehaviour
         Action CheckEnd = () =>
         {
             int num = ResourceUtils.GetCacheNum();
-            ConsoleUtils.Log("加载进度", num / (float)total);
+            //ConsoleUtils.Log("加载进度", num / (float)total);
+
+            completed = num / (float)total;
+            SetCompleted(last + completed);
+
             if (num >= total)
             {
                 ConsoleUtils.Log("资源加载完成");
@@ -126,6 +142,8 @@ public class Launcher : MonoBehaviour
             if (Global.Cam != null && Global.Controller != null)
             {
                 TimerUtils.Clear(timer);
+
+                SetCompleted(_completed + 1);
                 InitNext();
             }
         };
@@ -136,6 +154,8 @@ public class Launcher : MonoBehaviour
     private void InitUtils()
     {
         TimerUtils.Init();
+        UIManager.Ins().Init();
+
         InitNext();
     }
 
@@ -149,7 +169,8 @@ public class Launcher : MonoBehaviour
         MissionManager.Ins().Init();
         PropManager.Ins().Init();
         MapManager.Ins().Init();
-        UIManager.Ins().Init();
+
+        SetCompleted(_completed + 1);
         InitNext();
     }
 
@@ -172,6 +193,13 @@ public class Launcher : MonoBehaviour
             }
         };
 #endif
+        SetCompleted(_completed + 1);
         InitNext();
+    }
+
+    private void SetCompleted(float completed)
+    {
+        _completed = completed;
+        _loadingView.SetProgress(completed / _totalProgress);
     }
 }

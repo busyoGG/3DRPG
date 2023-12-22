@@ -11,10 +11,21 @@ public class SkillManager : Singleton<SkillManager>
     /// </summary>
     private Dictionary<int, SkillConfigData> _skills = new Dictionary<int, SkillConfigData>();
 
+    private Dictionary<int, SkillConfigData> _allSkills = new Dictionary<int, SkillConfigData>();
+
     public void Init()
     {
         //读配置表初始化
-        _skills = ConfigManager.Ins().GetConfig<SkillConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.SkillConfig);
+        _allSkills = ConfigManager.Ins().GetConfig<SkillConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.SkillConfig);
+
+        foreach (var skill in _allSkills)
+        {
+            if (skill.Value.stepId == 0)
+            {
+                _skills.Add(skill.Value.skillId, skill.Value);
+            }
+        }
+
         ConsoleUtils.Log("技能", _skills);
     }
 
@@ -33,10 +44,10 @@ public class SkillManager : Singleton<SkillManager>
     /// <returns></returns>
     public SkillConfigData NextSkill(SkillConfigData skill, InputKey key)
     {
-        for(int i = 0; i < skill.next.Count; i++)
+        for (int i = 0; i < skill.next.Count; i++)
         {
-            SkillConfigData next = skill.next[i];
-            if(key == next.key)
+            SkillConfigData next = _allSkills[skill.next[i]];
+            if (key == next.key)
             {
                 return next;
             }

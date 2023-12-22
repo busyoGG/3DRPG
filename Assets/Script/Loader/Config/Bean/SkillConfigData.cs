@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 namespace Bean{
 	public class SkillConfigData: ConfigBaseData, ICloneable{
+		public int skillId;
 		public string name;
 		public InputKey key;
+		public int stepId;
 		public double skillTime;
 		public double outOfTime;
 		public int holdingTime;
@@ -13,14 +15,16 @@ namespace Bean{
 		public int defaultForceTimes;
 		public int forceResetTime;
 		public string ani;
-		public List<SkillConfigData> next;
+		public List<int> next;
 		public bool attackEnable;
 		public SkillConfigData(){
-			next = new List<SkillConfigData>();
+			next = new List<int>();
 		}
 		public SkillConfigData(SkillConfigData obj){
+			skillId = obj.skillId;
 			name = obj.name;
 			key = obj.key;
+			stepId = obj.stepId;
 			skillTime = obj.skillTime;
 			outOfTime = obj.outOfTime;
 			holdingTime = obj.holdingTime;

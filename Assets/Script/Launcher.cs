@@ -58,6 +58,7 @@ public class Launcher : MonoBehaviour
 
     private void InitNext()
     {
+        ConsoleUtils.Log("µ±«∞≤Ω÷Ë",_initIndex);
         switch (_initIndex++)
         {
             case 0:

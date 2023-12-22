@@ -1501,6 +1501,8 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: d8cd9a0ede55dfe4aa0bf73c952d1d0a, type: 2}
     - Key: Attack1
       Value: {fileID: 11400000, guid: ca655ea7e89fc574b85f75effc6b48eb, type: 2}
+    - Key: Attack2
+      Value: {fileID: 11400000, guid: 70c36e4a9c8b38247a8d9d54e6418ca0, type: 2}
   _logicAniRoot: {fileID: 0}
   _triggerFunc: 0000000002000000
   _isTriggerPositive: 1

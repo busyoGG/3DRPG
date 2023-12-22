@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CompInit : MonoBehaviour
 {
@@ -43,10 +45,17 @@ public class CompInit : MonoBehaviour
     public float _jumpScale = 1f;
     //-----move-end-----
 
-    //-----collide-start-----
+    //-----box-start-----
     public CollisionType _boxType = CollisionType.AABB;
-    //public bool _isStatic = true;
-    //-----collide-end-----
+    /// <summary>
+    /// 是否自定义包围盒
+    /// </summary>
+    public bool _isCustomBox = false;
+
+    public Vector3 _boxOffset = Vector3.zero;
+
+    public Vector3 _boxSize = Vector3.one;
+    //-----box-end-----
 
     //-----qtree-start-----
     public bool _isCustomAABB = false;
@@ -174,7 +183,7 @@ public class CompInit : MonoBehaviour
             trigger.isPositive = _isTriggerPositive;
         }
 
-        if(_isTrigger || _isCollide)
+        if (_isTrigger || _isCollide)
         {
             BoxComp box = entity.Add<BoxComp>();
             box.type = _boxType;
@@ -182,15 +191,31 @@ public class CompInit : MonoBehaviour
             {
                 case CollisionType.AABB:
                     AABBData aabb = new AABBData();
-                    aabb.position = bound.center;
-                    aabb.size = bound.size;
+                    if (_isCustomBox)
+                    {
+                        aabb.position = bound.center + _boxOffset;
+                        aabb.size = _boxSize;
+                    }
+                    else
+                    {
+                        aabb.position = bound.center;
+                        aabb.size = bound.size;
+                    }
                     box.aabb = aabb;
                     box.position = aabb.position;
                     break;
                 case CollisionType.OBB:
                     OBBData obb = new OBBData();
-                    obb.position = transform.position;
-                    obb.size = transform.localScale;
+                    if (_isCustomBox)
+                    {
+                        obb.position = transform.position + _boxOffset;
+                        obb.size = _boxSize;
+                    }
+                    else
+                    {
+                        obb.position = transform.position;
+                        obb.size = transform.localScale;
+                    }
                     obb.axes = new Vector3[3]
                     {
                         transform.right,
@@ -308,7 +333,7 @@ public class CompInit : MonoBehaviour
             dialog.randomIds = _randomId;
         }
 
-        if(_isHealthBar)
+        if (_isHealthBar)
         {
             entity.Add<HealthBarComp>();
         }
@@ -316,6 +341,8 @@ public class CompInit : MonoBehaviour
 
     private void InitLogicAni(GameObject root, LogicAniComp logicAniComp)
     {
+        Vector3 vecMax = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+
         CompInit rootInit = root.GetComponent<CompInit>();
 
         SerializableDictionary<string, AnimationData> logicAni = rootInit._logicAni;
@@ -347,7 +374,7 @@ public class CompInit : MonoBehaviour
         }
 
         Dictionary<string, List<List<Vector3>>> aniClips = new Dictionary<string, List<List<Vector3>>>();
-        Dictionary<string,bool> loopStatus = new Dictionary<string,bool>();
+        Dictionary<string, bool> loopStatus = new Dictionary<string, bool>();
 
         foreach (var data in logicAni)
         {
@@ -374,7 +401,6 @@ public class CompInit : MonoBehaviour
                 {
                     if (trans == null)
                     {
-
                         for (int j = 0; j < aniClip.transforms[aniClip.transforms.Keys.ToList()[0]].Count; j++)
                         {
                             resPos.Add(Vector3.zero);
@@ -386,9 +412,9 @@ public class CompInit : MonoBehaviour
                     {
                         for (int j = 0; j < trans.Count; j++)
                         {
-                            resPos.Add(trans[j].position);
-                            resEuler.Add(trans[j].euler);
-                            resScale.Add(trans[j].scale);
+                            resPos.Add(trans[j].position == vecMax ? transform.localPosition : trans[j].position);
+                            resEuler.Add(trans[j].euler == vecMax ? transform.localEulerAngles : trans[j].euler);
+                            resScale.Add(trans[j].scale == vecMax ? transform.localScale : trans[j].scale);
                         }
                     }
                 }
@@ -396,9 +422,9 @@ public class CompInit : MonoBehaviour
                 {
                     for (int j = 0; j < trans.Count; j++)
                     {
-                        resPos[j] += trans[j].position;
-                        resEuler[j] += trans[j].euler;
-                        resScale[j] = Vector3.Scale(trans[j].scale, resScale[j]);
+                        resPos[j] += trans[j].position == vecMax ? transform.localPosition : trans[j].position;
+                        resEuler[j] += trans[j].euler == vecMax ? transform.localEulerAngles : trans[j].euler;
+                        resScale[j] = Vector3.Scale(trans[j].scale == vecMax ? transform.localScale : trans[j].scale, resScale[j]);
                     }
                 }
             }
@@ -408,5 +434,32 @@ public class CompInit : MonoBehaviour
 
         logicAniComp.root = rootInit._entity;
         logicAniComp.isLoop = loopStatus;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        if (gameObject.activeInHierarchy && _isCustomBox)
+        {
+            Gizmos.color = Color.red;
+            Vector3 finalPos = transform.position + _boxOffset;
+            switch (_boxType)
+            {
+                case CollisionType.AABB:
+                    Gizmos.DrawWireCube(finalPos, _boxSize);
+                    break;
+                case CollisionType.OBB:
+                    Matrix4x4 defMat = Gizmos.matrix;
+
+                    Matrix4x4 mat = Matrix4x4.TRS(finalPos, transform.rotation, Vector3.one);
+                    Gizmos.matrix = mat;
+
+                    Gizmos.DrawWireCube(Vector3.zero, _boxSize);
+
+                    Gizmos.matrix = defMat;
+
+                    break;
+            }
+            Gizmos.color = Color.white;
+        }
     }
 }

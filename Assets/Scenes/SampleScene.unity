@@ -280,6 +280,9 @@ MonoBehaviour:
   _gravity: 0
   _jumpScale: 1
   _boxType: 1
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
@@ -503,6 +506,9 @@ MonoBehaviour:
   _gravity: 0
   _jumpScale: 1
   _boxType: 2
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
@@ -920,6 +926,9 @@ MonoBehaviour:
   _gravity: 0
   _jumpScale: 1
   _boxType: 1
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
@@ -1163,6 +1172,9 @@ MonoBehaviour:
   _gravity: 9.8
   _jumpScale: 1
   _boxType: 2
+  _isCustomBox: 1
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 0.3, y: 0.3, z: 2}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
@@ -1487,6 +1499,9 @@ MonoBehaviour:
   _gravity: 9.8
   _jumpScale: 2
   _boxType: 1
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 1
   _aabbSize: {x: 2, y: 2, z: 2}
   _cameraScript: {fileID: 963194229}
@@ -1607,6 +1622,9 @@ MonoBehaviour:
   _gravity: 9.8
   _jumpScale: 1
   _boxType: 1
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
@@ -1778,6 +1796,9 @@ MonoBehaviour:
   _gravity: 0
   _jumpScale: 1
   _boxType: 2
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}
@@ -1919,6 +1940,9 @@ MonoBehaviour:
   _gravity: 0
   _jumpScale: 1
   _boxType: 1
+  _isCustomBox: 0
+  _boxOffset: {x: 0, y: 0, z: 0}
+  _boxSize: {x: 1, y: 1, z: 1}
   _isCustomAABB: 0
   _aabbSize: {x: 1, y: 1, z: 1}
   _cameraScript: {fileID: 0}

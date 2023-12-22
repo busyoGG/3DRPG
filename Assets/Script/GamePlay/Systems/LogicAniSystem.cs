@@ -42,18 +42,13 @@ public class LogicAniSystem : ECSSystem
                 logicAni.frame = 0;
             }
 
-            Play(logicAni, box, curAni);
-
-            //保存当前transform
-            transform.position = box.obb.position;
-            transform.rotation = box.obb.rot;
-            transform.scale = box.obb.size;
+            Play(logicAni, box, curAni, transform);
         }
     }
 
-    private void Play(LogicAniComp logicAni, BoxComp box, string curAni)
+    private void Play(LogicAniComp logicAni, BoxComp box, string curAni,TransformComp transform)
     {
-        if(curAni == null) return;
+        if (curAni == null) return;
 
         List<List<Vector3>> vec3;
         logicAni.aniClips.TryGetValue(curAni, out vec3);
@@ -88,6 +83,11 @@ public class LogicAniSystem : ECSSystem
                 logicAni.frame = 0;
             }
         }
+
+        //保存当前transform
+        transform.position = box.obb.position;
+        transform.rotation = box.obb.rot;
+        transform.scale = box.obb.size;
     }
 
     public override void OnDrawGizmos(List<Entity> entities)
@@ -96,18 +96,25 @@ public class LogicAniSystem : ECSSystem
         {
             //LogicAniComp logicAni = entity.Get<LogicAniComp>();
             TransformComp transform = entity.Get<TransformComp>();
+            BoxComp box = entity.Get<BoxComp>();
 
             Gizmos.color = Color.blue;
 
-            Matrix4x4 matrix = Gizmos.matrix;
-            Matrix4x4 matrixDef = matrix;
+            switch (box.type)
+            {
+                case CollisionType.AABB:
+                    Gizmos.DrawWireCube(box.aabb.position, box.aabb.size);
+                    break;
+                case CollisionType.OBB:
+                    Matrix4x4 matrixDef = Gizmos.matrix;
+                    Matrix4x4 matrix = Matrix4x4.TRS(box.position, transform.rotation, Vector3.one);
+                    Gizmos.matrix = matrix;
+                    Gizmos.DrawWireCube(Vector3.zero, box.obb.size);
+                    Gizmos.matrix = matrixDef;
+                    break;
+            }
 
-            matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
-
-            Gizmos.matrix = matrix;
-            Gizmos.DrawWireCube(Vector3.zero, transform.scale);
-
-            Gizmos.matrix = matrixDef;
+            Gizmos.color = Color.white;
         }
     }
 }

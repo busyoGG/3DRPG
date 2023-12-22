@@ -54,7 +54,7 @@ public class CompInitEditor : Editor
         }
 
         compInit._isRole = EditorGUILayout.Toggle("是否角色", compInit._isRole);
-        if(compInit._isRole)
+        if (compInit._isRole)
         {
             EditorGUI.indentLevel++;
             compInit._hp = EditorGUILayout.IntField("生命值", compInit._hp);
@@ -64,7 +64,7 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel--;
         }
 
-        compInit._isHealthBar = EditorGUILayout.Toggle("是否显示血条",compInit._isHealthBar);
+        compInit._isHealthBar = EditorGUILayout.Toggle("是否显示血条", compInit._isHealthBar);
 
         compInit._isSkill = EditorGUILayout.Toggle("是否有技能", compInit._isSkill);
         if (compInit._isSkill)
@@ -120,9 +120,17 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel--;
         }
 
-        if(compInit._isCollide || compInit._isTrigger)
+        if (compInit._isCollide || compInit._isTrigger)
         {
             EditorGUILayout.PropertyField(_boxType, new GUIContent("碰撞类型"));
+            compInit._isCustomBox = EditorGUILayout.Toggle("是否自定义包围盒", compInit._isCustomBox);
+            if (compInit._isCustomBox)
+            {
+                EditorGUI.indentLevel++;
+                compInit._boxOffset = EditorGUILayout.Vector3Field("偏移坐标", compInit._boxOffset);
+                compInit._boxSize = EditorGUILayout.Vector3Field("包围盒大小", compInit._boxSize);
+                EditorGUI.indentLevel--;
+            }
             compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发", compInit._isTriggerPositive);
         }
 
@@ -167,7 +175,7 @@ public class CompInitEditor : Editor
         if (compInit._isAttack || compInit._isRole)
         {
             EditorGUI.indentLevel++;
-            compInit._group = EditorGUILayout.IntField("组别",compInit._group);
+            compInit._group = EditorGUILayout.IntField("组别", compInit._group);
             EditorGUI.indentLevel--;
         }
 

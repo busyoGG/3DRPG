@@ -8,6 +8,8 @@ public class ConvertAnimationDataEditor : EditorWindow
 {
     private static EditorWindow window;
 
+    private float _frame = 20;
+
     [MenuItem("PreUtils/ConverAnimationData")]
     static void Execute()
     {
@@ -35,6 +37,8 @@ public class ConvertAnimationDataEditor : EditorWindow
             animAsset = EditorGUILayout.ObjectField(animAsset, typeof(AnimationData), false) as AnimationData;
         }
 
+        _frame = EditorGUILayout.FloatField("²ÉÑùÖ¡ÂÊ", _frame);
+
         if (GUILayout.Button("Save"))
         {
             Save();
@@ -44,10 +48,11 @@ public class ConvertAnimationDataEditor : EditorWindow
 
     private void Save()
     {
+        Vector3 vecMax = new Vector3(float.MaxValue,float.MaxValue, float.MaxValue);
         var path = AssetDatabase.GetAssetPath(animAsset);
         var asset = AssetDatabase.LoadAssetAtPath<AnimationData>(path);
 
-        asset.frameDelta = 1f / 20f;
+        asset.frameDelta = 1f / _frame;
         asset.frameCount = Mathf.CeilToInt(clip.length / asset.frameDelta) + 1;
         asset.isLoop = clip.isLooping;
         //asset.positions = new SerializableDictionary<string, List<Vector3>>();
@@ -62,15 +67,16 @@ public class ConvertAnimationDataEditor : EditorWindow
         asset.transforms = new SerializableDictionary<string, List<Trans>>();
         foreach (var binding in AnimationUtility.GetCurveBindings(clip))
         {
+            string propName = binding.propertyName;
             if (!asset.transforms.ContainsKey(binding.path))
             {
                 List<Trans> transList = new List<Trans>();
                 for (int i = 0; i < asset.frameCount; ++i)
                 {
                     Trans trans = new Trans();
-                    trans.position = Vector3.zero;
-                    trans.euler = Vector3.zero;
-                    trans.scale = Vector3.one;
+                    trans.position = vecMax;
+                    trans.euler = vecMax;
+                    trans.scale = vecMax;
                     transList.Add(trans);
                 }
                 asset.transforms.Add(binding.path, transList);
@@ -78,10 +84,8 @@ public class ConvertAnimationDataEditor : EditorWindow
 
             AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
 
-            string propName = binding.propertyName;
-
             float timer = 0;
-            float maxTime = clip.length;
+            //float maxTime = clip.length;
             int index = 0;
 
             while (index < asset.frameCount - 1)

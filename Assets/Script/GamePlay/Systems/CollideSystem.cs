@@ -29,6 +29,7 @@ public class CollideSystem : ECSSystem
 
             LinkedList<(int, Entity)> intersectObjs = IntersectSingleton.Ins().GetIntersectObjs(entity.id);
 
+            bool isCollide = false;
             //重置斜面旋转
             move.up = Quaternion.identity;
             //重置排斥
@@ -45,6 +46,7 @@ public class CollideSystem : ECSSystem
                 CollideComp collideComp = other.Get<CollideComp>();
                 if (collideComp != null)
                 {
+                    isCollide = true;
                     BoxComp boxComp = other.Get<BoxComp>();
 
                     float len;
@@ -89,7 +91,7 @@ public class CollideSystem : ECSSystem
             }
 
             float over = Mathf.Abs(Vector3.Dot(Vector3.down, move.fixedForward));
-            if(over > 0 && over < 0.8 || box.minY >= collider.closestTop.y)
+            if(isCollide && (over > 0 && over < 0.8 || box.minY >= collider.closestTop.y))
             {
                 move.isOnPlane = true;
             }

@@ -16,9 +16,9 @@ public class DialogManager : Singleton<DialogManager>
 
         foreach (var config in _allConfigs.Values)
         {
-            if (!_rootConfigs.ContainsKey(config.dialogId) && config.stepId == 0)
+            if (!_rootConfigs.ContainsKey(config.mainId) && config.stepId == 0)
             {
-                _rootConfigs.Add(config.dialogId, config);
+                _rootConfigs.Add(config.mainId, config);
             }
         }
     }
@@ -26,12 +26,12 @@ public class DialogManager : Singleton<DialogManager>
     /// <summary>
     /// 获取对话
     /// </summary>
-    /// <param name="dialogId"></param>
+    /// <param name="mainId"></param>
     /// <param name="stepId"></param>
     /// <returns></returns>
-    public DialogConfigData GetDialog(int dialogId)
+    public DialogConfigData GetDialog(int mainId)
     {
-        return _rootConfigs[dialogId];
+        return _rootConfigs[mainId];
     }
 
     /// <summary>

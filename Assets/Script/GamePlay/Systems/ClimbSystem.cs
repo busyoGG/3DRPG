@@ -47,7 +47,7 @@ public class ClimbSystem : ECSSystem
             {
                 Vector3 dir = (box.position - collider.closestCenter).normalized;
 
-                if(dir.y < -0.7f)
+                if (dir.y < -0.7f)
                 {
                     //头顶有障碍物
                     move.isClimb = false;
@@ -70,6 +70,7 @@ public class ClimbSystem : ECSSystem
                     {
                         //攀爬到顶并且没有ClimbUpComp的情况下添加组件
                         entity.Add<ClimbUpComp>();
+                        move.climbJump = 0;
                     }
                     else if (!isClimbTop)
                     {
@@ -84,15 +85,35 @@ public class ClimbSystem : ECSSystem
                                 offset = collider.closestCenter + dir * box.obb.halfSize.z - move.nextPostition;
                                 break;
                         }
+                        //跳跃
+                        if (move.climbJump > 0)
+                        {
+                            if(move.climbJump == 3)
+                            {
+                                climb.fixedForward = climb.jumpForward;
+                                if (climb.fixedForward == Vector3.zero)
+                                {
+                                    climb.fixedForward.z = 1;
+                                }
+                                climb.fixedForward = qua * climb.fixedForward;
+                                climb.fixedForward = move.up * climb.fixedForward;
+                            }
+                            move.climbJump--;
+                            move.nextPostition += climb.fixedForward * move.speed * 2;
+                        }
+
                         move.nextPostition += offset;
                     }
                 }
+
+
+                if (move.nextPostition.y <= 1 && move.fixedForward.y < 0)
+                {
+                    move.isClimb = false;
+                    move.climbJump = 0;
+                }
             }
 
-            if (move.nextPostition.y < 1)
-            {
-                move.isClimb = false;
-            }
 
             //if (move.isClimbTop == 1 && !entity.Has<ClimbUpComp>())
             //{
@@ -119,15 +140,4 @@ public class ClimbSystem : ECSSystem
         }
     }
 
-    //private Vector3 GetClosestPoint(Vector3 position, BoxComp box)
-    //{
-    //    switch (box.type)
-    //    {
-    //        case CollisionType.AABB:
-    //            return CollideUtils.GetClosestPoint(position, box.aabb);
-    //        case CollisionType.OBB:
-    //            return CollideUtils.GetClosestPoint(position, box.obb);
-    //    }
-    //    return Vector3.zero;
-    //}
 }

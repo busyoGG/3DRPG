@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "dialogId": 1,
+    "mainId": 1,
     "stepId": 0,
     "branchId": 0,
     "target": "NPC",
@@ -14,7 +14,7 @@
   },
   {
     "id": 1,
-    "dialogId": 1,
+    "mainId": 1,
     "stepId": 1,
     "branchId": 0,
     "target": "NPC",
@@ -31,7 +31,7 @@
   },
   {
     "id": 2,
-    "dialogId": 1,
+    "mainId": 1,
     "stepId": 2,
     "branchId": 0,
     "target": "NPC",
@@ -44,7 +44,7 @@
   },
   {
     "id": 3,
-    "dialogId": 1,
+    "mainId": 1,
     "stepId": 2,
     "branchId": 1,
     "target": "NPC",
@@ -55,7 +55,7 @@
   },
   {
     "id": 4,
-    "dialogId": 1,
+    "mainId": 1,
     "stepId": 3,
     "branchId": 0,
     "target": "NPC",

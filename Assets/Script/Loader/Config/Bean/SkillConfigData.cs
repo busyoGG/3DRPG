@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 namespace Bean{
 	public class SkillConfigData: ConfigBaseData, ICloneable{
-		public int skillId;
+		public int mainId;
 		public string name;
 		public InputKey key;
 		public int stepId;
@@ -21,7 +21,7 @@ namespace Bean{
 			next = new List<int>();
 		}
 		public SkillConfigData(SkillConfigData obj){
-			skillId = obj.skillId;
+			mainId = obj.mainId;
 			name = obj.name;
 			key = obj.key;
 			stepId = obj.stepId;

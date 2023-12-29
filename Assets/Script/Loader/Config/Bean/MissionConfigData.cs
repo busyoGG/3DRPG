@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 namespace Bean{
 	public class MissionConfigData: ConfigBaseData, ICloneable{
-		public int missionId;
+		public int mainId;
 		public int stepId;
 		public string title;
 		public string desc;
@@ -15,7 +15,7 @@ namespace Bean{
 		public List<int> award;
 		public List<int> awardNum;
 		public bool isPreCount;
-		public MissionConfigData next;
+		public int next;
 		public List<int> unlockMission;
 		public List<int> branch;
 		public int branchBelong;
@@ -31,7 +31,7 @@ namespace Bean{
 			branch = new List<int>();
 		}
 		public MissionConfigData(MissionConfigData obj){
-			missionId = obj.missionId;
+			mainId = obj.mainId;
 			stepId = obj.stepId;
 			title = obj.title;
 			desc = obj.desc;

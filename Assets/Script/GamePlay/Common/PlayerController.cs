@@ -17,6 +17,10 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     private Vector3 _forward = Vector3.zero;
     /// <summary>
+    /// 攀爬跳跃方向
+    /// </summary>
+    private Vector3 _climbJumpForward = Vector3.zero;
+    /// <summary>
     /// 控制类型
     /// </summary>
     private ControlType _controlType = ControlType.KeyboardOnly;
@@ -29,11 +33,14 @@ public class PlayerController : MonoBehaviour
 
     SkillComp _skill;
 
+    ClimbComp _climb;
+
     void Start()
     {
         _move = player.Get<MoveComp>();
         _jump = player.Get<JumpComp>();
         _skill = player.Get<SkillComp>();
+        _climb = player.Get<ClimbComp>();
         InitInput();
     }
 
@@ -57,10 +64,15 @@ public class PlayerController : MonoBehaviour
                 if (status == InputStatus.Hold || status == InputStatus.Down)
                 {
                     SetForward(key);
+                    if (status == InputStatus.Hold)
+                    {
+                        SetClimbJumpForward(key);
+                    }
                 }
                 else
                 {
                     ResetForward(key);
+                    ResetClimbJumpForward(key);
                 }
 
                 //技能监听
@@ -103,6 +115,7 @@ public class PlayerController : MonoBehaviour
                 {
                     _jump.startJump = true;
                 }
+                _move.climbJump = 3;
                 return;
             case InputKey.X:
                 _move.isClimb = false;
@@ -146,6 +159,48 @@ public class PlayerController : MonoBehaviour
         _move.forward = Global.Cam.GetRotation(false) * res;
         _move.forward.y = 0;
         _move.inputForward = res;
+    }
+
+    private void SetClimbJumpForward(InputKey key)
+    {
+        switch (key)
+        {
+            case InputKey.A:
+                _climbJumpForward.x = -1f;
+                break;
+            case InputKey.D:
+                _climbJumpForward.x = 1f;
+                break;
+            case InputKey.W:
+                _climbJumpForward.z = 1f;
+                break;
+            case InputKey.S:
+                _climbJumpForward.z = -1f;
+                break;
+            default:
+                return;
+        }
+        Vector3 res = _climbJumpForward.normalized;
+        _climb.jumpForward = res;
+    }
+
+    private void ResetClimbJumpForward(InputKey key)
+    {
+        switch (key)
+        {
+            case InputKey.A:
+            case InputKey.D:
+                _climbJumpForward.x = 0f;
+                break;
+            case InputKey.W:
+            case InputKey.S:
+                _climbJumpForward.z = 0f;
+                break;
+            default:
+                return;
+        }
+        Vector3 res = _climbJumpForward.normalized;
+        _climb.jumpForward = res;
     }
 
     public void SetControlType(ControlType type)

@@ -12,6 +12,7 @@ public class ClimbUpSystem : ECSSystem
     {
         foreach (var entity in entities)
         {
+            ConsoleUtils.Log("¿ªÊ¼ÅÀµ½¶¥");
             ClimbUpComp climbUp = entity.Get<ClimbUpComp>();
             MoveComp move = entity.Get<MoveComp>();
             BoxComp box = entity.Get<BoxComp>();

@@ -24,14 +24,14 @@ public class OffsetSystem : ECSSystem
         }
     }
 
-    public override void OnDrawGizmos(List<Entity> entities)
-    {
-        foreach (Entity entity in entities)
-        {
-            CollideComp colider = entity.Get<CollideComp>();
-            BoxComp box = entity.Get<BoxComp>();
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(box.position, box.position + colider.totalOffset * 100);
-        }
-    }
+    //public override void OnDrawGizmos(List<Entity> entities)
+    //{
+    //    foreach (Entity entity in entities)
+    //    {
+    //        CollideComp colider = entity.Get<CollideComp>();
+    //        BoxComp box = entity.Get<BoxComp>();
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawLine(box.position, box.position + colider.totalOffset * 100);
+    //    }
+    //}
 }

@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "skillId": 1,
+    "mainId": 1,
     "name": "普通攻击1段",
     "key|InputKey": -1,
     "stepId": 0,
@@ -21,7 +21,7 @@
   },
   {
     "id": 1,
-    "skillId": 1,
+    "mainId": 1,
     "name": "普通攻击2段",
     "key|InputKey": -1,
     "stepId": 1,

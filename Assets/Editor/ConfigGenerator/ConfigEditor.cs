@@ -89,11 +89,19 @@ public class ConfigEditor : EditorWindow
                 for (int i = 0, len = fileInfo.Value.Count; i < len; i++)
                 {
                     FileInfo file = fileInfo.Value[i];
+                    string fileName = file.Name.Replace(".json", "");
                     //EditorGUILayout.LabelField("测试");
-                    GUIContent name = new GUIContent((i + 1) + "." + file.Name.Replace(".json", ""));
+                    GUIContent name = new GUIContent((i + 1) + "." + fileName);
                     if (GUILayout.Button(name, configButtonStyle))
                     {
                         //EditorWindow.GetWindow(typeof(ConfigDetailEditor));
+                        string folder = string.Empty;
+
+                        if (fileInfo.Key != "Configs")
+                        {
+                            folder = fileInfo.Key;
+                        }
+                        ConfigViewer.Show(folder, fileName);
                     }
                     GUILayout.Space(2);
                 }
@@ -275,7 +283,7 @@ public class ConfigEditor : EditorWindow
                             strListEnd += ">";
                             if (i == loop - 1)
                             {
-                                
+
                                 if (propSplit.Length > 1)
                                 {
                                     //strList += propSplit[1] + strListEnd;

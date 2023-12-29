@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "missionId": 1,
+    "mainId": 1,
     "stepId": 0,
     "title": "测试新手任务",
     "desc": "这是一个测试用的新手任务描述",
@@ -24,7 +24,7 @@
       1
     ],
     "isPreCount": false,
-    "next": null,
+    "next|int": 2,
     "unlockMission|int": [],
     "branch|int": [
       2
@@ -34,7 +34,7 @@
   },
   {
     "id": 1,
-    "missionId": 2,
+    "mainId": 2,
     "stepId": 0,
     "title": "测试分支任务",
     "desc": "这是一个测试用的分支任务描述",
@@ -57,7 +57,7 @@
       1
     ],
     "isPreCount": false,
-    "next": null,
+    "next|int": -1,
     "unlockMission|int": [],
     "branch|int": [],
     "branchBelong": 1,
@@ -65,7 +65,7 @@
   },
   {
     "id": 2,
-    "missionId": 1,
+    "mainId": 1,
     "stepId": 1,
     "title": "测试新手任务第二步",
     "desc": "这是一个测试用的新手任务描述2",
@@ -88,7 +88,7 @@
       1
     ],
     "isPreCount": false,
-    "next": null,
+    "next|int": -1,
     "unlockMission|int": [],
     "branch|int": [],
     "branchBelong": 1,

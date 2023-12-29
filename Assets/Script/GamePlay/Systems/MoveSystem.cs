@@ -22,7 +22,7 @@ public class MoveSystem : ECSSystem
             MoveComp move = entity.Get<MoveComp>();
             //TransformComp transform = entity.Get<TransformComp>();
 
-            if (move.inputForward != Vector3.zero && !entity.Has<ClimbUpComp>())
+            if (move.inputForward != Vector3.zero && !entity.Has<ClimbUpComp>() && (!move.isClimb || move.isClimb && move.climbJump == 0))
             {
                 if (move.isClimb)
                 {

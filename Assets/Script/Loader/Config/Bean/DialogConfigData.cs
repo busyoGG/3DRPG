@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 namespace Bean{
 	public class DialogConfigData: ConfigBaseData, ICloneable{
-		public int dialogId;
+		public int mainId;
 		public int stepId;
 		public int branchId;
 		public string target;
@@ -15,7 +15,7 @@ namespace Bean{
 			next = new List<int>();
 		}
 		public DialogConfigData(DialogConfigData obj){
-			dialogId = obj.dialogId;
+			mainId = obj.mainId;
 			stepId = obj.stepId;
 			branchId = obj.branchId;
 			target = obj.target;

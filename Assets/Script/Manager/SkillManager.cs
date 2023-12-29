@@ -22,7 +22,7 @@ public class SkillManager : Singleton<SkillManager>
         {
             if (skill.Value.stepId == 0)
             {
-                _skills.Add(skill.Value.skillId, skill.Value);
+                _skills.Add(skill.Value.mainId, skill.Value);
             }
         }
 

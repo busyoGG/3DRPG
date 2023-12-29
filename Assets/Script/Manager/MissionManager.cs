@@ -6,16 +6,33 @@ using UnityEngine;
 
 public class MissionManager : Singleton<MissionManager>
 {
+    /// <summary>
+    /// 所有任务
+    /// </summary>
+    private Dictionary<int ,MissionConfigData> _allMission = new Dictionary<int, MissionConfigData> ();
+    /// <summary>
+    /// 未解锁任务
+    /// </summary>
     private Dictionary<int, MissionConfigData> _lockedMission = new Dictionary<int, MissionConfigData>();
-
+    /// <summary>
+    /// 已解锁任务
+    /// </summary>
     private Dictionary<int, MissionConfigData> _unlockedMission = new Dictionary<int, MissionConfigData>();
-
+    /// <summary>
+    /// 非分支任务 用于任务列表的显示
+    /// </summary>
     private Dictionary<int, MissionConfigData> _notBranchMission = new Dictionary<int, MissionConfigData>();
-
+    /// <summary>
+    /// 已完成任务
+    /// </summary>
     private Dictionary<int, MissionConfigData> _doneMission = new Dictionary<int, MissionConfigData>();
-
+    /// <summary>
+    /// 预计数
+    /// </summary>
     private Dictionary<int, int> _preCount = new Dictionary<int, int>();
-
+    /// <summary>
+    /// 最近任务 用于任务追踪
+    /// </summary>
     private MissionConfigData _curMission = null;
 
     private string[] _strFilter = new string[2] {
@@ -25,11 +42,11 @@ public class MissionManager : Singleton<MissionManager>
 
     public void Init()
     {
-        Dictionary<int, MissionConfigData> missionDic = ConfigManager.Ins().GetConfig<MissionConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.MissionConfig);
+        _allMission = ConfigManager.Ins().GetConfig<MissionConfigData>(ConfigsFolderConfig.Null, ConfigsNameConfig.MissionConfig);
 
         Dictionary<int, List<MissionConfigData>> steps = new Dictionary<int, List<MissionConfigData>>();
 
-        foreach (var data in missionDic.Values)
+        foreach (var data in _allMission.Values)
         {
             if (data.stepId == 0)
             {
@@ -39,7 +56,7 @@ public class MissionManager : Singleton<MissionManager>
                 }
                 else
                 {
-                    _lockedMission.Add(data.missionId, data);
+                    _lockedMission.Add(data.mainId, data);
                 }
             }
             else
@@ -49,22 +66,10 @@ public class MissionManager : Singleton<MissionManager>
                 if (stepList == null)
                 {
                     stepList = new List<MissionConfigData>();
-                    steps.Add(data.missionId, stepList);
+                    steps.Add(data.mainId, stepList);
                 }
 
                 stepList.Add(data);
-            }
-        }
-
-        MissionConfigData temp;
-        foreach (var data in steps)
-        {
-            data.Value.Sort((a, b) => { return a.stepId.CompareTo(b.stepId); });
-            temp = _unlockedMission[data.Key];
-            foreach (var mission in data.Value)
-            {
-                temp.next = mission;
-                temp = temp.next;
             }
         }
     }
@@ -226,13 +231,13 @@ public class MissionManager : Singleton<MissionManager>
     /// <summary>
     /// 设置任务完成数量
     /// </summary>
-    /// <param name="missionId"></param>
+    /// <param name="mainId"></param>
     /// <param name="completeNum"></param>
     /// <param name="isAdd"></param>
-    public void SetCompleteNum(int missionId, int targetId, int completeNum, bool isAdd = true)
+    public void SetCompleteNum(int mainId, int targetId, int completeNum, bool isAdd = true)
     {
         MissionConfigData mission;
-        _unlockedMission.TryGetValue(missionId, out mission);
+        _unlockedMission.TryGetValue(mainId, out mission);
         if (mission != null)
         {
             if (!mission.completeNum.ContainsKey(targetId))
@@ -248,7 +253,7 @@ public class MissionManager : Singleton<MissionManager>
                 mission.completeNum[targetId] = completeNum;
             }
             //保存数据
-            //SaveMissionData(missionId, mission.stepId, mission.completeNum, false);
+            //SaveMissionData(mainId, mission.stepId, mission.completeNum, false);
             //判断任务是否完成
             if (CheckComplete(mission))
             {
@@ -260,7 +265,7 @@ public class MissionManager : Singleton<MissionManager>
     /// <summary>
     /// 检测任务是否完成
     /// </summary>
-    /// <param name="missionId"></param>
+    /// <param name="mainId"></param>
     /// <returns></returns>
     public bool CheckComplete(MissionConfigData mission)
     {
@@ -291,9 +296,9 @@ public class MissionManager : Singleton<MissionManager>
     /// <param name="mission"></param>
     public void Next(MissionConfigData mission)
     {
-        //MissionConfigData mission = _unlockedMission[missionId];
-        int missionId = mission.missionId;
-        MissionConfigData next = mission.next;
+        //MissionConfigData mission = _unlockedMission[mainId];
+        int mainId = mission.mainId;
+        MissionConfigData next = _allMission[mission.next];
         if (next != null)
         {
             if (mission.unlockMission.Count > 0)
@@ -311,14 +316,14 @@ public class MissionManager : Singleton<MissionManager>
             //下一任务
             SetUnlockedMission(next);
             //保存数据
-            //SaveMissionData(missionId, next.stepId, next.completeNum, false);
+            //SaveMissionData(mainId, next.stepId, next.completeNum, false);
         }
         else
         {
-            SetUnlockedMission(missionId);
-            _doneMission.Add(missionId, mission);
+            SetUnlockedMission(mainId);
+            _doneMission.Add(mainId, mission);
             //保存数据
-            //SaveMissionData(missionId, mission.stepId, mission.completeNum, true);
+            //SaveMissionData(mainId, mission.stepId, mission.completeNum, true);
         }
 
         //获得奖励
@@ -352,23 +357,23 @@ public class MissionManager : Singleton<MissionManager>
     {
         if (mission.filter != MissionFilter.Branch)
         {
-            if (_notBranchMission.ContainsKey(mission.missionId))
+            if (_notBranchMission.ContainsKey(mission.mainId))
             {
-                _notBranchMission[mission.missionId] = mission;
+                _notBranchMission[mission.mainId] = mission;
             }
             else
             {
-                _notBranchMission.Add(mission.missionId, mission);
+                _notBranchMission.Add(mission.mainId, mission);
             }
         }
 
-        if (_unlockedMission.ContainsKey(mission.missionId))
+        if (_unlockedMission.ContainsKey(mission.mainId))
         {
-            _unlockedMission[mission.missionId] = mission;
+            _unlockedMission[mission.mainId] = mission;
         }
         else
         {
-            _unlockedMission.Add(mission.missionId, mission);
+            _unlockedMission.Add(mission.mainId, mission);
         }
     }
 
@@ -376,20 +381,20 @@ public class MissionManager : Singleton<MissionManager>
     /// 设置任务数据
     /// </summary>
     /// <param name="mission"></param>
-    private void SetUnlockedMission(int missionId = -1)
+    private void SetUnlockedMission(int mainId = -1)
     {
-        if (_notBranchMission.ContainsKey(missionId))
+        if (_notBranchMission.ContainsKey(mainId))
         {
-            _notBranchMission.Remove(missionId);
+            _notBranchMission.Remove(mainId);
         }
 
-        if (_unlockedMission.ContainsKey(missionId))
+        if (_unlockedMission.ContainsKey(mainId))
         {
-            _unlockedMission[missionId] = null;
+            _unlockedMission[mainId] = null;
         }
         else
         {
-            _unlockedMission.Add(missionId, null);
+            _unlockedMission.Add(mainId, null);
         }
     }
 
@@ -407,17 +412,17 @@ public class MissionManager : Singleton<MissionManager>
     //    Debug.Log("获得任务奖励 ===> " + award);
     //}
 
-    //private void SaveMissionData(int missionId, int stepId, Dictionary<int, float> completeNum, bool isDone)
+    //private void SaveMissionData(int mainId, int stepId, Dictionary<int, float> completeNum, bool isDone)
     //{
 
     //    //保存数据
     //    MissionSaveData missionSaveData;
-    //    _missionSaveData.TryGetValue(missionId, out missionSaveData);
+    //    _missionSaveData.TryGetValue(mainId, out missionSaveData);
     //    if (missionSaveData == null)
     //    {
     //        missionSaveData = new MissionSaveData();
-    //        missionSaveData.missionId = missionId;
-    //        _missionSaveData.Add(missionId, missionSaveData);
+    //        missionSaveData.mainId = mainId;
+    //        _missionSaveData.Add(mainId, missionSaveData);
     //    }
 
     //    missionSaveData.stepId = stepId;

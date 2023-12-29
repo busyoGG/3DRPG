@@ -116,7 +116,7 @@ public class MissionView : BaseView
             branchMissionList.data = index;
             branchMissionList.SetVirtual();
             branchMissionList.itemRenderer = BranchMissionRenderer;
-            branchMissionList.numItems = _branchMissions[res.missionId].Count;
+            branchMissionList.numItems = _branchMissions[res.mainId].Count;
 
             //点击展开列表
             //btnMission.data = res;
@@ -142,7 +142,7 @@ public class MissionView : BaseView
         GButton btnMission = obj.asButton;
         GTextField title = btnMission.GetChildAt(3).asTextField;
 
-        MissionConfigData res = _branchMissions[_missions[(int)btnMission.parent.data].missionId][index];
+        MissionConfigData res = _branchMissions[_missions[(int)btnMission.parent.data].mainId][index];
 
         title.text = res.title;
 
@@ -199,7 +199,7 @@ public class MissionView : BaseView
         button.selected = !button.selected;
         if (button.selected)
         {
-            List<MissionConfigData> data = _branchMissions[_missions[_missionList.GetChildIndex(button)].missionId];
+            List<MissionConfigData> data = _branchMissions[_missions[_missionList.GetChildIndex(button)].mainId];
             button.height = 120 + 120 * data.Count + 10 * (data.Count - 1);
         }
         else
@@ -236,11 +236,11 @@ public class MissionView : BaseView
         //初始化分支任务
         foreach (var mission in missions)
         {
-            if (!_branchMissions.ContainsKey(mission.missionId))
+            if (!_branchMissions.ContainsKey(mission.mainId))
             {
-                _branchMissions.Add(mission.missionId, new List<MissionConfigData>());
+                _branchMissions.Add(mission.mainId, new List<MissionConfigData>());
             }
-            _branchMissions[mission.missionId].Clear();
+            _branchMissions[mission.mainId].Clear();
 
             if (!initDetail && mission.branch.Count == 0)
             {
@@ -251,7 +251,7 @@ public class MissionView : BaseView
             foreach (var branchMission in mission.branch)
             {
                 MissionConfigData branchMissionData = MissionManager.Ins().GetUnlockedMissionById(branchMission);
-                _branchMissions[mission.missionId].Add(branchMissionData);
+                _branchMissions[mission.mainId].Add(branchMissionData);
 
                 if (!initDetail)
                 {

@@ -26,11 +26,14 @@ public class MoveComp : Comp
     /// 是否攀爬
     /// </summary>
     public bool isClimb;
-    ///// <summary>
-    ///// 是否爬到顶 0未到顶 1到顶 2自动攀爬
-    ///// </summary>
-    //public int isClimbTop;
+    /// <summary>
+    /// 是否在平台上
+    /// </summary>
     public bool isOnPlane;
+    /// <summary>
+    /// 攀爬跳跃阶段
+    /// </summary>
+    public int climbJump;
 
     public Vector3 inputForward;
 
@@ -72,5 +75,6 @@ public class MoveComp : Comp
         jumpSpeed = 0f;
         //isClimbTop = 0;
         isOnPlane = true;
+        climbJump = 0;
     }
 }

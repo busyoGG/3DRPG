@@ -17,7 +17,8 @@
     "next|int": [
       1
     ],
-    "attackEnable": true
+    "attackEnable": true,
+    "action|string": "None"
   },
   {
     "id": 1,
@@ -35,6 +36,26 @@
     "forceResetTime": 0,
     "ani": "Attack2",
     "next|int": [],
-    "attackEnable": true
+    "attackEnable": true,
+    "action|string": "None"
+  },
+  {
+    "id": 2,
+    "mainId": 2,
+    "name": "冲刺",
+    "key|InputKey": -2,
+    "stepId": 0,
+    "skillTime": 0.5,
+    "outOfTime": 0.5,
+    "holdingTime": 0,
+    "trigger|SkillTrigger": 0,
+    "isCanForceStop": false,
+    "forceTimes": 0,
+    "defaultForceTimes": 0,
+    "forceResetTime": 0,
+    "ani": null,
+    "next|int": [],
+    "attackEnable": false,
+    "action|string": "Dash"
   }
 ]

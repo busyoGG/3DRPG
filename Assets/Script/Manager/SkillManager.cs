@@ -55,8 +55,14 @@ public class SkillManager : Singleton<SkillManager>
         return null;
     }
 
-    public void PlaySkill()
+    public void PlaySkill(Entity entity,string action)
     {
-
+        switch (action)
+        {
+            case "Dash":
+                MoveComp move = entity.Get<MoveComp>();
+                move.nextPostition += move.fixedForward * move.speed * 10;
+                break;
+        }
     }
 }

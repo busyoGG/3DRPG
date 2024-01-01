@@ -159,6 +159,7 @@ public enum SkillTrigger
     Charge
 }
 
+
 /// <summary>
 /// 触发器触发类型
 /// </summary>

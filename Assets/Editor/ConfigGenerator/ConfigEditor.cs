@@ -189,7 +189,15 @@ public class ConfigEditor : EditorWindow
 
             if (type.Equals(JsonType.None))
             {
-                listClass.Add("\t\tpublic " + clsName + " " + propName + ";\r\n");
+                string[] propSplit = propName.Split('|');
+                if (propSplit.Length > 1)
+                {
+                    listClass.Add("\t\tpublic " + propSplit[1] + " " + propSplit[0] + ";\r\n");
+                }
+                else
+                {
+                    listClass.Add("\t\tpublic " + clsName + " " + propName + ";\r\n");
+                }
             }
             else if (type.Equals(JsonType.Array))
             {

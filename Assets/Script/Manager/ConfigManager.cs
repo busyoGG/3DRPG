@@ -37,7 +37,7 @@ public class ConfigManager : Singleton<ConfigManager>
 #else
             string config = FileUtils.ReadFile("Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
 #endif
-            config = Regex.Replace(config, "(\\|).*(?=\")", "");
+            config = Regex.Replace(config, "(\\|).*?(?=\")", "");
 
             Debug.Log("配置读取路径 - " + Application.dataPath + "/Configs/" + (folder != null ? folder + "/" : "") + name + ".json");
             Debug.Log("读取内容  = " + config);

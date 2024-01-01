@@ -70,6 +70,10 @@ public class SkillSystem : ECSSystem
                     {
                         AniSingleton.Ins().SetCurAni(entity.id, skill.skill.ani, true);
                         AttackSingleton.Ins().SetAttackEnable(entity.id, skill.skill.attackEnable);
+                        if (skill.skill.action != "")
+                        {
+                            SkillManager.Ins().PlaySkill(entity, skill.skill.action);
+                        }
                     }
                     //ÊÍ·Å¼¼ÄÜ
                     if (skill.duration >= skill.skill.skillTime)

@@ -17,6 +17,7 @@ namespace Bean{
 		public string ani;
 		public List<int> next;
 		public bool attackEnable;
+		public string action;
 		public SkillConfigData(){
 			next = new List<int>();
 		}
@@ -36,6 +37,7 @@ namespace Bean{
 			ani = obj.ani;
 			next = obj.next;
 			attackEnable = obj.attackEnable;
+			action = obj.action;
 		}
 		public object Clone()
 		{

@@ -55,8 +55,8 @@ public class SkillManager : Singleton<SkillManager>
         return null;
     }
 
-    private void SetSkill(int id, SkillConfigData skill)
+    public void PlaySkill()
     {
-        _skills.Add(id, skill);
+
     }
 }

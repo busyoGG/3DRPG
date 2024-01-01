@@ -102,12 +102,8 @@ public class CompInitEditor : Editor
         if (compInit._isCollide)
         {
             EditorGUI.indentLevel++;
-            //_collideGroup = EditorGUILayout.BeginFoldoutHeaderGroup(_collideGroup, "碰撞组件属性");
-            //if (_collideGroup)
-            //{
-            //    compInit._isStatic = EditorGUILayout.Toggle("是否静态物体", compInit._isStatic);
-            //}
-            //EditorGUILayout.EndFoldoutHeaderGroup();
+            compInit._stepHeight = EditorGUILayout.FloatField("跨越台阶高度", compInit._stepHeight);
+            compInit._slopeAngle = EditorGUILayout.FloatField("不滑坡角度", compInit._slopeAngle);
             EditorGUI.indentLevel--;
         }
 

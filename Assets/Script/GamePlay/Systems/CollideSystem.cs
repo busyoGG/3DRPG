@@ -84,14 +84,22 @@ public class CollideSystem : ECSSystem
                         }
                     }
 
-                    Vector3 offset = normal * len;
+                    Vector3 offset = Vector3.zero;
+                    if (box.minY < boxComp.maxY && box.position.y + collider.stepHeight >= boxComp.maxY)
+                    {
+                        offset.y = boxComp.maxY - box.minY;
+                    }
+                    else
+                    {
+                        offset = normal * len;
+                    }
                     collider.totalOffset += offset;
                     RefreshCollider(box, offset);
                 }
             }
 
             float over = Mathf.Abs(Vector3.Dot(Vector3.down, move.fixedForward));
-            if(isCollide && (over > 0 && over < 0.8 || box.minY >= collider.closestTop.y))
+            if (isCollide && (over > 0 && over < collider.slopeAngle || box.minY >= collider.closestTop.y))
             {
                 move.isOnPlane = true;
             }

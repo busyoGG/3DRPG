@@ -104,6 +104,12 @@ public class CompInit : MonoBehaviour
     public int _attack;
     //-----role-end-----
 
+    //-----collide-start-----
+    public float _stepHeight;
+    [Range(0f, 1f)]
+    public float _slopeAngle = 0.8f;
+    //-----collide-end-----
+
     private Entity _entity;
 
     void Start()
@@ -163,6 +169,8 @@ public class CompInit : MonoBehaviour
         {
             CollideComp collide = entity.Add<CollideComp>();
             //collide.isStatic = _isStatic;
+            collide.stepHeight = _stepHeight;
+            collide.slopeAngle = _slopeAngle;
         }
 
         if (_isTrigger)

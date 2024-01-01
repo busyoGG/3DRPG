@@ -14,7 +14,7 @@ public class FallSystem : ECSSystem
     {
         foreach (Entity entity in entities)
         {
-             MoveComp move = entity.Get<MoveComp>();
+            MoveComp move = entity.Get<MoveComp>();
             //float timeOfHigherest = move.jumpSpeed / move.gravity;
             //float over = Mathf.Abs(Vector3.Dot(Vector3.down, move.fixedForward));
 

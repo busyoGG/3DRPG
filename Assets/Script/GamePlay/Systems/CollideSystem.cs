@@ -85,7 +85,7 @@ public class CollideSystem : ECSSystem
                     }
 
                     Vector3 offset = Vector3.zero;
-                    if (box.minY < boxComp.maxY && box.position.y + collider.stepHeight >= boxComp.maxY)
+                    if (box.minY < boxComp.maxY && box.minY + collider.stepHeight >= boxComp.maxY)
                     {
                         offset.y = boxComp.maxY - box.minY;
                     }

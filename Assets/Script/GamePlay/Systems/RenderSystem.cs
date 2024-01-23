@@ -27,11 +27,9 @@ public class RenderSystem : ECSSystem
                 render.curStep = 0;
             }
 
-            transformNode.rotation = transform.rotation;
-            //transformNode.position = transform.position;
+            //transformNode.rotation = transform.rotation;
 
             render.curStep += _dt;
-            //ConsoleUtils.Log("帧间隔", _dt, render.curStep);
 
             float ratio = render.curStep / render.totalStep;
             if (ratio > 1)

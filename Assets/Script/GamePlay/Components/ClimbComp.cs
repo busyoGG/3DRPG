@@ -8,7 +8,7 @@ public class ClimbComp : Comp
 
     public float targetTime;
 
-    public bool firstClimb;
+    //public bool firstClimb;
 
     public Vector3 jumpForward;
 
@@ -18,7 +18,7 @@ public class ClimbComp : Comp
     {
         enterTime = 0f;
         targetTime = 0.1f;
-        firstClimb = false;
+        //firstClimb = false;
         jumpForward = Vector3.zero;
         fixedForward = Vector3.zero;
     }

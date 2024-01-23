@@ -35,7 +35,7 @@ public class ClimbSystem : ECSSystem
                     if (climb.enterTime >= climb.targetTime)
                     {
                         move.isClimb = true;
-                        climb.firstClimb = true;
+                        //climb.firstClimb = true;
                     }
                 }
                 else

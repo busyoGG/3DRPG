@@ -10,6 +10,8 @@ public class CollideComp : Comp
 
     public float slopeAngle;
 
+    public bool isCanClimb;
+
     public Vector3 totalOffset;
 
     public Vector3 closestTop;
@@ -18,6 +20,7 @@ public class CollideComp : Comp
     public override void Reset()
     {
         //isStatic = true;
+        isCanClimb = true;
         stepHeight = 0;
         slopeAngle = 0.8f;
         totalOffset = Vector3.zero;

@@ -38,6 +38,8 @@ public class CollideSystem : ECSSystem
             collider.closestTop = CollideUtils._maxValue;
             //初始化最近点距离
             float minClose = float.MaxValue;
+            //重置攀爬检测状态
+            move.isCanCheckClimb = false;
 
             foreach (var intersectObj in intersectObjs)
             {
@@ -59,7 +61,9 @@ public class CollideSystem : ECSSystem
                     //障碍物最高点
                     collider.closestTop = higherest;
 
-                    if (move.isClimb)
+                    move.isCanCheckClimb = collideComp.isCanClimb;
+
+                    if (move.isClimb && collideComp.isCanClimb)
                     {
                         //判断是否爬到顶部 没有的话就计算攀爬法线
                         if (_tempVec.y - higherest.y < 0.1f)

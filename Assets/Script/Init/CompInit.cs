@@ -108,6 +108,7 @@ public class CompInit : MonoBehaviour
     public float _stepHeight;
     [Range(0f, 1f)]
     public float _slopeAngle = 0.8f;
+    public bool _isCanClimb = true;
     //-----collide-end-----
 
     private Entity _entity;
@@ -171,6 +172,7 @@ public class CompInit : MonoBehaviour
             //collide.isStatic = _isStatic;
             collide.stepHeight = _stepHeight;
             collide.slopeAngle = _slopeAngle;
+            collide.isCanClimb = _isCanClimb;
         }
 
         if (_isTrigger)

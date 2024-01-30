@@ -104,6 +104,7 @@ public class CompInitEditor : Editor
             EditorGUI.indentLevel++;
             compInit._stepHeight = EditorGUILayout.FloatField("跨越台阶高度", compInit._stepHeight);
             compInit._slopeAngle = EditorGUILayout.FloatField("不滑坡角度", compInit._slopeAngle);
+            compInit._isCanClimb = EditorGUILayout.Toggle("是否可以攀爬",compInit._isCanClimb);
             EditorGUI.indentLevel--;
         }
 

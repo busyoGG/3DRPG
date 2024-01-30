@@ -21,11 +21,7 @@ public class ClimbSystem : ECSSystem
 
             if (!move.isClimb)
             {
-                //³õÊ¼»¯
-                //move.climbOffset = Vector3.zero;
-                //move.climbOffsetQua = Quaternion.identity;
-
-                //Vector3 inputForward = InputSingleton.Ins().GetForward(entity.id);
+                if (!move.isCanCheckClimb) continue;
 
                 float sameSide = Vector3.Dot(collider.totalOffset.normalized, move.forward);
 
@@ -88,7 +84,7 @@ public class ClimbSystem : ECSSystem
                         //ÌøÔ¾
                         if (move.climbJump > 0)
                         {
-                            if(move.climbJump == 3)
+                            if (move.climbJump == 3)
                             {
                                 climb.fixedForward = climb.jumpForward;
                                 if (climb.fixedForward == Vector3.zero)

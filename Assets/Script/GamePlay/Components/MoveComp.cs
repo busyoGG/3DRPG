@@ -22,6 +22,11 @@ public class MoveComp : Comp
     public float jumpScale;
 
     public float gravity;
+
+    /// <summary>
+    /// ≈–∂® «∑Òø…“‘ºÏ≤‚≈ ≈¿◊¥Ã¨
+    /// </summary>
+    public bool isCanCheckClimb;
     /// <summary>
     ///  «∑Ò≈ ≈¿
     /// </summary>
@@ -76,5 +81,6 @@ public class MoveComp : Comp
         //isClimbTop = 0;
         isOnPlane = true;
         climbJump = 0;
+        isCanCheckClimb = true;
     }
 }

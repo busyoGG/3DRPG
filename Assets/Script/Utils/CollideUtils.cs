@@ -627,7 +627,7 @@ public class CollideUtils
             }
             if (overlap >= -0.001)
             {
-
+                overlap = overlap / axes[i].magnitude;
                 if (overlap < minOverlap)
                 {
                     minOverlap = overlap;
@@ -642,7 +642,7 @@ public class CollideUtils
             }
         }
 
-        len = minOverlap / normal.magnitude;
+        len = minOverlap;
         //len = minOverlap;
         Vector3 dis = data1.position - data2.position;
         float amount = normal.x * dis.x + normal.y * dis.y + normal.z * dis.z;
@@ -652,7 +652,7 @@ public class CollideUtils
         }
         if (len > 0.5f)
         {
-            ConsoleUtils.Log("³¬³¤");
+            ConsoleUtils.Log("³¬³¤", normal,len);
         }
         return normal.normalized;
     }

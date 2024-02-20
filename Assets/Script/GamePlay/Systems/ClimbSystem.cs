@@ -23,9 +23,10 @@ public class ClimbSystem : ECSSystem
             {
                 if (!move.isCanCheckClimb) continue;
 
-                float sameSide = Vector3.Dot(collider.totalOffset.normalized, move.forward);
+                Vector3 offsetNormal = collider.totalOffset.normalized;
+                float sameSide = Vector3.Dot(offsetNormal, move.forward);
 
-                if (sameSide < -0.5f)
+                if (offsetNormal.y < 0.5f && sameSide < -0.5f)
                 {
                     climb.enterTime += _dt;
                     if (climb.enterTime >= climb.targetTime)

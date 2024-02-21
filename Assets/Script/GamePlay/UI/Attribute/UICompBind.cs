@@ -9,9 +9,11 @@ using UnityEngine;
 [AttributeUsage(AttributeTargets.Property)]
 public class UICompBind :Attribute
 {
+    public string _type;
     public string _path;
-    public UICompBind(string path)
+    public UICompBind(string type,string path)
     {
+        _type = type;
         _path = path;
     }
 }

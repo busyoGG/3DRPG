@@ -3,7 +3,7 @@ using System;
 /// <summary>
 /// 绑定UI组件和动作事件，使其支持交互
 /// </summary>
-[AttributeUsage(AttributeTargets.Property)]
+[AttributeUsage(AttributeTargets.Method)]
 public class UIActionBind : Attribute
 {
     public string _type;

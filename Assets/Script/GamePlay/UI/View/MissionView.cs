@@ -9,18 +9,14 @@ using Unity.VisualScripting.FullSerializer;
 
 public class MissionView : BaseView
 {
-    private GList _missionList;
+    [UICompBind("List","2")]
+    private GList _missionList { get; set; }
 
-    private GComponent _detail;
+    [UICompBind("Comp","3")]
+    private GComponent _detail { get; set; }
 
-
-    private GList _missionRequestList;
-
-    private GList _awardList;
-
-    private GTextField _empty;
-
-    private GButton _close;
+    [UICompBind("TextField", "4")]
+    private GTextField _empty { get; set; }
 
     //-----data-----
 
@@ -30,49 +26,22 @@ public class MissionView : BaseView
     [UIDataBind("TextFeild", "3/2")]
     private UIProp _missionContent { get; set; }
 
-    //private List<int> _test = new List<int>();
-    [UIDataBind("List", "2", "MissionRenderer", "MissionProvider","height")]
+    [UIDataBind("List", "2", "height")]
     private UIListProp<MissionConfigData> _missions { get; set; }
+
+    [UIDataBind("List", "3/1")]
+    private UIListProp<int> _requests { get; set; }
+    [UIDataBind("List", "3/3")]
+    private UIListProp<int> _awards { get; set; }
 
     private Dictionary<int, List<MissionConfigData>> _branchMissions;
 
     private MissionConfigData _curMission;
 
-    //protected override void BindItem()
-    //{
-    //    _missionList = main.GetChildAt(2).asList;
-    //    _missionList.numItems = 0;
-    //    _missionList.itemRenderer = MissionRenderer;
-    //    _missionList.itemProvider = MissionProvider;
-    //    _missionList.SetVirtual();
-
-    //    _empty = main.GetChildAt(4).asTextField;
-    //    _close = main.GetChildAt(5).asButton;
-
-    //    _detail = main.GetChildAt(3).asCom;
-
-    //    _missionTitle = _detail.GetChildAt(0).asTextField;
-    //    _missionRequestList = _detail.GetChildAt(1).asList;
-    //    _missionContent = _detail.GetChildAt(2).asTextField;
-    //    _awardList = _detail.GetChildAt(3).asList;
-
-    //    _missionRequestList.numItems = 0;
-    //    _missionRequestList.itemRenderer = RequestRenderer;
-    //    _missionRequestList.SetVirtual();
-
-    //    _awardList.numItems = 0;
-    //    _awardList.itemRenderer = AwardRenderer;
-    //    _awardList.SetVirtual();
-    //}
 
     protected override void InitListener()
     {
         EventManager.AddListening(id, "show_mission_list", ShowMissionList);
-    }
-
-    protected override void InitAction()
-    {
-        _close?.onClick.Set(OnCloseClick);
     }
 
     protected override void OnShow()
@@ -86,6 +55,7 @@ public class MissionView : BaseView
         UIManager.Ins().SetFocus(false);
     }
 
+    [UIActionBind("ListProvider", "2")]
     private string MissionProvider(int index)
     {
         MissionConfigData res = _missions.Get()[index];
@@ -105,6 +75,7 @@ public class MissionView : BaseView
     /// </summary>
     /// <param name="index"></param>
     /// <param name="obj"></param>
+    [UIActionBind("ListRender", "2")]
     private void MissionRenderer(int index, GObject obj)
     {
         MissionConfigData res = _missions.Get()[index];
@@ -123,13 +94,10 @@ public class MissionView : BaseView
             branchMissionList.numItems = _branchMissions[res.mainId].Count;
 
             //点击展开列表
-            //btnMission.data = res;
             btnMission.onClick.Set(ResizeMissionList);
-            //_missionList.onClickItem.Set(ResizeMissionList);
         }
         else
         {
-            //_missionList.onClickItem.Set(OnMissionClick);
             //点击任务详情 监听按钮才能阻止冒泡
             btnMission.data = res;
             btnMission.onClick.Set(OnMissionClick);
@@ -159,13 +127,14 @@ public class MissionView : BaseView
     /// </summary>
     /// <param name="index"></param>
     /// <param name="obj"></param>
+    [UIActionBind("ListRender", "3/1")]
     private void RequestRenderer(int index, GObject obj)
     {
         GComponent button = obj.asCom;
         GTextField content = button.GetChildAt(1).asTextField;
         GTextField requstNum = button.GetChildAt(2).asTextField;
 
-        int targetId = _curMission.target[index];
+        int targetId = _requests.Get()[index];
 
         content.text = _curMission.targetDescribe[targetId];
         requstNum.text = MissionManager.Ins().GetCompleteNum(_curMission, targetId) + "/" + _curMission.targetNum[targetId];
@@ -176,12 +145,13 @@ public class MissionView : BaseView
     /// </summary>
     /// <param name="index"></param>
     /// <param name="obj"></param>
+    [UIActionBind("ListRender", "3/3")]
     private void AwardRenderer(int index, GObject obj)
     {
         GButton button = obj.asButton;
         GTextField num = button.GetChildAt(5).asTextField;
 
-        num.text = _curMission.awardNum[index].ToString();
+        num.text = _awards.Get()[index].ToString();
     }
 
     //-----点击事件-----
@@ -197,6 +167,7 @@ public class MissionView : BaseView
         SetDetail(res);
         context.StopPropagation();
     }
+
     private void ResizeMissionList(EventContext context)
     {
         GButton button = context.sender as GButton;
@@ -213,6 +184,7 @@ public class MissionView : BaseView
         _missionList.RefreshVirtualList();
     }
 
+    [UIActionBind("Click", "5")]
     private void OnCloseClick()
     {
         UIManager.Ins().Hide(this);
@@ -228,8 +200,6 @@ public class MissionView : BaseView
     {
         Dictionary<int, MissionConfigData> missionDic = (Dictionary<int, MissionConfigData>)data[0];
         List<MissionConfigData> missions = missionDic.Values.ToList();
-
-        _missions.Set(missions);
 
         if (_branchMissions == null)
         {
@@ -265,6 +235,7 @@ public class MissionView : BaseView
             }
         }
 
+        _missions.Set(missions);
 
         RefreshMissionList();
     }
@@ -272,6 +243,8 @@ public class MissionView : BaseView
     private void SetDetail(MissionConfigData config)
     {
         _curMission = config;
+        _requests.Set(config.target);
+        _awards.Set(config.awardNum);
         _missionTitle.Set(config.title);
         _missionContent.Set(config.desc);
 
@@ -295,16 +268,4 @@ public class MissionView : BaseView
             _detail.visible = false;
         }
     }
-
-    //private void RefreshRequestList()
-    //{
-    //    _missionRequestList.numItems = _curMission.target.Count;
-    //    _missionRequestList.height = _curMission.target.Count * _missionRequestList.GetChildAt(0).height + _missionRequestList.lineGap * (_curMission.target.Count - 1);
-    //}
-
-    //private void RefreshAwardList()
-    //{
-    //    _awardList.numItems = _curMission.award.Count;
-    //    _awardList.width = _curMission.target.Count * _awardList.GetChildAt(0).width + _awardList.columnGap * (_curMission.target.Count - 1) + _awardList.margin.left + _awardList.margin.right;
-    //}
 }

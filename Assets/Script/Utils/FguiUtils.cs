@@ -16,7 +16,7 @@ public class FguiUtils
     public static T GetUI<T>(GComponent comp, string path) where T : GObject
     {
         string[] paths = path.Split('/');
-        GComponent res = null;
+        GObject res = null;
         GComponent parent = comp;
         foreach (string s in paths)
         {
@@ -25,18 +25,25 @@ public class FguiUtils
             bool isNumeric = int.TryParse(s, out output);
             if (isNumeric)
             {
-                res = parent.GetChildAt(output)?.asCom;
+                res = parent.GetChildAt(output);
             }
             else
             {
-                res = parent.GetChild(s)?.asCom;
+                res = parent.GetChild(s);
             }
             if (res == null)
             {
                 ConsoleUtils.Error("uiÂ·¾¶´íÎó", path);
                 return null;
             }
-            parent = res;
+            if (res is GComponent)
+            {
+                parent = res.asCom;
+            }
+            else
+            {
+                break;
+            }
         }
         return res as T;
     }

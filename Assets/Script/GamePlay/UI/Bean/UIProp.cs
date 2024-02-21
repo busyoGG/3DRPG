@@ -23,7 +23,7 @@ public class UIProp
 
     public UIProp(string value)
     {
-        this.val = value;
+        _value = value;
     }
 
     public void Set(string value)

@@ -28,7 +28,8 @@ public class UIListProp<T>
 
     public UIListProp(List<T> value)
     {
-        this.val = value;
+        //this.val = value;
+        _value = value;
     }
 
     public List<T> Get()
@@ -44,7 +45,10 @@ public class UIListProp<T>
 
     public void Invoke()
     {
-        _onValueChange?.Invoke(val.Count);
+        if (val != null)
+        {
+            _onValueChange?.Invoke(val.Count);
+        }
     }
 
     public override string ToString()

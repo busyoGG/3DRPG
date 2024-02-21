@@ -1,11 +1,8 @@
 using FairyGUI;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 
-public class UIBase : MonoBehaviour
+public class UIBase
 {
     private BindingFlags flag = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
@@ -14,6 +11,21 @@ public class UIBase : MonoBehaviour
     {
         Type type = GetType();
         PropertyInfo[] props = type.GetProperties(flag);
+        GComponent main = (GComponent)type.GetField("main", flag).GetValue(this);
+
+        MethodInfo[] methods = type.GetMethods(flag);
+
+        foreach (var method in methods)
+        {
+            var methodAttrs = method.GetCustomAttributes(true);
+            foreach (var attr in methodAttrs)
+            {
+                if (attr is UIActionBind)
+                {
+                    BindAction(method, attr, main);
+                }
+            }
+        }
 
         foreach (var prop in props)
         {
@@ -22,29 +34,51 @@ public class UIBase : MonoBehaviour
             {
                 if (attr is UICompBind)
                 {
-                    BindComp(prop, type, attr);
+                    BindComp(prop, attr, main);
                 }
-                else if (attr is UIDataBind)
+                else if(attr is UIDataBind)
                 {
-                    BindData(prop, type, attr);
-                }
-                else
-                {
-                    BindAction(prop, type, attr);
+                    BindData(prop, attr, main);
                 }
             }
         }
     }
 
-    private void BindComp(PropertyInfo prop, Type type, object attr)
+    private void BindComp(PropertyInfo prop, object attr, GComponent main)
     {
+        UICompBind uiBind = (UICompBind)attr;
 
+        switch (uiBind._type)
+        {
+            case "Comp":
+                GComponent comp = FguiUtils.GetUI<GComponent>(main, uiBind._path);
+                prop.SetValue(this, comp);
+                break;
+            case "TextField":
+                GTextField textField = FguiUtils.GetUI<GTextField>(main, uiBind._path);
+                prop.SetValue(this, textField);
+                break;
+            case "TextInput":
+                GTextInput textInput = FguiUtils.GetUI<GTextInput>(main, uiBind._path);
+                prop.SetValue(this, textInput);
+                break;
+            case "Image":
+                GImage image = FguiUtils.GetUI<GImage>(main, uiBind._path);
+                prop.SetValue(this, image);
+                break;
+            case "Loader":
+                GLoader loader = FguiUtils.GetUI<GLoader>(main, uiBind._path);
+                prop.SetValue(this, loader);
+                break;
+            case "List":
+                GList list = FguiUtils.GetUI<GList>(main, uiBind._path);
+                prop.SetValue(this, list);
+                break;
+        }
     }
 
-    private void BindData(PropertyInfo prop, Type type, object attr)
+    private void BindData(PropertyInfo prop, object attr, GComponent main)
     {
-        GComponent main = (GComponent)type.GetField("main", flag).GetValue(this);
-
         UIDataBind uiBind = (UIDataBind)attr;
 
         var feildInfo = prop.PropertyType.GetField("_onValueChange", flag);
@@ -116,29 +150,12 @@ public class UIBase : MonoBehaviour
                 {
                     if (list != null)
                     {
+                        list.SetVirtual();
                         list.numItems = data;
 
                         if (uiBind._extra.Length > 0)
                         {
-                            var renderer = type.GetMethod(uiBind._extra[0], flag);
-
-                            var listItemRendererDelegate = Delegate.CreateDelegate(typeof(ListItemRenderer), null, renderer);
-
-                            list.itemRenderer = (ListItemRenderer)listItemRendererDelegate;
-                        }
-
-                        if (uiBind._extra.Length > 1)
-                        {
-                            var provider = type.GetMethod(uiBind._extra[1], flag);
-
-                            var listItemProviderDelegate = Delegate.CreateDelegate(typeof(ListItemProvider), null, provider);
-
-                            list.itemProvider = (ListItemProvider)listItemProviderDelegate;
-                        }
-
-                        if (uiBind._extra.Length > 2)
-                        {
-                            switch (uiBind._extra[2])
+                            switch (uiBind._extra[0])
                             {
                                 case "height":
                                     list.height = data * list.GetChildAt(0).height + list.lineGap * (data - 1) + list.margin.top + list.margin.bottom;
@@ -155,8 +172,25 @@ public class UIBase : MonoBehaviour
         }
     }
 
-    private void BindAction(PropertyInfo prop, Type type, object attr)
+    private void BindAction(MethodInfo method, object attr, GComponent main)
     {
-
+        UIActionBind uiBind = (UIActionBind)attr;
+        GObject obj = FguiUtils.GetUI<GObject>(main, uiBind._path);
+        switch (uiBind._type)
+        {
+            case "Click":
+                var click = Delegate.CreateDelegate(typeof(EventCallback0), this, method);
+                obj.onClick.Set((EventCallback0)click);
+                break;
+            case "ListRender":
+                var render = Delegate.CreateDelegate(typeof(ListItemRenderer), this, method);
+                obj.asList.itemRenderer = (ListItemRenderer)render;
+                ConsoleUtils.Log("∞Û∂®‰÷»æ");
+                break;
+            case "ListProvider":
+                var provider = Delegate.CreateDelegate(typeof(ListItemProvider), this, method);
+                obj.asList.itemProvider = (ListItemProvider)provider;
+                break;
+        }
     }
 }

@@ -22,7 +22,14 @@ public class Launcher : MonoBehaviour
 
     void Start()
     {
+        Test();
         InitNext();
+    }
+
+    private void Test()
+    {
+        TestView test = new TestView();
+        test.OnAwake();
     }
 
     private void Update()
@@ -162,8 +169,9 @@ public class Launcher : MonoBehaviour
 
     private void InitManager()
     {
+        AttributeManager.Ins().Init();
         PoolManager.Ins().Init();
-        ECSManager.Ins().Init();
+        //ECSManager.Ins().Init();
         InputManager.Ins().Init();
         SkillManager.Ins().Init();
         DialogManager.Ins().Init();

@@ -2,8 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using FairyGUI;
+using System;
+using System.Reflection;
+using Unity.VisualScripting;
+using System.Linq;
+using System.Runtime.InteropServices;
 
-public class BaseView
+public class BaseView : UIBase
 {
     public string id;
     public GComponent main;
@@ -12,7 +17,8 @@ public class BaseView
     /// <summary>
     /// 只在创建的时候执行
     /// </summary>
-    public void OnAwake() { 
+    public void OnAwake()
+    {
         BindItem();
         InitListener();
         InitAction();
@@ -47,7 +53,7 @@ public class BaseView
 
     protected virtual void InitAction() { }
 
-    protected virtual void BindItem() { }
+    //protected virtual void BindItem() { }
 
     protected virtual void InitListener() { }
 }

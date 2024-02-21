@@ -1,7 +1,7 @@
 namespace Bean
 {
-	public class ConfigBaseData
-	{
-		public int id;
-	}
+    public class ConfigBaseData : object
+    {
+        public int id;
+    }
 }

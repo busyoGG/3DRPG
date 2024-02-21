@@ -14,13 +14,13 @@ public class TriggerList : BaseView
 
     private List<(string, Action)> _items = new List<(string, Action)>();
 
-    protected override void BindItem()
-    {
-        _list = main.GetChildAt(0).asList;
-        _list.SetVirtual();
-        _list.itemRenderer = ItemRenderer;
-        _list.numItems = 0;
-    }
+    //protected override void BindItem()
+    //{
+    //    _list = main.GetChildAt(0).asList;
+    //    _list.SetVirtual();
+    //    _list.itemRenderer = ItemRenderer;
+    //    _list.numItems = 0;
+    //}
 
     protected override void InitListener()
     {

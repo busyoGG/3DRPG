@@ -35,19 +35,24 @@ public class ECSManager : Singleton<ECSManager>
 
     private Dictionary<int, Stack<Comp>> _compPool = new Dictionary<int, Stack<Comp>>();
 
-    public void Init()
+    //public void Init()
+    //{
+    //    Assembly assembly = Assembly.GetAssembly(typeof(ECSManager));
+    //    Type[] types = assembly.GetTypes();
+    //    foreach (Type type in types)
+    //    {
+    //        //获取自定义特性的过程中自动执行构造函数
+    //        var attr = type.GetCustomAttribute<CompRegister>();
+    //        if(attr != null)
+    //        {
+    //            _total++;
+    //        }
+    //    }
+    //}
+
+    public void SetTotalCompNum(int num)
     {
-        Assembly assembly = Assembly.GetAssembly(typeof(ECSManager));
-        Type[] types = assembly.GetTypes();
-        foreach (Type type in types)
-        {
-            //获取自定义特性的过程中自动执行构造函数
-            var attr = type.GetCustomAttribute<CompRegister>();
-            if(attr != null)
-            {
-                _total++;
-            }
-        }
+        _total = num;
     }
 
     public int GetTotalCompNum()

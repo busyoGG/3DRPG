@@ -24,14 +24,14 @@ public class LoadingView : BaseView
         "Мгдижа..."
     };
 
-    protected override void BindItem()
-    {
-        _progress = main.GetChildAt(1).asCom.GetChildAt(1).asGraph;
-        _hint = main.GetChildAt(2).asTextField;
+    //protected override void BindItem()
+    //{
+    //    _progress = main.GetChildAt(1).asCom.GetChildAt(1).asGraph;
+    //    _hint = main.GetChildAt(2).asTextField;
 
-        _defWidth = _progress.width;
-        _progress.width = 0;
-    }
+    //    _defWidth = _progress.width;
+    //    _progress.width = 0;
+    //}
 
     protected override void OnShow()
     {

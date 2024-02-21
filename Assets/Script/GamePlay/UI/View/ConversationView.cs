@@ -25,20 +25,20 @@ public class ConversationView : BaseView
 
     private TimerChain _timer;
 
-    protected override void BindItem()
-    {
-        _btnConversation = main.GetChildAt(0).asButton;
+    //protected override void BindItem()
+    //{
+    //    _btnConversation = main.GetChildAt(0).asButton;
 
-        _textTalker = main.GetChildAt(2).asTextField;
+    //    _textTalker = main.GetChildAt(2).asTextField;
 
-        _listSelection = main.GetChildAt(3).asList;
+    //    _listSelection = main.GetChildAt(3).asList;
 
-        _btnAuto = main.GetChildAt(4).asButton;
+    //    _btnAuto = main.GetChildAt(4).asButton;
 
-        _listSelection.SetVirtual();
-        _listSelection.itemRenderer = SelectionRenderer;
-        _listSelection.numItems = 0;
-    }
+    //    _listSelection.SetVirtual();
+    //    _listSelection.itemRenderer = SelectionRenderer;
+    //    _listSelection.numItems = 0;
+    //}
 
     protected override void InitAction()
     {

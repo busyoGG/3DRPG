@@ -13,9 +13,6 @@ public class MissionView : BaseView
 
     private GComponent _detail;
 
-    private GTextField _missionTitle;
-
-    private GTextField _missionContent;
 
     private GList _missionRequestList;
 
@@ -27,39 +24,46 @@ public class MissionView : BaseView
 
     //-----data-----
 
+    [UIDataBind("TextFeild", "3/0")]
+    private UIProp _missionTitle { get; set; }
+
+    [UIDataBind("TextFeild", "3/2")]
+    private UIProp _missionContent { get; set; }
+
     //private List<int> _test = new List<int>();
-    private List<MissionConfigData> _missions;
+    [UIDataBind("List", "2", "MissionRenderer", "MissionProvider","height")]
+    private UIListProp<MissionConfigData> _missions { get; set; }
 
     private Dictionary<int, List<MissionConfigData>> _branchMissions;
 
     private MissionConfigData _curMission;
 
-    protected override void BindItem()
-    {
-        _missionList = main.GetChildAt(2).asList;
-        _missionList.numItems = 0;
-        _missionList.itemRenderer = MissionRenderer;
-        _missionList.itemProvider = MissionProvider;
-        _missionList.SetVirtual();
+    //protected override void BindItem()
+    //{
+    //    _missionList = main.GetChildAt(2).asList;
+    //    _missionList.numItems = 0;
+    //    _missionList.itemRenderer = MissionRenderer;
+    //    _missionList.itemProvider = MissionProvider;
+    //    _missionList.SetVirtual();
 
-        _empty = main.GetChildAt(4).asTextField;
-        _close = main.GetChildAt(5).asButton;
+    //    _empty = main.GetChildAt(4).asTextField;
+    //    _close = main.GetChildAt(5).asButton;
 
-        _detail = main.GetChildAt(3).asCom;
+    //    _detail = main.GetChildAt(3).asCom;
 
-        _missionTitle = _detail.GetChildAt(0).asTextField;
-        _missionRequestList = _detail.GetChildAt(1).asList;
-        _missionContent = _detail.GetChildAt(2).asTextField;
-        _awardList = _detail.GetChildAt(3).asList;
+    //    _missionTitle = _detail.GetChildAt(0).asTextField;
+    //    _missionRequestList = _detail.GetChildAt(1).asList;
+    //    _missionContent = _detail.GetChildAt(2).asTextField;
+    //    _awardList = _detail.GetChildAt(3).asList;
 
-        _missionRequestList.numItems = 0;
-        _missionRequestList.itemRenderer = RequestRenderer;
-        _missionRequestList.SetVirtual();
+    //    _missionRequestList.numItems = 0;
+    //    _missionRequestList.itemRenderer = RequestRenderer;
+    //    _missionRequestList.SetVirtual();
 
-        _awardList.numItems = 0;
-        _awardList.itemRenderer = AwardRenderer;
-        _awardList.SetVirtual();
-    }
+    //    _awardList.numItems = 0;
+    //    _awardList.itemRenderer = AwardRenderer;
+    //    _awardList.SetVirtual();
+    //}
 
     protected override void InitListener()
     {
@@ -68,7 +72,7 @@ public class MissionView : BaseView
 
     protected override void InitAction()
     {
-        _close.onClick.Set(OnCloseClick);
+        _close?.onClick.Set(OnCloseClick);
     }
 
     protected override void OnShow()
@@ -84,7 +88,7 @@ public class MissionView : BaseView
 
     private string MissionProvider(int index)
     {
-        MissionConfigData res = _missions[index];
+        MissionConfigData res = _missions.Get()[index];
 
         if (res.branch.Count > 0)
         {
@@ -103,7 +107,7 @@ public class MissionView : BaseView
     /// <param name="obj"></param>
     private void MissionRenderer(int index, GObject obj)
     {
-        MissionConfigData res = _missions[index];
+        MissionConfigData res = _missions.Get()[index];
         GButton btnMission = obj.asButton;
         GTextField title = btnMission.GetChildAt(3).asTextField;
 
@@ -142,7 +146,7 @@ public class MissionView : BaseView
         GButton btnMission = obj.asButton;
         GTextField title = btnMission.GetChildAt(3).asTextField;
 
-        MissionConfigData res = _branchMissions[_missions[(int)btnMission.parent.data].mainId][index];
+        MissionConfigData res = _branchMissions[_missions.Get()[(int)btnMission.parent.data].mainId][index];
 
         title.text = res.title;
 
@@ -199,7 +203,7 @@ public class MissionView : BaseView
         button.selected = !button.selected;
         if (button.selected)
         {
-            List<MissionConfigData> data = _branchMissions[_missions[_missionList.GetChildIndex(button)].mainId];
+            List<MissionConfigData> data = _branchMissions[_missions.Get()[_missionList.GetChildIndex(button)].mainId];
             button.height = 120 + 120 * data.Count + 10 * (data.Count - 1);
         }
         else
@@ -225,7 +229,7 @@ public class MissionView : BaseView
         Dictionary<int, MissionConfigData> missionDic = (Dictionary<int, MissionConfigData>)data[0];
         List<MissionConfigData> missions = missionDic.Values.ToList();
 
-        _missions = missions;
+        _missions.Set(missions);
 
         if (_branchMissions == null)
         {
@@ -268,18 +272,18 @@ public class MissionView : BaseView
     private void SetDetail(MissionConfigData config)
     {
         _curMission = config;
-        _missionTitle.text = config.title;
-        _missionContent.text = config.desc;
+        _missionTitle.Set(config.title);
+        _missionContent.Set(config.desc);
 
-        RefreshRequestList();
-        RefreshAwardList();
+        //RefreshRequestList();
+        //RefreshAwardList();
     }
 
     //-----Ë¢ÐÂ-----
 
     private void RefreshMissionList()
     {
-        _missionList.numItems = _missions.Count;
+        //_missionList.numItems = _missions.Count;
         if (_missions.Count > 0)
         {
             _empty.visible = false;
@@ -292,15 +296,15 @@ public class MissionView : BaseView
         }
     }
 
-    private void RefreshRequestList()
-    {
-        _missionRequestList.numItems = _curMission.target.Count;
-        _missionRequestList.height = _curMission.target.Count * _missionRequestList.GetChildAt(0).height + _missionRequestList.lineGap * (_curMission.target.Count - 1);
-    }
+    //private void RefreshRequestList()
+    //{
+    //    _missionRequestList.numItems = _curMission.target.Count;
+    //    _missionRequestList.height = _curMission.target.Count * _missionRequestList.GetChildAt(0).height + _missionRequestList.lineGap * (_curMission.target.Count - 1);
+    //}
 
-    private void RefreshAwardList()
-    {
-        _awardList.numItems = _curMission.award.Count;
-        _awardList.width = _curMission.target.Count * _awardList.GetChildAt(0).width + _awardList.columnGap * (_curMission.target.Count - 1) + _awardList.margin.left + _awardList.margin.right;
-    }
+    //private void RefreshAwardList()
+    //{
+    //    _awardList.numItems = _curMission.award.Count;
+    //    _awardList.width = _curMission.target.Count * _awardList.GetChildAt(0).width + _awardList.columnGap * (_curMission.target.Count - 1) + _awardList.margin.left + _awardList.margin.right;
+    //}
 }

@@ -191,21 +191,40 @@ public class UIBase
         switch (uiBind._type)
         {
             case "Click":
-                var click = Delegate.CreateDelegate(typeof(EventCallback0), this, method);
-                obj.onClick.Set((EventCallback0)click);
+                var methondParamsClick = method.GetParameters();
+                Delegate click = null;
+                if (methondParamsClick.Length == 0)
+                {
+                    click = Delegate.CreateDelegate(typeof(EventCallback0), this, method);
+                    obj.onClick.Set((EventCallback0)click);
+                }
+                else
+                {
+                    click = Delegate.CreateDelegate(typeof(EventCallback1), this, method);
+                    obj.onClick.Set((EventCallback1)click);
+                }
                 break;
             case "ListRender":
                 var render = Delegate.CreateDelegate(typeof(ListItemRenderer), this, method);
                 obj.asList.itemRenderer = (ListItemRenderer)render;
-                ConsoleUtils.Log("∞Û∂®‰÷»æ");
                 break;
             case "ListProvider":
                 var provider = Delegate.CreateDelegate(typeof(ListItemProvider), this, method);
                 obj.asList.itemProvider = (ListItemProvider)provider;
                 break;
             case "ListClick":
-                var listClick = Delegate.CreateDelegate(typeof(EventCallback0), this, method);
-                obj.asList.onClickItem.Set((EventCallback0)listClick);
+                var methondParamsListClick = method.GetParameters();
+                Delegate listClick = null;
+                if (methondParamsListClick.Length == 0)
+                {
+                    listClick = Delegate.CreateDelegate(typeof(EventCallback0), this, method);
+                    obj.asList.onClickItem.Set((EventCallback0)listClick);
+                }
+                else
+                {
+                    listClick = Delegate.CreateDelegate(typeof(EventCallback1), this, method);
+                    obj.asList.onClickItem.Set((EventCallback1)listClick);
+                }
                 break;
         }
     }

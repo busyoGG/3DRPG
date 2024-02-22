@@ -36,7 +36,7 @@ public class UIBase
                 {
                     BindComp(prop, attr, main);
                 }
-                else if(attr is UIDataBind)
+                else if (attr is UIDataBind)
                 {
                     BindData(prop, attr, main);
                 }
@@ -158,10 +158,16 @@ public class UIBase
                             switch (uiBind._extra[0])
                             {
                                 case "height":
-                                    list.height = data * list.GetChildAt(0).height + list.lineGap * (data - 1) + list.margin.top + list.margin.bottom;
+                                    if (list.numChildren > 0)
+                                    {
+                                        list.height = data * list.GetChildAt(0).height + list.lineGap * (data - 1) + list.margin.top + list.margin.bottom;
+                                    }
                                     break;
                                 case "width":
-                                    list.width = data * list.GetChildAt(0).width + list.columnGap * (data - 1) + list.margin.left + list.margin.right;
+                                    if (list.numChildren > 0)
+                                    {
+                                        list.width = data * list.GetChildAt(0).width + list.columnGap * (data - 1) + list.margin.left + list.margin.right;
+                                    }
                                     break;
                             }
                         }
@@ -190,6 +196,10 @@ public class UIBase
             case "ListProvider":
                 var provider = Delegate.CreateDelegate(typeof(ListItemProvider), this, method);
                 obj.asList.itemProvider = (ListItemProvider)provider;
+                break;
+            case "ListClick":
+                var listClick = Delegate.CreateDelegate(typeof(EventCallback0), this, method);
+                obj.asList.onClickItem.Set((EventCallback0)listClick);
                 break;
         }
     }

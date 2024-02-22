@@ -540,6 +540,7 @@ public class CollideUtils
                     break;
             }
         }
+        //ConsoleUtils.Log("碰撞法线AABB", normal, len);
         return normal.normalized;
     }
 
@@ -654,6 +655,7 @@ public class CollideUtils
         {
             ConsoleUtils.Log("超长", normal,len);
         }
+        //ConsoleUtils.Log("碰撞法线OBB", normal, len);
         return normal.normalized;
     }
 

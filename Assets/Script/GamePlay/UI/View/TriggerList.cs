@@ -8,28 +8,17 @@ using UnityEngine;
 
 public class TriggerList : BaseView
 {
-    GList _list;
+    [UICompBind("List","0")]
+    GList _list { get; set; }
 
     private Dictionary<int, (string, Action)> _itemsDic = new Dictionary<int, (string, Action)>();
 
-    private List<(string, Action)> _items = new List<(string, Action)>();
-
-    //protected override void BindItem()
-    //{
-    //    _list = main.GetChildAt(0).asList;
-    //    _list.SetVirtual();
-    //    _list.itemRenderer = ItemRenderer;
-    //    _list.numItems = 0;
-    //}
+    [UIDataBind("List","0","height")]
+    private UIListProp<(string, Action)> _items { get; set; }
 
     protected override void InitListener()
     {
         EventManager.AddListening(id, "ChangeItem", ChangeItem);
-    }
-
-    protected override void InitAction()
-    {
-        _list.onClickItem.Set(OnButtonClick);
     }
 
     protected override void OnShow()
@@ -44,12 +33,13 @@ public class TriggerList : BaseView
         InputManager.Ins().RemoveEventListener(OnPressButton);
     }
 
+    [UIActionBind("ListRender","0")]
     private void ItemRenderer(int index, GObject obj)
     {
         GButton button = obj.asButton;
         GTextField content = button.GetChildAt(3).asTextField;
 
-        content.text = _items[index].Item1;
+        content.text = _items.Get()[index].Item1;
 
         //button.onClick.Set(OnPressButton);
     }
@@ -64,21 +54,28 @@ public class TriggerList : BaseView
             int selection = _list.selectedIndex;
             if (selection < _items.Count)
             {
-                Action action = _items[selection].Item2;
-                _items.RemoveAt(selection);
+                List<(string, Action)> listData = _items.Get();
+                Action action = listData[selection].Item2;
+                listData.RemoveAt(selection);
+                _items.Set(listData);
+
                 RefreshList();
                 action.Invoke();
             }
         }
     }
 
+    [UIActionBind("ListClick","0")]
     private void OnButtonClick()
     {
         int selection = _list.selectedIndex;
         if (selection < _items.Count)
         {
-            Action action = _items[selection].Item2;
-            _items.RemoveAt(selection);
+            List<(string,Action)> listData = _items.Get();
+            Action action = listData[selection].Item2;
+            listData.RemoveAt(selection);
+            _items.Set(listData);
+
             RefreshList();
             action.Invoke();
         }
@@ -99,21 +96,21 @@ public class TriggerList : BaseView
             _itemsDic.Remove(id);
         }
 
-        _items.Clear();
+        List<(string,Action)> newList = new List<(string, Action)> ();
         foreach (var item in _itemsDic.Values)
         {
-            _items.Add(item);
+            newList.Add(item);
         }
+
+        _items.Set(newList);
 
         RefreshList();
     }
 
     private void RefreshList()
     {
-        _list.numItems = _items.Count;
         if (_items.Count > 0)
         {
-            _list.height = _items.Count * _list.GetChildAt(0).height + _list.lineGap * (_items.Count - 1);
             if (_items.Count == 1)
             {
                 _list.selectedIndex = 0;

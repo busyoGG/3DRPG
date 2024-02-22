@@ -26,12 +26,12 @@ public class MissionView : BaseView
     [UIDataBind("TextFeild", "3/2")]
     private UIProp _missionContent { get; set; }
 
-    [UIDataBind("List", "2", "height")]
+    [UIDataBind("List", "2")]
     private UIListProp<MissionConfigData> _missions { get; set; }
 
-    [UIDataBind("List", "3/1")]
+    [UIDataBind("List", "3/1", "height")]
     private UIListProp<int> _requests { get; set; }
-    [UIDataBind("List", "3/3")]
+    [UIDataBind("List", "3/3", "width")]
     private UIListProp<int> _awards { get; set; }
 
     private Dictionary<int, List<MissionConfigData>> _branchMissions;

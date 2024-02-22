@@ -5,46 +5,35 @@ using System.Collections.Generic;
 
 public class ConversationView : BaseView
 {
-    private GList _listSelection;
+    [UICompBind("List", "3")]
+    private GList _listSelection { get; set; }
 
-    private GTextField _textTalker;
+    //private GTextField _textTalker;
 
-    private GButton _btnAuto;
+    //private GButton _btnAuto;
 
-    private GButton _btnConversation;
+    //private GButton _btnConversation;
 
     //-----保存数据-----
 
-    private List<string> _selection = new List<string>();
+    [UIDataBind("List", "3")]
+    private UIListProp<string> _selection { get; set; }
+    [UIDataBind("TextField", "4/3")]
+    private UIProp _autoBtnContent { get; set; }
+    [UIDataBind("TextField", "2")]
+    private UIProp _talker { get; set; }
+    [UIDataBind("TextField", "0/3")]
+    private UIProp _content {  get; set; }
 
     private string[] _strAuto = new string[2] { "自动", "自动中" };
 
     private bool _isAuto = false;
 
+    private int _selectIndex = 0;
+
     private DialogConfigData _curDialog;
 
     private TimerChain _timer;
-
-    //protected override void BindItem()
-    //{
-    //    _btnConversation = main.GetChildAt(0).asButton;
-
-    //    _textTalker = main.GetChildAt(2).asTextField;
-
-    //    _listSelection = main.GetChildAt(3).asList;
-
-    //    _btnAuto = main.GetChildAt(4).asButton;
-
-    //    _listSelection.SetVirtual();
-    //    _listSelection.itemRenderer = SelectionRenderer;
-    //    _listSelection.numItems = 0;
-    //}
-
-    protected override void InitAction()
-    {
-        _btnAuto.onClick.Set(OnAutoClick);
-        _btnConversation.onClick.Set(OnConversationClick);
-    }
 
     protected override void InitListener()
     {
@@ -66,12 +55,13 @@ public class ConversationView : BaseView
     /// </summary>
     /// <param name="index"></param>
     /// <param name="obj"></param>
+    [UIActionBind("ListRender", "3")]
     private void SelectionRenderer(int index, GObject obj)
     {
         GButton btnSelection = obj.asButton;
         GTextField content = btnSelection.GetChildAt(3).asTextField;
 
-        content.text = _selection[index];
+        content.text = _selection.Get()[index];
 
         btnSelection.onClick.Set(OnSelectionClick);
     }
@@ -91,12 +81,12 @@ public class ConversationView : BaseView
     /// <summary>
     /// 点击自动对话
     /// </summary>
+    [UIActionBind("Click","4")]
     private void OnAutoClick()
     {
         _isAuto = !_isAuto;
 
-        GTextField content = _btnAuto.GetChildAt(3).asTextField;
-        content.text = _isAuto ? _strAuto[1] : _strAuto[0];
+        _autoBtnContent.Set(_isAuto ? _strAuto[1] : _strAuto[0]);
 
         if (_isAuto)
         {
@@ -113,7 +103,7 @@ public class ConversationView : BaseView
     /// </summary>
     private void OnAutoDialog()
     {
-        OnClickDialog(0);
+        OnClickDialog();
 
         if (_isAuto && _curDialog != null && _curDialog.selection.Count == 0)
         {
@@ -136,9 +126,9 @@ public class ConversationView : BaseView
     /// 手动播放
     /// </summary>
     /// <param name="selection"></param>
-    private void OnClickDialog(int selection)
+    private void OnClickDialog()
     {
-        _curDialog = DialogManager.Ins().Next(_curDialog, selection);
+        _curDialog = DialogManager.Ins().Next(_curDialog, _selectIndex);
         bool next = _curDialog != null;
         if (next)
         {
@@ -182,6 +172,7 @@ public class ConversationView : BaseView
     {
         GButton button = (GButton)context.sender;
         _listSelection.selectedIndex = _listSelection.GetChildIndex(button);
+        _selectIndex = _listSelection.selectedIndex;
 
         if (_isAuto)
         {
@@ -189,13 +180,14 @@ public class ConversationView : BaseView
         }
         else
         {
-            OnClickDialog(_listSelection.selectedIndex);
+            OnClickDialog();
         }
     }
 
     /// <summary>
     /// 点击对话
     /// </summary>
+    [UIActionBind("Click", "0")]
     private void OnConversationClick()
     {
         if (!_listSelection.visible)
@@ -206,7 +198,7 @@ public class ConversationView : BaseView
             }
             else
             {
-                OnClickDialog(0);
+                OnClickDialog();
             }
         }
     }
@@ -216,7 +208,8 @@ public class ConversationView : BaseView
     /// </summary>
     private void ChangeSelection()
     {
-        _selection = _curDialog.selection;
+        _selectIndex = 0;
+        _selection.Set(_curDialog.selection);
         RefreshSelection();
     }
 
@@ -225,9 +218,8 @@ public class ConversationView : BaseView
     /// </summary>
     private void RefreshConversation()
     {
-        _textTalker.text = _curDialog.target;
-        GTextField content = _btnConversation.GetChildAt(3).asTextField;
-        content.text = _curDialog.content;
+        _talker.Set(_curDialog.target);
+        _content.Set(_curDialog.content);
     }
 
     /// <summary>

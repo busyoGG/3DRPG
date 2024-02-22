@@ -28,8 +28,7 @@ public class Launcher : MonoBehaviour
 
     private void Test()
     {
-        TestView test = new TestView();
-        test.OnAwake();
+
     }
 
     private void Update()

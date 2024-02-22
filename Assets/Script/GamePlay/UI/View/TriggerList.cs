@@ -16,11 +16,6 @@ public class TriggerList : BaseView
     [UIDataBind("List","0","height")]
     private UIListProp<(string, Action)> _items { get; set; }
 
-    protected override void InitListener()
-    {
-        EventManager.AddListening(id, "ChangeItem", ChangeItem);
-    }
-
     protected override void OnShow()
     {
         base.OnShow();
@@ -81,6 +76,7 @@ public class TriggerList : BaseView
         }
     }
 
+    [UIListenerBind("ChangeItem")]
     private void ChangeItem(ArrayList data)
     {
         bool isAdd = (bool)data[0];

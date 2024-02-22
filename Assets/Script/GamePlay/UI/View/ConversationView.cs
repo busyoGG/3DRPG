@@ -35,11 +35,6 @@ public class ConversationView : BaseView
 
     private TimerChain _timer;
 
-    protected override void InitListener()
-    {
-        EventManager.AddListening(id, "start_conversation", StartConversation);
-    }
-
     protected override void OnShow()
     {
         UIManager.Ins().SetFocus(true);
@@ -70,6 +65,7 @@ public class ConversationView : BaseView
     /// 开始对话
     /// </summary>
     /// <param name="data"></param>
+    [UIListenerBind("start_conversation")]
     private void StartConversation(ArrayList data)
     {
         DialogConfigData config = (DialogConfigData)data[0];

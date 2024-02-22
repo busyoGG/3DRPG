@@ -1,5 +1,6 @@
 using FairyGUI;
 using System;
+using System.Collections;
 using System.Reflection;
 
 public class UIBase
@@ -7,13 +8,14 @@ public class UIBase
     private BindingFlags flag = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance;
 
 
-    protected void BindItem()
+    protected void Bind()
     {
         Type type = GetType();
         PropertyInfo[] props = type.GetProperties(flag);
         GComponent main = (GComponent)type.GetField("main", flag).GetValue(this);
 
         MethodInfo[] methods = type.GetMethods(flag);
+        string id = (string)type.GetField("id", flag).GetValue(this);
 
         foreach (var method in methods)
         {
@@ -23,6 +25,10 @@ public class UIBase
                 if (attr is UIActionBind)
                 {
                     BindAction(method, attr, main);
+                }
+                else if (attr is UIListenerBind)
+                {
+                    BindListener(method, attr, id);
                 }
             }
         }
@@ -202,5 +208,12 @@ public class UIBase
                 obj.asList.onClickItem.Set((EventCallback0)listClick);
                 break;
         }
+    }
+
+    private void BindListener(MethodInfo method, object attr, string id)
+    {
+        UIListenerBind uiBind = (UIListenerBind)attr;
+        var eventFunc = Delegate.CreateDelegate(typeof(Action<ArrayList>), this, method);
+        EventManager.AddListening(id, uiBind._name, (Action<ArrayList>)eventFunc);
     }
 }

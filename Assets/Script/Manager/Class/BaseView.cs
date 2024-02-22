@@ -19,9 +19,7 @@ public class BaseView : UIBase
     /// </summary>
     public void OnAwake()
     {
-        BindItem();
-        InitListener();
-        InitAction();
+        Bind();
     }
 
     public void Show()
@@ -50,10 +48,4 @@ public class BaseView : UIBase
     /// 每次隐藏的时候执行
     /// </summary>
     protected virtual void OnHide() { }
-
-    protected virtual void InitAction() { }
-
-    //protected virtual void BindItem() { }
-
-    protected virtual void InitListener() { }
 }

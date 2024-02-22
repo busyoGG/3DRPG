@@ -38,12 +38,6 @@ public class MissionView : BaseView
 
     private MissionConfigData _curMission;
 
-
-    protected override void InitListener()
-    {
-        EventManager.AddListening(id, "show_mission_list", ShowMissionList);
-    }
-
     protected override void OnShow()
     {
         UIManager.Ins().SetFocus(true);
@@ -196,6 +190,7 @@ public class MissionView : BaseView
     /// 显示任务列表
     /// </summary>
     /// <param name="data"></param>
+    [UIListenerBind("show_mission_list")]
     private void ShowMissionList(ArrayList data)
     {
         Dictionary<int, MissionConfigData> missionDic = (Dictionary<int, MissionConfigData>)data[0];

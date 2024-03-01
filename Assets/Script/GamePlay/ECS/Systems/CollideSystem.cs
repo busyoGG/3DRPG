@@ -104,10 +104,10 @@ public class CollideSystem : ECSSystem
                                 if (collider.powerToMove != 0)
                                 {
                                     float powerRatio = collideComp.powerToBeMove / collider.powerToMove;
-                                    Vector3 verse_offset = offset * (1 - powerRatio);
+                                    Vector3 reverseOffset = offset * (1 - powerRatio);
                                     offset *= powerRatio;
                                     //被推的物体增加排斥值
-                                    collideComp.totalOffset += -verse_offset;
+                                    collideComp.totalOffset += -reverseOffset;
                                 }
                             }
                         }

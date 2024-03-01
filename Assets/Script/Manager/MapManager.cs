@@ -74,6 +74,7 @@ public class MapManager : Singleton<MapManager>
 
         _chunkSize = children[0].transform.localScale.x;
         _startPos = children[0].transform.position;
+        Vector3 endPos = Vector3.zero;
 
         for (int i = 0, len = children.Count; i < len; i++)
         {
@@ -82,20 +83,28 @@ public class MapManager : Singleton<MapManager>
             md.pos = children[i].transform.position;
             md.objects = new List<MapObjectData>();
             _chunks.Add(md);
-            //每个地块创建四叉树
-            if (_generateQTree)
+
+            if(i == len - 1)
             {
-                AABBData bounds = QtreeManager.Ins().CreateBounds(md.pos, new Vector3(_chunkSize, 9999, _chunkSize));
-                int deep = 1;
-                while(_chunkSize / Mathf.Pow(4, deep) > 16)
-                {
-                    deep++;
-                }
-                QtreeManager.Ins().CreateQtree(bounds, deep, 10);
+                endPos = children[i].transform.position;
             }
         }
 
-        Vector3 endPos = children[children.Count - 1].transform.position;
+        Vector3 qtreePos = new Vector3((_startPos.x + endPos.x) * 0.5f, (_startPos.y + endPos.y) * 0.5f, (_startPos.z + endPos.z) * 0.5f);
+        float qtreeSize = Mathf.Abs(_startPos.x - endPos.x);
+
+        //创建四叉树
+        if (_generateQTree)
+        {
+            AABBData bounds = QtreeManager.Ins().CreateBounds(qtreePos, new Vector3(qtreeSize, 9999, qtreeSize));
+            int deep = 1;
+            while (qtreeSize / Mathf.Pow(4, deep) > 16)
+            {
+                deep++;
+            }
+            QtreeManager.Ins().CreateQtree(bounds, deep, 10);
+        }
+
         _mapSize.x = (endPos.x - _startPos.x) / _chunkSize + 1;
         _mapSize.y = (endPos.z - _startPos.z) / _chunkSize + 1;
 

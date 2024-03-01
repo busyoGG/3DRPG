@@ -25,7 +25,7 @@ public class QObjFindingSystem : ECSSystem
             {
                 QTreeComp qTree = entity.Get<QTreeComp>();
                 AABBData bounds = qTree.qObj.bounds;
-                List<QTreeObj> objs = QtreeManager.Ins().Find(MapManager.Ins().GetIndex(bounds.position), bounds);
+                List<QTreeObj> objs = QtreeManager.Ins().Find(bounds);
                 //qTreeObjs.AddRange(objs);
                 qTree.foundObjs.Clear();
                 qTree.foundObjs.AddRange(objs);

@@ -109,6 +109,9 @@ public class CompInit : MonoBehaviour
     [Range(0f, 1f)]
     public float _slopeAngle = 0.8f;
     public bool _isCanClimb = true;
+    public bool _isStatic = true;
+    public float _powerToMove;
+    public float _powerToBeMove;
     //-----collide-end-----
 
     private Entity _entity;
@@ -136,6 +139,7 @@ public class CompInit : MonoBehaviour
         Bounds bound = GetComponent<BoxCollider>().bounds;
 
         Entity entity = ECSManager.Ins().CreateEntity();
+        entity.name = this.name;
         _entity = entity;
 
         bool isRender = false;
@@ -169,10 +173,12 @@ public class CompInit : MonoBehaviour
         if (_isCollide)
         {
             CollideComp collide = entity.Add<CollideComp>();
-            //collide.isStatic = _isStatic;
+            collide.isStatic = _isStatic;
             collide.stepHeight = _stepHeight;
             collide.slopeAngle = _slopeAngle;
             collide.isCanClimb = _isCanClimb;
+            collide.powerToBeMove = _powerToBeMove;
+            collide.powerToMove = _powerToMove;
         }
 
         if (_isTrigger)
@@ -255,7 +261,7 @@ public class CompInit : MonoBehaviour
             }
 
             qtree.qObj = QtreeManager.Ins().CreateQtreeObj(aabb, entity);
-            qtree.qNode = QtreeManager.Ins().Insert(MapManager.Ins().GetIndex(transform.position), qtree.qObj);
+            qtree.qNode = QtreeManager.Ins().Insert(qtree.qObj);
         }
 
         if (_isMainCharacter)

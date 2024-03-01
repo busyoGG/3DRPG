@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -17,6 +18,13 @@ public class CollideComp : Comp
     public Vector3 closestTop;
 
     public Vector3 closestCenter;
+
+    public bool isStatic;
+
+    public float powerToMove;
+
+    public float powerToBeMove;
+
     public override void Reset()
     {
         //isStatic = true;
@@ -26,5 +34,8 @@ public class CollideComp : Comp
         totalOffset = Vector3.zero;
         closestTop = Vector3.zero;
         closestCenter = Vector3.zero;
+        isStatic = false;
+        powerToMove = 0;
+        powerToBeMove = 0;
     }
 }

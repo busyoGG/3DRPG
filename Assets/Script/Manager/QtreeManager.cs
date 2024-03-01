@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public class QtreeManager:Singleton<QtreeManager>
+public class QtreeManager : Singleton<QtreeManager>
 {
-    private List<QTree> _qtree = new List<QTree>();
+    QTree _qtree = null;
 
     /// <summary>
     /// 创建一个四叉树
@@ -13,7 +13,7 @@ public class QtreeManager:Singleton<QtreeManager>
     /// <param name="maxCount"></param>
     public void CreateQtree(AABBData bounds, int maxDepth, int maxCount)
     {
-        _qtree.Add(new QTree(bounds, maxDepth, maxCount));
+        _qtree = new QTree(bounds, maxDepth, maxCount);
     }
 
     /// <summary>
@@ -50,9 +50,9 @@ public class QtreeManager:Singleton<QtreeManager>
     /// </summary>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public QNode Insert(int id,QTreeObj obj)
+    public QNode Insert(QTreeObj obj)
     {
-        QNode node = _qtree[id].Insert(obj);
+        QNode node = _qtree.Insert(obj);
         obj.qNode = node;
         return node;
     }
@@ -61,9 +61,9 @@ public class QtreeManager:Singleton<QtreeManager>
     /// 移除对象
     /// </summary>
     /// <param name="obj"></param>
-    public void Remove(int id, QTreeObj obj)
+    public void Remove(QTreeObj obj)
     {
-        _qtree[id].Remove(obj);
+        _qtree.Remove(obj);
     }
 
     /// <summary>
@@ -71,9 +71,39 @@ public class QtreeManager:Singleton<QtreeManager>
     /// </summary>
     /// <param name="bounds"></param>
     /// <returns></returns>
-    public List<QTreeObj> Find(int id, AABBData bounds)
+    public List<QTreeObj> Find(AABBData bounds)
     {
-        return _qtree[id].Find(bounds);
+        return _qtree.Find(bounds);
+    }
+
+    public void DrawQtree()
+    {
+        DrawLine(_qtree._root._bounds.position, _qtree._root._bounds.halfSize, Color.green);
+        DrawRect(_qtree._root);
+    }
+
+    private void DrawRect(QNode parent)
+    {
+        foreach (QNode child in parent._children)
+        {
+            DrawLine(child._bounds.position, child._bounds.halfSize,Color.red);
+            DrawRect(child);
+        }
+    }
+
+    private void DrawLine(Vector3 center, Vector3 halfSize,Color color)
+    {
+        Gizmos.color = color;
+        Vector3[] points = {
+            new Vector3(center.x - halfSize.x,0,center.z - halfSize.z),
+            new Vector3(center.x + halfSize.x,0,center.z - halfSize.z),
+            new Vector3(center.x + halfSize.x,0,center.z + halfSize.z),
+            new Vector3(center.x - halfSize.x,0,center.z + halfSize.z)
+        };
+        Gizmos.DrawLine(points[0], points[1]);
+        Gizmos.DrawLine(points[1], points[2]);
+        Gizmos.DrawLine(points[2], points[3]);
+        Gizmos.DrawLine(points[3], points[0]);
     }
 }
 

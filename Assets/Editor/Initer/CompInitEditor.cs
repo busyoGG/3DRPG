@@ -119,6 +119,7 @@ public class CompInitEditor : Editor
 
         if (compInit._isCollide || compInit._isTrigger)
         {
+            EditorGUI.indentLevel++;
             EditorGUILayout.PropertyField(_boxType, new GUIContent("碰撞类型"));
             compInit._isCustomBox = EditorGUILayout.Toggle("是否自定义包围盒", compInit._isCustomBox);
             if (compInit._isCustomBox)
@@ -129,6 +130,10 @@ public class CompInitEditor : Editor
                 EditorGUI.indentLevel--;
             }
             compInit._isTriggerPositive = EditorGUILayout.Toggle("是否主动触发", compInit._isTriggerPositive);
+            compInit._isStatic = EditorGUILayout.Toggle("是否静态物体", compInit._isStatic);
+            compInit._powerToBeMove = EditorGUILayout.FloatField("被推动力大小", compInit._powerToBeMove);
+            compInit._powerToMove = EditorGUILayout.FloatField("推动力大小", compInit._powerToMove);
+            EditorGUI.indentLevel--;
         }
 
         compInit._isQTree = EditorGUILayout.Toggle("QTreeComp", compInit._isQTree) || compInit._isCollide;

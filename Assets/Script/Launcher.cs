@@ -59,6 +59,9 @@ public class Launcher : MonoBehaviour
             _logicWorld.DrawGrizmos();
             _physicWorld.DrawGrizmos();
             _renderWorld.DrawGrizmos();
+
+            //ต๗สิ
+            QtreeManager.Ins().DrawQtree();
         }
     }
 

@@ -32,8 +32,6 @@ public class CollideSystem : ECSSystem
             bool isCollide = false;
             //重置斜面旋转
             move.up = Quaternion.identity;
-            //重置排斥
-            collider.totalOffset = Vector3.zero;
             //重置最高点
             collider.closestTop = CollideUtils._maxValue;
             //初始化最近点距离
@@ -91,11 +89,28 @@ public class CollideSystem : ECSSystem
                     Vector3 offset = Vector3.zero;
                     if (box.minY < boxComp.maxY && box.minY + collider.stepHeight >= boxComp.maxY)
                     {
+                        //台阶的情况
                         offset.y = boxComp.maxY - box.minY;
                     }
                     else
                     {
                         offset = normal * len;
+
+                        //推的情况
+                        if (!collider.isStatic && !collideComp.isStatic)
+                        {
+                            if (collider.powerToMove > collideComp.powerToBeMove)
+                            {
+                                if (collider.powerToMove != 0)
+                                {
+                                    float powerRatio = collideComp.powerToBeMove / collider.powerToMove;
+                                    Vector3 verse_offset = offset * (1 - powerRatio);
+                                    offset *= powerRatio;
+                                    //被推的物体增加排斥值
+                                    collideComp.totalOffset += -verse_offset;
+                                }
+                            }
+                        }
                     }
                     collider.totalOffset += offset;
                     RefreshCollider(box, offset);

@@ -8,11 +8,11 @@ public class QNode
 
     private QTree _belong;
 
-    private AABBData _bounds;
+    public AABBData _bounds;
 
     private AABBData _looseBounds;
 
-    private List<QNode> _children;
+    public List<QNode> _children;
 
     private List<QTreeObj> _objs;
 
@@ -180,8 +180,8 @@ public class QNode
         for (int i = 0; i < 4; i++)
         {
             AABBData bounds = new AABBData();
-            float newX = _bounds.position.x + _bounds.halfSize.x * Mathf.Pow(-1, i + 1);
-            float newZ = _bounds.position.z + _bounds.halfSize.z * (i < 2 ? 1 : -1);
+            float newX = _bounds.position.x + _bounds.halfSize.x * 0.5f * Mathf.Pow(-1, i + 1);
+            float newZ = _bounds.position.z + _bounds.halfSize.z * 0.5f * (i < 2 ? 1 : -1);
             bounds.position = new Vector3(newX, _bounds.position.y, newZ);
             bounds.size = _bounds.size * 0.5f;
             QNode child = new QNode(bounds, this, _belong, _depth + 1);
@@ -198,7 +198,7 @@ public class QNode
     private bool CheckInBounds(AABBData bounds1, AABBData bounds2)
     {
         if (bounds1.position.x <= bounds2.max.x && bounds1.position.x >= bounds2.min.x &&
-            bounds1.position.z <= bounds2.max.z && bounds1.position.x >= bounds2.min.z)
+            bounds1.position.z <= bounds2.max.z && bounds1.position.z >= bounds2.min.z)
         {
             return true;
         }

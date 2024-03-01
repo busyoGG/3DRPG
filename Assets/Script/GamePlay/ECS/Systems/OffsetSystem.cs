@@ -20,6 +20,8 @@ public class OffsetSystem : ECSSystem
             if (!collider.totalOffset.Equals(Vector3.zero))
             {
                 move.nextPostition += collider.totalOffset;
+                //÷ÿ÷√≈≈≥‚
+                collider.totalOffset = Vector3.zero;
             }
         }
     }

@@ -10,6 +10,8 @@ public class Entity
 {
     public int id { get; set; }
 
+    public string name { get; set; }
+
     public ECSMask mask { get; set; }
 
     private Dictionary<Type, Comp> _compsInEntity = new Dictionary<Type, Comp>();

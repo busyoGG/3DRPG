@@ -3,17 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void EnterListener(Entity entity);
+
+public delegate void RemoveListener(Entity entity);
+
 public class Group
 {
     private ECSMatcher _matcher;
-
-    //private List<Entity> _enters = new List<Entity>();
-
-    //private List<Entity> _removes = new List<Entity>();
-
-    public delegate void EnterListener(Entity entity);
-
-    public delegate void RemoveListener(Entity entity);
 
     private EnterListener _enterListener;
 

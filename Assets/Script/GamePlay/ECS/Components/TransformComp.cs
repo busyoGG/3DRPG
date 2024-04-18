@@ -30,6 +30,7 @@ public class TransformComp : Comp
         lastPosition = Vector3.zero;
         lastRotation = Quaternion.identity;
         lastScale = Vector3.one;
+        changed = false;
         //parent = null;
         //children = new List<Entity>();
     }

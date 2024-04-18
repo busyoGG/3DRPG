@@ -31,14 +31,17 @@ public class CompInit : MonoBehaviour
     /// 移动速度
     /// </summary>
     public float _moveSpeed = 0.1f;
+
     /// <summary>
     /// 跳跃初速度
     /// </summary>
     public float _jumpSpeed = 1f;
+
     /// <summary>
     /// 重力
     /// </summary>
     public float _gravity = 9.8f;
+
     /// <summary>
     /// 跳跃过程倍率
     /// </summary>
@@ -47,6 +50,7 @@ public class CompInit : MonoBehaviour
 
     //-----box-start-----
     public CollisionType _boxType = CollisionType.AABB;
+
     /// <summary>
     /// 是否自定义包围盒
     /// </summary>
@@ -106,8 +110,7 @@ public class CompInit : MonoBehaviour
 
     //-----collide-start-----
     public float _stepHeight;
-    [Range(0f, 1f)]
-    public float _slopeAngle = 0.8f;
+    [Range(0f, 1f)] public float _slopeAngle = 0.8f;
     public bool _isCanClimb = true;
     public bool _isStatic = true;
     public float _powerToMove;
@@ -217,6 +220,7 @@ public class CompInit : MonoBehaviour
                         aabb.position = bound.center;
                         aabb.size = bound.size;
                     }
+
                     box.aabb = aabb;
                     box.position = aabb.position;
                     break;
@@ -232,6 +236,7 @@ public class CompInit : MonoBehaviour
                         obb.position = transform.position;
                         obb.size = transform.localScale;
                     }
+
                     obb.axes = new Vector3[3]
                     {
                         transform.right,
@@ -242,7 +247,26 @@ public class CompInit : MonoBehaviour
                     box.obb = obb;
                     box.position = obb.position;
                     break;
+                case CollisionType.Capsule:
+                    CapsuleData capsule = new CapsuleData();
+                    if (_isCustomBox)
+                    {
+                        capsule.height = _boxSize.y - _boxSize.x;
+                        capsule.radius = _boxSize.x * 0.5f;
+                    }
+                    else
+                    {
+                        capsule.height = transform.localScale.y - transform.localScale.x;
+                        capsule.radius = transform.localScale.x * 0.5f;
+                    }
+
+                    capsule.position = transform.position;
+                    capsule.rot = transform.rotation;
+
+                    box.capsule = capsule;
+                    break;
             }
+
             box.isPositive = _isTriggerPositive;
         }
 
@@ -312,8 +336,6 @@ public class CompInit : MonoBehaviour
             AniComp ani = entity.Add<AniComp>();
             //ani.curAni = _defAni;
             ani.animator = transform.GetComponent<Animator>();
-
-
         }
 
         if (_logicAniRoot != null)
@@ -386,6 +408,7 @@ public class CompInit : MonoBehaviour
             {
                 path += "/" + names[i];
             }
+
             paths.Add(path);
         }
 
@@ -440,7 +463,8 @@ public class CompInit : MonoBehaviour
                     {
                         resPos[j] += trans[j].position == vecMax ? transform.localPosition : trans[j].position;
                         resEuler[j] += trans[j].euler == vecMax ? transform.localEulerAngles : trans[j].euler;
-                        resScale[j] = Vector3.Scale(trans[j].scale == vecMax ? transform.localScale : trans[j].scale, resScale[j]);
+                        resScale[j] = Vector3.Scale(trans[j].scale == vecMax ? transform.localScale : trans[j].scale,
+                            resScale[j]);
                     }
                 }
             }
@@ -475,6 +499,7 @@ public class CompInit : MonoBehaviour
 
                     break;
             }
+
             Gizmos.color = Color.white;
         }
     }

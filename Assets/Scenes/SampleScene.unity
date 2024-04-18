@@ -2613,7 +2613,7 @@ MonoBehaviour:
   _jumpSpeed: 8
   _gravity: 9.8
   _jumpScale: 2
-  _boxType: 2
+  _boxType: 4
   _isCustomBox: 0
   _boxOffset: {x: 0, y: 0, z: 0}
   _boxSize: {x: 1, y: 1, z: 1}

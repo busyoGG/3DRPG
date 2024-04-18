@@ -1,10 +1,4 @@
-
-using Microsoft.SqlServer.Server;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Transactions;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CollideSystem : ECSSystem
@@ -25,18 +19,13 @@ public class CollideSystem : ECSSystem
             CollideComp collider = entity.Get<CollideComp>();
 
             MoveComp move = entity.Get<MoveComp>();
-            //³õÊ¼»¯Åö×²Êı×é
 
             LinkedList<(int, Entity)> intersectObjs = IntersectSingleton.Ins().GetIntersectObjs(entity.id);
 
             bool isCollide = false;
-            //ÖØÖÃĞ±ÃæĞı×ª
             move.up = Quaternion.identity;
-            //ÖØÖÃ×î¸ßµã
             collider.closestTop = CollideUtils._maxValue;
-            //³õÊ¼»¯×î½üµã¾àÀë
             float minClose = float.MaxValue;
-            //ÖØÖÃÅÊÅÀ¼ì²â×´Ì¬
             move.isCanCheckClimb = false;
 
             foreach (var intersectObj in intersectObjs)
@@ -52,18 +41,17 @@ public class CollideSystem : ECSSystem
                     float len;
                     Vector3 normal = GetNormal(box, boxComp, out len);
 
-                    //×Ô¼º×î¸ßµã
                     _tempVec = box.position;
                     _tempVec.y = box.maxY;
                     Vector3 higherest = GetClosestPoint(_tempVec, boxComp);
-                    //ÕÏ°­Îï×î¸ßµã
+                    //è·å–æœ€é«˜ç‚¹
                     collider.closestTop = higherest;
 
                     move.isCanCheckClimb = collideComp.isCanClimb;
 
                     if (move.isClimb && collideComp.isCanClimb)
                     {
-                        //ÅĞ¶ÏÊÇ·ñÅÀµ½¶¥²¿ Ã»ÓĞµÄ»°¾Í¼ÆËãÅÊÅÀ·¨Ïß
+                        //ï¿½Ğ¶ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã»ï¿½ĞµÄ»ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if (_tempVec.y - higherest.y < 0.1f)
                         {
                             Vector3 closest = GetClosestPoint(box.position, boxComp);
@@ -80,7 +68,7 @@ public class CollideSystem : ECSSystem
                     {
                         if (normal.y > 0)
                         {
-                            //ÉèÖÃĞ±ÃæĞı×ª
+                            //æ—‹è½¬å‰è¿›æ–¹å‘
                             move.up.SetFromToRotation(Vector3.up, normal);
                             move.fixedForward = move.up * move.curForwad;
                         }
@@ -89,14 +77,14 @@ public class CollideSystem : ECSSystem
                     Vector3 offset = Vector3.zero;
                     if (box.minY < boxComp.maxY && box.minY + collider.stepHeight >= boxComp.maxY)
                     {
-                        //Ì¨½×µÄÇé¿ö
+                        //Ì¨ï¿½×µï¿½ï¿½ï¿½ï¿½
                         offset.y = boxComp.maxY - box.minY;
                     }
                     else
                     {
                         offset = normal * len;
 
-                        //ÍÆµÄÇé¿ö
+                        //ï¿½Æµï¿½ï¿½ï¿½ï¿½
                         if (!collider.isStatic && !collideComp.isStatic)
                         {
                             if (collider.powerToMove > collideComp.powerToBeMove)
@@ -106,13 +94,13 @@ public class CollideSystem : ECSSystem
                                     float powerRatio = collideComp.powerToBeMove / collider.powerToMove;
                                     Vector3 reverseOffset = offset * (1 - powerRatio);
                                     offset *= powerRatio;
-                                    //±»ÍÆµÄÎïÌåÔö¼ÓÅÅ³âÖµ
                                     collideComp.totalOffset += -reverseOffset;
                                 }
                             }
                         }
                     }
                     collider.totalOffset += offset;
+                    collider.lastTotalOffset = collider.totalOffset;
                     RefreshCollider(box, offset);
                 }
             }
@@ -129,9 +117,13 @@ public class CollideSystem : ECSSystem
         }
     }
 
+    /// <summary>
+    /// åˆ·æ–°åŒ…å›´ç›’
+    /// </summary>
+    /// <param name="box"></param>
+    /// <param name="offset"></param>
     private void RefreshCollider(BoxComp box, Vector3 offset)
     {
-        //¸üĞÂ°üÎ§ºĞ
         box.position += offset;
         switch (box.type)
         {
@@ -148,9 +140,22 @@ public class CollideSystem : ECSSystem
                 }
                 //if(collider.obb.axes)
                 break;
+            case CollisionType.Capsule:
+                if (box.capsule.position != box.position)
+                {
+                    box.capsule.position = box.position;
+                }
+                break;
         }
     }
 
+    /// <summary>
+    /// è·å–ç¢°æ’æ³•å‘é‡
+    /// </summary>
+    /// <param name="box1"></param>
+    /// <param name="box2"></param>
+    /// <param name="len"></param>
+    /// <returns></returns>
     public Vector3 GetNormal(BoxComp box1, BoxComp box2, out float len)
     {
         switch (box1.type)
@@ -159,11 +164,20 @@ public class CollideSystem : ECSSystem
                 return GetNormal(box1.aabb, box2, out len);
             case CollisionType.OBB:
                 return GetNormal(box1.obb, box2, out len);
+            case CollisionType.Capsule:
+                return GetNormal(box1.capsule, box2, out len);
         }
         len = 0;
         return Vector3.zero;
     }
 
+    /// <summary>
+    /// è·å–ç¢°æ’æ³•å‘é‡çš„å…·ä½“å®ç°
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="box2"></param>
+    /// <param name="len"></param>
+    /// <returns></returns>
     private Vector3 GetNormal(ICollide data1, BoxComp box2, out float len)
     {
         switch (box2.type)
@@ -172,13 +186,15 @@ public class CollideSystem : ECSSystem
                 return data1.GetNormal(box2.aabb, out len);
             case CollisionType.OBB:
                 return data1.GetNormal(box2.obb, out len);
+            case CollisionType.Capsule:
+                return data1.GetNormal(box2.capsule,out len);
         }
         len = 0;
         return Vector3.zero;
     }
 
     /// <summary>
-    /// »ñÈ¡×î½üµã
+    /// è·å–æœ€è¿‘ç‚¹
     /// </summary>
     /// <param name="position"></param>
     /// <param name="data2"></param>
@@ -191,6 +207,7 @@ public class CollideSystem : ECSSystem
                 return CollideUtils.GetClosestPoint(position, data2.aabb);
             case CollisionType.OBB:
                 return CollideUtils.GetClosestPoint(position, data2.obb);
+            // case 
         }
         return Vector3.zero;
     }

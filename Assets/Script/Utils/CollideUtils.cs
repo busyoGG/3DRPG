@@ -1,5 +1,3 @@
-
-
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,19 +10,22 @@ public class CollideUtils
 
     public static Dictionary<string, List<Vector2[]>> _limitObb = new Dictionary<string, List<Vector2[]>>();
 
+    public static Dictionary<string, Vector3[]> _closestPoint = new Dictionary<string, Vector3[]>();
+
     //----- AABB ----- start
 
     /// <summary>
-    /// AABB¼ì²â
+    /// AABBæ£€æµ‹
     /// </summary>
     /// <param name="data1">AABB</param>
     /// <param name="data2">AABB</param>
     /// <returns></returns>
     public static bool CollisionAABB(AABBData data1, AABBData data2)
     {
-        //°üÎ§ºĞ1µÄ×îĞ¡Öµ±È°üÎ§ºĞ2µÄ×î´óÖµ»¹´ó »ò °üÎ§ºĞ1µÄ×î´óÖµ±È°üÎ§ºĞ2µÄ×îĞ¡Öµ»¹Ğ¡ Ôò²»Åö×²
-        if (data2.min.x - data1.max.x > 0.001 || data2.min.y - data1.max.y > 0.001 || data2.min.z - data1.max.z > 0.001 ||
-            data1.min.x - data2.max.x > 0.001 || data1.min.y - data2.max.y > 0.001 || data1.min.z - data2.max.z >  0.001)
+        //åŒ…å›´ç›’1çš„æœ€å°å€¼æ¯”åŒ…å›´ç›’2çš„æœ€å¤§å€¼è¿˜å¤§ æˆ– åŒ…å›´ç›’1çš„æœ€å¤§å€¼æ¯”åŒ…å›´ç›’2çš„æœ€å°å€¼è¿˜å° åˆ™ä¸ç¢°æ’
+        if (data2.min.x - data1.max.x > 0.001 || data2.min.y - data1.max.y > 0.001 ||
+            data2.min.z - data1.max.z > 0.001 ||
+            data1.min.x - data2.max.x > 0.001 || data1.min.y - data2.max.y > 0.001 || data1.min.z - data2.max.z > 0.001)
         {
             return false;
         }
@@ -39,14 +40,14 @@ public class CollideUtils
     //----- OBB ----- start
 
     /// <summary>
-    /// SAT·ÖÀëÖáÅö×²¼ì²âÖ®OBB¼ì²â
+    /// SATåˆ†ç¦»è½´ç¢°æ’æ£€æµ‹ä¹‹OBBæ£€æµ‹
     /// </summary>
     /// <param name="data1">OBB</param>
     /// <param name="data2">OBB</param>
     /// <returns></returns>
     public static bool CollisionOBB(OBBData data1, OBBData data2)
     {
-        //ÇóÁ½¸öOBB°üÎ§ºĞÖ®¼äÁ½Á½×ø±êÖáµÄ·¨Æ½ÃæÖá ¹²9¸ö
+        //æ±‚ä¸¤ä¸ªOBBåŒ…å›´ç›’ä¹‹é—´ä¸¤ä¸¤åæ ‡è½´çš„æ³•å¹³é¢è½´ å…±9ä¸ª
         Vector3[] axes;
 
         string id = data1.GetHashCode() + "-" + data2.GetHashCode();
@@ -68,9 +69,11 @@ public class CollideUtils
                         initJ--;
                         axes[k++] = data2.axes[j];
                     }
+
                     axes[k++] = Vector3.Cross(data1.axes[i], data2.axes[j]);
                 }
             }
+
             _seperatingAxes.Add(id, axes);
         }
 
@@ -94,7 +97,7 @@ public class CollideUtils
 
             if (isNotInteractive)
             {
-                //ÓĞÒ»¸ö²»Ïà½»¾ÍÍË³ö
+                //æœ‰ä¸€ä¸ªä¸ç›¸äº¤å°±é€€å‡º
                 return false;
             }
             else
@@ -107,7 +110,7 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// ¼ÆËãÍ¶Ó°ÊÇ·ñ²»Ïà½»
+    /// è®¡ç®—æŠ•å½±æ˜¯å¦ä¸ç›¸äº¤
     /// </summary>
     /// <param name="vertexs1"></param>
     /// <param name="vertexs2"></param>
@@ -116,16 +119,16 @@ public class CollideUtils
     public static bool NotInteractiveOBB(Vector3[] vertexs1, Vector3[] vertexs2, Vector3 axis, out Vector2[] limit)
     {
         limit = new Vector2[2];
-        //¼ÆËãOBB°üÎ§ºĞÔÚ·ÖÀëÖáÉÏµÄÍ¶Ó°¼«ÏŞÖµ
+        //è®¡ç®—OBBåŒ…å›´ç›’åœ¨åˆ†ç¦»è½´ä¸Šçš„æŠ•å½±æé™å€¼
         limit[0] = GetProjectionLimit(vertexs1, axis);
         limit[1] = GetProjectionLimit(vertexs2, axis);
-        //Á½¸ö°üÎ§ºĞ¼«ÏŞÖµ²»Ïà½»£¬Ôò²»Åö×²
+        //ä¸¤ä¸ªåŒ…å›´ç›’æé™å€¼ä¸ç›¸äº¤ï¼Œåˆ™ä¸ç¢°æ’
         bool res = limit[0].x - limit[1].y >= 0.001 || limit[1].x - limit[0].y >= 0.001;
         return res;
     }
 
     /// <summary>
-    /// ¼ÆËã¶¥µãÍ¶Ó°¼«ÏŞÖµ
+    /// è®¡ç®—é¡¶ç‚¹æŠ•å½±æé™å€¼
     /// </summary>
     /// <param name="vertexts"></param>
     /// <param name="axis"></param>
@@ -140,24 +143,25 @@ public class CollideUtils
             result.x = Mathf.Min(dot, result[0]);
             result.y = Mathf.Max(dot, result[1]);
         }
+
         return result;
     }
     //----- OBB ----- end
 
     //----- Circle ----- start
     /// <summary>
-    /// ÇòÓëÇò¼ì²â
+    /// çƒä¸çƒæ£€æµ‹
     /// </summary>
-    /// <param name="data1">Çò</param>
-    /// <param name="data2">Çò</param>
+    /// <param name="data1">çƒ</param>
+    /// <param name="data2">çƒ</param>
     /// <returns></returns>
     public static bool CollisionCircle(CircleData data1, CircleData data2)
     {
-        //ÇóÁ½¸öÇò°ë¾¶ºÍ
+        //æ±‚ä¸¤ä¸ªçƒåŠå¾„å’Œ
         float totalRadius = Mathf.Pow(data1.radius + data2.radius, 2);
-        //ÇòÁ½¸öÇòĞÄÖ®¼äµÄ¾àÀë
+        //çƒä¸¤ä¸ªçƒå¿ƒä¹‹é—´çš„è·ç¦»
         float distance = (data1.position - data2.position).sqrMagnitude;
-        //¾àÀëĞ¡ÓÚµÈÓÚ°ë¾¶ºÍÔòÅö×²
+        //è·ç¦»å°äºç­‰äºåŠå¾„å’Œåˆ™ç¢°æ’
         if (distance <= totalRadius)
         {
             return true;
@@ -169,20 +173,20 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// ÇòÓëAABB¼ì²â
+    /// çƒä¸AABBæ£€æµ‹
     /// </summary>
-    /// <param name="data1">Çò</param>
+    /// <param name="data1">çƒ</param>
     /// <param name="data2">AABB</param>
     /// <returns></returns>
     public static bool CollisionCircle2AABB(CircleData data1, AABBData data2, out Vector3 point)
     {
-        //Çó³ö×î½üµã
+        //æ±‚å‡ºæœ€è¿‘ç‚¹
         Vector3 center = data1.position;
         Vector3 nearP = GetClosestPoint(data1.position, data2);
-        //Çó³ö×î½üµãÓëÇòĞÄµÄ¾àÀë
+        //æ±‚å‡ºæœ€è¿‘ç‚¹ä¸çƒå¿ƒçš„è·ç¦»
         float distance = (nearP - center).sqrMagnitude;
         float radius = Mathf.Pow(data1.radius, 2);
-        //¾àÀëĞ¡ÓÚ°ë¾¶ÔòÅö×²
+        //è·ç¦»å°äºåŠå¾„åˆ™ç¢°æ’
         if (distance <= radius)
         {
             point = nearP;
@@ -196,7 +200,7 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// »ñµÃÒ»µãµ½AABB×î½üµã
+    /// è·å¾—ä¸€ç‚¹åˆ°AABBæœ€è¿‘ç‚¹
     /// </summary>
     /// <param name="data1"></param>
     /// <param name="data2"></param>
@@ -211,16 +215,16 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// ÇòÓëOBB¼ì²â
+    /// çƒä¸OBBæ£€æµ‹
     /// </summary>
-    /// <param name="data1">Çò</param>
+    /// <param name="data1">çƒ</param>
     /// <param name="data2">OBB</param>
     /// <returns></returns>
     public static bool CollisionCircle2OBB(CircleData data1, OBBData data2, out Vector3 point)
     {
-        //Çó×î½üµã
+        //æ±‚æœ€è¿‘ç‚¹
         Vector3 nearP = GetClosestPoint(data1.position, data2);
-        //ÓëAABB¼ì²âÔ­ÀíÏàÍ¬
+        //ä¸AABBæ£€æµ‹åŸç†ç›¸åŒ
         float distance = (nearP - data1.position).sqrMagnitude;
         float radius = Mathf.Pow(data1.radius, 2);
         if (distance <= radius)
@@ -236,13 +240,13 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// »ñÈ¡Ò»µãµ½OBBµÄ×î½üµã
+    /// è·å–ä¸€ç‚¹åˆ°OBBçš„æœ€è¿‘ç‚¹
     /// </summary>
     /// <returns></returns>
     public static Vector3 GetClosestPoint(Vector3 point, OBBData data2, bool isWorldPosition = true)
     {
         Vector3 nearP = data2.position;
-        //ÇóÇòĞÄÓëOBBÖĞĞÄµÄ¾àÀëÏòÁ¿ ´ÓOBBÖĞĞÄÖ¸ÏòÇòĞÄ
+        //æ±‚çƒå¿ƒä¸OBBä¸­å¿ƒçš„è·ç¦»å‘é‡ ä»OBBä¸­å¿ƒæŒ‡å‘çƒå¿ƒ
         Vector3 center1 = point;
         Vector3 center2 = data2.position;
         Vector3 dist = center1 - center2;
@@ -252,10 +256,10 @@ public class CollideUtils
 
         for (int i = 0; i < 3; i++)
         {
-            //¼ÆËã¾àÀëÏòÁ¿µ½OBB×ø±êÖáµÄÍ¶Ó°³¤¶È ¼´¾àÀëÏòÁ¿ÔÚOBB×ø±êÏµÖĞµÄ¶ÔÓ¦×ø±êÖáµÄ³¤¶È
+            //è®¡ç®—è·ç¦»å‘é‡åˆ°OBBåæ ‡è½´çš„æŠ•å½±é•¿åº¦ å³è·ç¦»å‘é‡åœ¨OBBåæ ‡ç³»ä¸­çš„å¯¹åº”åæ ‡è½´çš„é•¿åº¦
             float distance = Vector3.Dot(dist, axes[i]);
             distance = Mathf.Clamp(distance, -size[i], size[i]);
-            //»¹Ô­µ½ÊÀ½ç×ø±ê
+            //è¿˜åŸåˆ°ä¸–ç•Œåæ ‡
             //nearP.x += distance * axes[i].x;
             //nearP.y += distance * axes[i].y;
             //nearP.z += distance * axes[i].z;
@@ -279,6 +283,7 @@ public class CollideUtils
                 }
             }
         }
+
         return nearP;
     }
 
@@ -287,11 +292,10 @@ public class CollideUtils
     //----- Ray ----- start
 
     /// <summary>
-    /// ÉäÏßºÍÇò¼ì²â
+    /// å°„çº¿å’Œçƒæ£€æµ‹
     /// </summary>
     public static bool CollisionRay2Circle(RayData data1, CircleData data2, out Vector3 point)
     {
-
         Vector3 centerDis = data2.position - data1.origin;
         Vector3 forward = data1.forward;
 
@@ -299,13 +303,13 @@ public class CollideUtils
         float r2 = Mathf.Pow(data2.radius, 2);
         float f = Mathf.Pow(projection, 2) + r2 - centerDis.sqrMagnitude;
 
-        //·½ÏòÏà·´
+        //æ–¹å‘ç›¸å
         bool checkforward = projection < 0;
-        //ÉäÏß¹ı¶Ì
+        //å°„çº¿è¿‡çŸ­
         bool checkDistance = centerDis.sqrMagnitude > Mathf.Pow(data1.length + data2.radius, 2);
-        //ÉäÏßÆğµãÔÚÇòÄÚ²¿
+        //å°„çº¿èµ·ç‚¹åœ¨çƒå†…éƒ¨
         bool checkNotInside = centerDis.sqrMagnitude > r2;
-        //²»Ïà½»
+        //ä¸ç›¸äº¤
         bool checkNotCollide = f < 0;
 
         if (checkNotInside && (checkforward || checkDistance || checkNotCollide))
@@ -322,9 +326,9 @@ public class CollideUtils
 
     public static bool CollisionRay2AABB(RayData data1, AABBData data2, out Vector3 point)
     {
-        //ÅĞ¶ÏÊÇ·ñ²»ÔÚAABBÄÚ
+        //åˆ¤æ–­æ˜¯å¦ä¸åœ¨AABBå†…
         bool checkNotInside = CheckInsideAABB(data1.origin, data2);
-        //ÅĞ¶Ï·´ÏòÇé¿ö
+        //åˆ¤æ–­åå‘æƒ…å†µ
         bool checkForawd = Vector3.Dot(data2.position - data1.origin, data1.forward) < 0;
         if (checkNotInside && checkForawd)
         {
@@ -332,7 +336,7 @@ public class CollideUtils
             return false;
         }
 
-        //ÅĞ¶ÏÊÇ·ñÏà½»
+        //åˆ¤æ–­æ˜¯å¦ç›¸äº¤
         Vector3 min = data2.min - data1.origin;
         Vector3 max = data2.max - data1.origin;
 
@@ -350,7 +354,6 @@ public class CollideUtils
 
         if (!checkNotInside)
         {
-
             point = data1.origin + data1.forward * f;
 
             return true;
@@ -371,7 +374,7 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// ¼ì²âÒ»¸öµãÊÇ·ñÔÚAABBÄÚ
+    /// æ£€æµ‹ä¸€ä¸ªç‚¹æ˜¯å¦åœ¨AABBå†…
     /// </summary>
     /// <param name="point"></param>
     /// <param name="data2"></param>
@@ -379,17 +382,17 @@ public class CollideUtils
     public static bool CheckInsideAABB(Vector3 point, AABBData data2)
     {
         bool notInside = point.x > data2.max.x || point.x < data2.min.x ||
-             point.y > data2.max.y || point.y < data2.min.y ||
-             point.z > data2.max.z || point.z < data2.min.z;
+                         point.y > data2.max.y || point.y < data2.min.y ||
+                         point.z > data2.max.z || point.z < data2.min.z;
         return !notInside;
     }
 
     public static bool CollisionRay2OBB(RayData data1, OBBData data2, out Vector3 point)
     {
-        //ÅĞ¶Ï²»ÔÚOBBÄÚ
+        //åˆ¤æ–­ä¸åœ¨OBBå†…
         Vector3 centerDis = data1.origin - data2.position;
         bool checkNotInside = CheckInsideObb(centerDis, data2);
-        //ÅĞ¶Ï·´ÏòÇé¿ö
+        //åˆ¤æ–­åå‘æƒ…å†µ
         bool checkFoward = Vector3.Dot(data2.position - data1.origin, data1.forward) < 0;
         if (checkNotInside && checkFoward)
         {
@@ -397,7 +400,7 @@ public class CollideUtils
             return false;
         }
 
-        //ÅĞ¶ÏÊÇ·ñÏà½»
+        //åˆ¤æ–­æ˜¯å¦ç›¸äº¤
         Vector3 min = Vector3.zero;
         Vector3 minP = data2.vertexts[0] - data1.origin;
         min.x = Vector3.Dot(minP, data2.axes[0]);
@@ -452,7 +455,70 @@ public class CollideUtils
     }
 
     /// <summary>
-    /// ¼ì²âÒ»¸öµãÊÇ·ñÔÚOBBÄÚ
+    /// å°„çº¿å’Œèƒ¶å›Šä½“æ£€æµ‹
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public static bool CollisionRay2Capsule(RayData data1, CapsuleData data2, out Vector3 point)
+    {
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        //è®¡ç®—æ–¹å‘å‘é‡
+        Vector3 direction2 = data2.rot * Vector3.up * data2.height * 0.5f;
+        //è®¡ç®—å¤´å°¾ç‚¹æœ€å€¼
+        Vector3 pointA1 = data1.origin;
+        Vector3 pointA2 = data1.origin + data1.forward * data1.length;
+
+        Vector3 pointB1 = data2.position + direction2;
+        Vector3 pointB2 = data2.position - direction2;
+
+        Vector3 center = (pointA1 + pointA2) * 0.5f;
+
+        Vector3 closest2;
+
+        if ((pointB1 - center).magnitude <= (pointB2 - center).magnitude)
+        {
+            closest2 = pointB1;
+        }
+        else
+        {
+            closest2 = pointB2;
+        }
+
+        Vector3 closest1 = GetClosestPointOnLineSegment(pointA1, pointA2, closest2);
+        closest2 = GetClosestPointOnLineSegment(pointB1, pointB2, closest1);
+
+        //æ±‚èƒ¶å›Šä½“åŠå¾„å¹³æ–¹
+        float totalRadius = Mathf.Pow(data2.radius, 2);
+        //æ±‚ä¸¤ä¸ªç‚¹ä¹‹é—´çš„è·ç¦»
+        float distance = (closest1 - closest2).sqrMagnitude;
+        point = (closest1 + closest2) * 0.5f;
+
+        if (_closestPoint.ContainsKey(id))
+        {
+            Vector3[] val = _closestPoint[id];
+            val[0] = closest1;
+            val[1] = closest2;
+        }
+        else
+        {
+            _closestPoint.Add(id, new[] { closest1, closest2 });
+        }
+
+        //è·ç¦»å°äºç­‰äºåŠå¾„å¹³æ–¹åˆ™ç¢°æ’
+        if (distance <= totalRadius)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// æ£€æµ‹ä¸€ä¸ªç‚¹æ˜¯å¦åœ¨OBBå†…
     /// </summary>
     /// <param name="point"></param>
     /// <param name="data2"></param>
@@ -463,14 +529,253 @@ public class CollideUtils
         float ray2ObbY = Vector3.Dot(point, data2.axes[1]);
         float ray2ObbZ = Vector3.Dot(point, data2.axes[2]);
         bool notInside = ray2ObbX < -data2.halfSize[0] || ray2ObbX > data2.halfSize[0] ||
-            ray2ObbY < -data2.halfSize[1] || ray2ObbY > data2.halfSize[1] ||
-            ray2ObbZ < -data2.halfSize[2] || ray2ObbZ > data2.halfSize[2];
+                         ray2ObbY < -data2.halfSize[1] || ray2ObbY > data2.halfSize[1] ||
+                         ray2ObbZ < -data2.halfSize[2] || ray2ObbZ > data2.halfSize[2];
         return !notInside;
     }
 
+
     //----- Ray ----- end
 
-    //----- »ñÈ¡Åö×²·¨Ïß -----
+    //----- Capsule ----- start
+
+    /// <summary>
+    /// èƒ¶å›Šä½“ç¢°æ’
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public static bool CollisionCapsule(CapsuleData data1, CapsuleData data2, out Vector3 point)
+    {
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        //è®¡ç®—æ–¹å‘å‘é‡
+        Vector3 direction1 = data1.rot * Vector3.up * data1.height * 0.5f;
+        Vector3 direction2 = data2.rot * Vector3.up * data2.height * 0.5f;
+        //è®¡ç®—å¤´å°¾ç‚¹æœ€å€¼
+        Vector3 pointA1 = data1.position + direction1;
+        Vector3 pointA2 = data1.position - direction1;
+
+        Vector3 pointB1 = data2.position + direction2;
+        Vector3 pointB2 = data2.position - direction2;
+
+        Vector3 closest1;
+
+        if ((pointA1 - data2.position).magnitude <= (pointA2 - data2.position).magnitude)
+        {
+            closest1 = pointA1;
+        }
+        else
+        {
+            closest1 = pointA2;
+        }
+
+        Vector3 closest2 = GetClosestPointOnLineSegment(pointB1, pointB2, closest1);
+        closest1 = GetClosestPointOnLineSegment(pointA1, pointA2, closest2);
+
+        //æ±‚ä¸¤ä¸ªçƒåŠå¾„å’Œ
+        float totalRadius = Mathf.Pow(data1.radius + data2.radius, 2);
+        //çƒä¸¤ä¸ªçƒå¿ƒä¹‹é—´çš„è·ç¦»
+        float distance = (closest1 - closest2).sqrMagnitude;
+        
+        point = (closest1 + closest2) * 0.5f;
+        
+        if (_closestPoint.ContainsKey(id))
+        {
+            Vector3[] val = _closestPoint[id];
+            val[0] = closest1;
+            val[1] = closest2;
+        }
+        else
+        {
+            _closestPoint.Add(id, new[] { closest1, closest2 });
+        }
+        //è·ç¦»å°äºç­‰äºåŠå¾„å’Œåˆ™ç¢°æ’
+        if (distance <= totalRadius)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// èƒ¶å›Šä½“ä¸çƒç¢°æ’
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public static bool CollisionCapsule2Circle(CapsuleData data1, CircleData data2, out Vector3 point)
+    {
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        //è®¡ç®—æ–¹å‘å‘é‡
+        Vector3 direction1 = data1.rot * Vector3.up * data1.height * 0.5f;
+        //è®¡ç®—å¤´å°¾ç‚¹æœ€å€¼
+        Vector3 point1 = data1.position + direction1;
+        Vector3 point2 = data1.position - direction1;
+
+        Vector3 closest = GetClosestPointOnLineSegment(point1, point2, data2.position);
+
+        //æ±‚ä¸¤ä¸ªçƒåŠå¾„å’Œ
+        float totalRadius = Mathf.Pow(data1.radius + data2.radius, 2);
+        //çƒä¸¤ä¸ªçƒå¿ƒä¹‹é—´çš„è·ç¦»
+        float distance = (closest - data2.position).sqrMagnitude;
+        point = (closest + data2.position) * 0.5f;
+        if (_closestPoint.ContainsKey(id))
+        {
+            Vector3[] val = _closestPoint[id];
+            val[0] = closest;
+            val[1] = data2.position;
+        }
+        else
+        {
+            _closestPoint.Add(id, new[] { closest, data2.position });
+        }
+        //è·ç¦»å°äºç­‰äºåŠå¾„å’Œåˆ™ç¢°æ’
+        if (distance <= totalRadius)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// èƒ¶å›Šä½“ä¸AABBç¢°æ’
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public static bool CollisionCapsule2AABB(CapsuleData data1, AABBData data2, out Vector3 point)
+    {
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        //è®¡ç®—æ–¹å‘å‘é‡
+        Vector3 direction1 = data1.rot * Vector3.up * data1.height * 0.5f;
+        //è®¡ç®—å¤´å°¾ç‚¹æœ€å€¼
+        Vector3 pointA1 = data1.position + direction1;
+        Vector3 pointA2 = data1.position - direction1;
+
+        Vector3 closest1;
+
+        if ((pointA1 - data2.position).magnitude <= (pointA2 - data2.position).magnitude)
+        {
+            closest1 = pointA1;
+        }
+        else
+        {
+            closest1 = pointA2;
+        }
+
+        Vector3 closest2 = GetClosestPoint(closest1, data2);
+        closest1 = GetClosestPointOnLineSegment(pointA1, pointA2, closest2);
+
+        //æ±‚èƒ¶å›Šä½“åŠå¾„å¹³æ–¹
+        float totalRadius = Mathf.Pow(data1.radius, 2);
+        //æ±‚ä¸¤ä¸ªç‚¹ä¹‹é—´çš„è·ç¦»
+        float distance = (closest1 - closest2).sqrMagnitude;
+        point = (closest1 + closest2) * 0.5f;
+        if (_closestPoint.ContainsKey(id))
+        {
+            Vector3[] val = _closestPoint[id];
+            val[0] = closest1;
+            val[1] = closest2;
+        }
+        else
+        {
+            _closestPoint.Add(id, new[] { closest1, closest2 });
+        }
+        //è·ç¦»å°äºç­‰äºåŠå¾„å¹³æ–¹åˆ™ç¢°æ’
+        if (distance <= totalRadius)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// èƒ¶å›Šä½“ä¸OBBæ£€æµ‹
+    /// </summary>
+    /// <param name="data1"></param>
+    /// <param name="data2"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    public static bool CollisionCapsule2OBB(CapsuleData data1, OBBData data2, out Vector3 point)
+    {
+        string id = data1.GetHashCode() + "-" + data2.GetHashCode();
+        //è®¡ç®—æ–¹å‘å‘é‡
+        Vector3 direction1 = data1.rot * Vector3.up * data1.height * 0.5f;
+        //è®¡ç®—å¤´å°¾ç‚¹æœ€å€¼
+        Vector3 pointA1 = data1.position + direction1;
+        Vector3 pointA2 = data1.position - direction1;
+
+        Vector3 closest1;
+
+        if ((pointA1 - data2.position).magnitude <= (pointA2 - data2.position).magnitude)
+        {
+            closest1 = pointA1;
+        }
+        else
+        {
+            closest1 = pointA2;
+        }
+
+        Vector3 closest2 = GetClosestPoint(closest1, data2);
+        closest1 = GetClosestPointOnLineSegment(pointA1, pointA2, closest2);
+
+        //æ±‚èƒ¶å›Šä½“åŠå¾„å¹³æ–¹
+        float totalRadius = Mathf.Pow(data1.radius, 2);
+        //æ±‚ä¸¤ä¸ªç‚¹ä¹‹é—´çš„è·ç¦»
+        float distance = (closest1 - closest2).sqrMagnitude;
+        point = (closest1 + closest2) * 0.5f;
+        if (_closestPoint.ContainsKey(id))
+        {
+            Vector3[] val = _closestPoint[id];
+            val[0] = closest1;
+            val[1] = closest2;
+        }
+        else
+        {
+            _closestPoint.Add(id, new[] { closest1, closest2 });
+        }
+        //è·ç¦»å°äºç­‰äºåŠå¾„å¹³æ–¹åˆ™ç¢°æ’
+        if (distance <= totalRadius)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// è·å–çº¿æ®µä¸Šä¸€ç‚¹åˆ°ç›®æ ‡ç‚¹çš„æœ€è¿‘ç‚¹
+    /// </summary>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    /// <param name="point"></param>
+    /// <returns></returns>
+    private static Vector3 GetClosestPointOnLineSegment(Vector3 start, Vector3 end, Vector3 point)
+    {
+        Vector3 line = end - start;
+        //dot line line æ±‚é•¿åº¦å¹³æ–¹
+        float ratio = Vector3.Dot(point - start, line) / Vector3.Dot(line, line);
+        ratio = Mathf.Min(Mathf.Max(ratio, 0), 1);
+        return start + ratio * line;
+    }
+
+    //----- Capsule ----- end
+
+    //----- è·å–ç¢°æ’æ³•çº¿ -----
 
     public static Vector3 GetCollideNormal(AABBData data1, AABBData data2, out float len)
     {
@@ -478,7 +783,8 @@ public class CollideUtils
         Vector3 len1_2 = data1.max - data2.min;
         Vector3 len2_1 = data2.max - data1.min;
 
-        float[] depth = new float[6] {
+        float[] depth = new float[6]
+        {
             len1_2.x,
             len1_2.y,
             len1_2.z,
@@ -540,7 +846,8 @@ public class CollideUtils
                     break;
             }
         }
-        //ConsoleUtils.Log("Åö×²·¨ÏßAABB", normal, len);
+
+        //ConsoleUtils.Log("ç¢°æ’æ³•çº¿AABB", normal, len);
         return normal.normalized;
     }
 
@@ -571,9 +878,11 @@ public class CollideUtils
                         initJ--;
                         axes[k++] = data2.axes[j];
                     }
+
                     axes[k++] = Vector3.Cross(data1.axes[i], data2.axes[j]);
                 }
             }
+
             _seperatingAxes.Add(id, axes);
         }
 
@@ -596,7 +905,7 @@ public class CollideUtils
 
                 if (isNotInteractive)
                 {
-                    //ÓĞÒ»¸ö²»Ïà½»¾ÍÍË³ö
+                    //æœ‰ä¸€ä¸ªä¸ç›¸äº¤å°±é€€å‡º
                     len = 0;
                     return normal;
                 }
@@ -626,6 +935,7 @@ public class CollideUtils
             {
                 overlap = Mathf.Min(limit[0].y, limit[1].y) - Mathf.Max(limit[0].x, limit[1].x);
             }
+
             if (overlap >= -0.001)
             {
                 overlap = overlap / axes[i].magnitude;
@@ -651,17 +961,35 @@ public class CollideUtils
         {
             normal = -normal;
         }
+
         if (len > 0.5f)
         {
-            ConsoleUtils.Log("³¬³¤", normal,len);
+            ConsoleUtils.Log("è¶…é•¿", normal, len);
         }
-        //ConsoleUtils.Log("Åö×²·¨ÏßOBB", normal, len);
+
+        //ConsoleUtils.Log("ç¢°æ’æ³•çº¿OBB", normal, len);
         return normal.normalized;
     }
 
-    //TODO GJK¼ì²â
+    public static Vector3 GetCollideNormal(string id,float maxLen, out float len)
+    {
+        Vector3[] points;
+        _closestPoint.TryGetValue(id, out points);
+        if (points == null)
+        {
+            len = 0;
+            return Vector3.zero;
+        }
+        Vector3 point1 = points[0];
+        Vector3 point2 = points[1];
 
-    //¹¤¾ßº¯Êı
+        len = Mathf.Clamp(maxLen - (point1 - point2).magnitude,0,maxLen);
+        return (point1 - point2).normalized;
+    }
+
+    //TODO GJKæ£€æµ‹
+
+    //å·¥å…·å‡½æ•°
 
     public static void Swap(ref float one, ref float two)
     {

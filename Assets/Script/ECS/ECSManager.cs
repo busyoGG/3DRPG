@@ -75,6 +75,11 @@ public class ECSManager : Singleton<ECSManager>
         return _comps;
     }
 
+    /// <summary>
+    /// 注册组件
+    /// </summary>
+    /// <param name="comp"></param>
+    /// <param name="compId"></param>
     public void CompRegister(Type comp, int compId)
     {
         _comps.Add(comp, compId);
@@ -83,7 +88,7 @@ public class ECSManager : Singleton<ECSManager>
     }
 
     /// <summary>
-    /// 创建类
+    /// 创建组件
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="comp"></param>

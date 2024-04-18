@@ -16,8 +16,7 @@ public class BoxRefreshSystem : ECSSystem
             BoxComp box = entity.Get<BoxComp>();
             MoveComp move = entity.Get<MoveComp>();
             TransformComp transform = entity.Get<TransformComp>();
-
-            //¸üÐÂ°üÎ§ºÐ
+            
             if (move != null)
             {
                 box.position = move.nextPostition;
@@ -53,6 +52,17 @@ public class BoxRefreshSystem : ECSSystem
 
                         //if(box.obb.rot != move.)
                         //if(box.obb.axes)
+                        break;
+                    case CollisionType.Capsule:
+                        if (box.capsule.position != move.nextPostition)
+                        {
+                            box.capsule.position = move.nextPostition;
+                        }
+                        
+                        if (box.capsule.rot != transform.rotation)
+                        {
+                            box.capsule.rot = transform.rotation;
+                        }
                         break;
                 }
             }

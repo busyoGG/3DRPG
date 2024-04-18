@@ -15,6 +15,8 @@ public class CollideComp : Comp
 
     public Vector3 totalOffset;
 
+    public Vector3 lastTotalOffset;
+
     public Vector3 closestTop;
 
     public Vector3 closestCenter;
@@ -32,6 +34,7 @@ public class CollideComp : Comp
         stepHeight = 0;
         slopeAngle = 0.8f;
         totalOffset = Vector3.zero;
+        lastTotalOffset = Vector3.zero;
         closestTop = Vector3.zero;
         closestCenter = Vector3.zero;
         isStatic = false;

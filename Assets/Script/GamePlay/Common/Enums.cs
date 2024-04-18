@@ -1,6 +1,6 @@
 using UnityEngine;
 /// <summary>
-/// ¿ØÖÆÀàĞÍ
+/// æ§åˆ¶ç±»å‹
 /// </summary>
 public enum ControlType
 {
@@ -10,7 +10,7 @@ public enum ControlType
 }
 
 /// <summary>
-/// ECS¹æÔòÆ¥ÅäÀàĞÍ
+/// ECSè§„åˆ™åŒ¹é…ç±»å‹
 /// </summary>
 public enum ECSRuleType
 {
@@ -20,18 +20,19 @@ public enum ECSRuleType
 }
 
 /// <summary>
-/// Åö×²ÌåÀàĞÍ
+/// ç¢°æ’ä½“ç±»å‹
 /// </summary>
 public enum CollisionType
 {
     Circle,
     AABB,
     OBB,
-    Ray
+    Ray,
+    Capsule
 }
 
 /// <summary>
-/// ¼¼ÄÜÊÍ·Å×´Ì¬
+/// æŠ€èƒ½é‡Šæ”¾çŠ¶æ€
 /// </summary>
 public enum SkillPlayStatus
 {
@@ -42,7 +43,7 @@ public enum SkillPlayStatus
 }
 
 /// <summary>
-/// ´¥·¢Æ÷×´Ì¬
+/// è§¦å‘å™¨çŠ¶æ€
 /// </summary>
 public enum TriggerStatus
 {
@@ -53,7 +54,7 @@ public enum TriggerStatus
 }
 
 /// <summary>
-/// ÊäÈë¼üÎ»
+/// è¾“å…¥é”®ä½
 /// </summary>
 public enum InputKey
 {
@@ -119,7 +120,7 @@ public enum InputKey
 }
 
 /// <summary>
-/// ÊäÈëÀàĞÍ
+/// è¾“å…¥ç±»å‹
 /// </summary>
 public enum InputType
 {
@@ -129,7 +130,7 @@ public enum InputType
 }
 
 /// <summary>
-/// ÊäÈë×´Ì¬
+/// è¾“å…¥çŠ¶æ€
 /// </summary>
 public enum InputStatus
 {
@@ -140,7 +141,7 @@ public enum InputStatus
 }
 
 /// <summary>
-/// µØÍ¼×´Ì¬
+/// åœ°å›¾çŠ¶æ€
 /// </summary>
 public enum MapStatus
 {
@@ -150,7 +151,7 @@ public enum MapStatus
 }
 
 /// <summary>
-/// ¼¼ÄÜ´¥·¢ÀàĞÍ
+/// æŠ€èƒ½è§¦å‘ç±»å‹
 /// </summary>
 public enum SkillTrigger
 {
@@ -161,17 +162,17 @@ public enum SkillTrigger
 
 
 /// <summary>
-/// ´¥·¢Æ÷´¥·¢ÀàĞÍ
+/// è§¦å‘å™¨è§¦å‘ç±»å‹
 /// </summary>
 public enum TriggerFunction
 {
-    [InspectorName("½»»¥")] Interactive,
-    [InspectorName("¹¥»÷")] Attack,
-    [InspectorName("ÊÕ¼¯")] Collect
+    [InspectorName("äº¤äº’")] Interactive,
+    [InspectorName("æ”»å‡»")] Attack,
+    [InspectorName("æ”¶é›†")] Collect
 }
 
 /// <summary>
-/// ½»»¥ÀàĞÍ
+/// äº¤äº’ç±»å‹
 /// </summary>
 public enum InteractionType
 {
@@ -182,7 +183,7 @@ public enum InteractionType
 }
 
 /// <summary>
-/// ¶¨Ê±Æ÷ÀàĞÍ
+/// å®šæ—¶å™¨ç±»å‹
 /// </summary>
 public enum TimerType
 {
@@ -191,7 +192,7 @@ public enum TimerType
 }
 
 /// <summary>
-/// ÈÎÎñÀàĞÍ
+/// ä»»åŠ¡ç±»å‹
 /// </summary>
 public enum MissionType
 {
@@ -201,17 +202,17 @@ public enum MissionType
 }
 
 /// <summary>
-/// ÈÎÎñ·ÖÀà
+/// ä»»åŠ¡åˆ†ç±»
 /// </summary>
 public enum MissionFilter
 {
     Main,
     Sub,
-    Branch//Õâ¸öÀàĞÍÒ»¶¨·Å×îºó ÒòÎª¸ÃÀàĞÍ²»²ÎÓë¼ÆËã£¬Ã¶¾ÙÊı²»ÄÜÓ°Ïì¼ÆËã
+    Branch//è¿™ä¸ªç±»å‹ä¸€å®šæ”¾æœ€å å› ä¸ºè¯¥ç±»å‹ä¸å‚ä¸è®¡ç®—ï¼Œæšä¸¾æ•°ä¸èƒ½å½±å“è®¡ç®—
 }
 
 /// <summary>
-/// buffÀàĞÍ
+/// buffç±»å‹
 /// </summary>
 public enum BuffType
 {
@@ -221,7 +222,7 @@ public enum BuffType
 }
 
 /// <summary>
-/// buffÀà±ğ
+/// buffç±»åˆ«
 /// </summary>
 public enum BuffFilter
 {

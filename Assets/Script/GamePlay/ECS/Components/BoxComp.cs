@@ -17,6 +17,8 @@ public class BoxComp : Comp
 
     public RayData ray;
 
+    public CapsuleData capsule;
+
     public bool isPositive;
 
     public float maxY
@@ -33,6 +35,8 @@ public class BoxComp : Comp
                     return obb.maxY;
                 case CollisionType.Ray:
                     break;
+                case CollisionType.Capsule:
+                    return capsule.maxY;
             }
             return 0;
         }
@@ -52,6 +56,8 @@ public class BoxComp : Comp
                     return obb.minY;
                 case CollisionType.Ray:
                     break;
+                case CollisionType.Capsule:
+                    return capsule.minY;
             }
             return 0;
         }

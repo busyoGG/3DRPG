@@ -23,8 +23,9 @@ public class ClimbSystem : ECSSystem
             {
                 if (!move.isCanCheckClimb) continue;
 
-                Vector3 offsetNormal = collider.totalOffset.normalized;
+                Vector3 offsetNormal = collider.lastTotalOffset.normalized;
                 float sameSide = Vector3.Dot(offsetNormal, move.forward);
+                ConsoleUtils.Log("Æ«ÒÆ·½Ïò",collider.lastTotalOffset,offsetNormal,move.fixedForward);
 
                 if (offsetNormal.y < 0.5f && sameSide < -0.5f)
                 {

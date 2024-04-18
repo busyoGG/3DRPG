@@ -48,7 +48,32 @@ public class CollideFunction
         return CollideUtils.CollisionRay2Circle(data1, data2, out point);
     }
 
-    //----- æµœÒ∫Ø ˝ -----
+    public static bool CheckCollide(CapsuleData data1, CapsuleData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule(data1, data2, out point);
+    }
+    
+    public static bool CheckCollide(CapsuleData data1, CircleData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule2Circle(data1, data2, out point);
+    }
+    
+    public static bool CheckCollide(CapsuleData data1, AABBData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule2AABB(data1, data2, out point);
+    }
+    
+    public static bool CheckCollide(CapsuleData data1, OBBData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule2OBB(data1, data2, out point);
+    }
+    
+    public static bool CheckCollide(RayData data1, CapsuleData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionRay2Capsule(data1, data2, out point);
+    }
+
+    //----- ÈïúÂÉèÂáΩÊï∞ -----
 
     public static bool CheckCollide(AABBData data1, OBBData data2, out Vector3 point)
     {
@@ -85,5 +110,25 @@ public class CollideFunction
     public static bool CheckCollide(CircleData data1, RayData data2, out Vector3 point)
     {
         return CollideUtils.CollisionRay2Circle(data2, data1, out point);
+    }
+    
+    public static bool CheckCollide(CircleData data1, CapsuleData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule2Circle(data2, data1, out point);
+    }
+    
+    public static bool CheckCollide(AABBData data1, CapsuleData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule2AABB(data2, data1, out point);
+    }
+    
+    public static bool CheckCollide(OBBData data1, CapsuleData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionCapsule2OBB(data2, data1, out point);
+    }
+    
+    public static bool CheckCollide(CapsuleData data1, RayData data2, out Vector3 point)
+    {
+        return CollideUtils.CollisionRay2Capsule(data2, data1, out point);
     }
 }

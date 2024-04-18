@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding" defaultCharsetForPropertiesFiles="GBK" addBOMForNewFiles="with BOM under Windows, with no BOM otherwise">
+    <file url="file://$PROJECT_DIR$/Assets/Editor/Initer/CompInitEditor.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/ECS/ECSManager.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/GamePlay/ECS/Systems/BoxRefreshSystem.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/GamePlay/ECS/Systems/ClimbSystem.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/GamePlay/ECS/Systems/CollideSystem.cs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/Init/CompInit.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/Utils/AssetBundleUtils.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/Utils/ClassFactory.cs" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/Assets/Script/Utils/SortUtils.cs" charset="GBK" />
+    <file url="PROJECT" charset="GBK" />
+  </component>
+</project>

@@ -20,7 +20,7 @@ public class IntersectSystem : ECSSystem
 
             TransformComp transform = entity.Get<TransformComp>();
 
-            //Ñ°ÕÒÏà½»ÎïÌå
+            //Ñ°ï¿½ï¿½ï¿½à½»ï¿½ï¿½ï¿½ï¿½
             LinkedList<(int, Entity)> intersectObjs = IntersectSingleton.Ins().GetIntersectObjs(entity.id);
             Dictionary<int, bool> intersectDic = IntersectSingleton.Ins().GetIntersectDic(entity.id);
 
@@ -48,7 +48,7 @@ public class IntersectSystem : ECSSystem
                 }
             }
 
-            //É¾³ý¶àÓàÏà½»ÎïÌå
+            //É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à½»ï¿½ï¿½ï¿½ï¿½
             foreach(var intersectObj in intersectObjs.ToList())
             {
                 if (!_intersectObjs.ContainsKey(intersectObj.Item1))
@@ -72,6 +72,8 @@ public class IntersectSystem : ECSSystem
                 return SubCheckIntersect(box1.circle, box2, out point);
             case CollisionType.Ray:
                 return SubCheckIntersect(box1.ray, box2, out point);
+            case CollisionType.Capsule:
+                return SubCheckIntersect(box1.capsule, box2, out point);
         }
         point = CollideUtils._minValue;
         return false;
@@ -90,6 +92,8 @@ public class IntersectSystem : ECSSystem
                 return data1.Interactive(box2.circle, out point);
             case CollisionType.Ray:
                 return data1.Interactive(box2.ray, out point);
+            case CollisionType.Capsule:
+                return data1.Interactive(box2.capsule, out point);
         }
         point = CollideUtils._minValue;
         return false;
